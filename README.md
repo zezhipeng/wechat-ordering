@@ -75,10 +75,44 @@ npm run build
    city: String,
    country: String,
    headimgurl: String,
-	 privilege:[
-
-   ], //用户特权信息，json 数组，如微信沃卡用户为（chinaunicom）
+	 privilege: Schema.Types.Mixed, //用户特权信息，json 数组，如微信沃卡用户为（chinaunicom）
    unionid: String // 只有在用户将公众号绑定到微信开放平台帐号后，才会出现该字段。详见：获取用户个人信息（UnionID机制）
+}
+```
+# Order
+```
+{
+  number: Number,
+  user:  {
+    type: ObjectId,
+    ref: 'User'
+  },
+  totalFee: {
+    type: Number,
+    default: 0
+  },
+  list: [
+    {
+      name: String,
+      price: Number,
+      status: {
+        type: String,
+        default: '未处理'
+      }
+    }
+  ]，
+  status: {
+    type: String,
+    default: '未处理'
+  }
+}
+```
 
+# Member
+
+# Class
+```
+{
+  name: String
 }
 ```
