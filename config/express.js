@@ -68,7 +68,7 @@ module.exports = function (app, passport) {
   // bodyParser should be above methodOverride
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
-  app.use(upload);
+  // app.use(upload);
   app.use(methodOverride(function (req) {
     if (req.body && typeof req.body === 'object' && '_method' in req.body) {
       // look in urlencoded POST bodies and delete it
