@@ -36,15 +36,15 @@ module.exports = function (app, passport) {
   app.get('/wx/user', wx.user)
   app.get('/wx/signature', wx.signature)
 
-  app.all('*', (req, res, next) => {
+  // app.all('*', )
+  app.get('/', (req, res, next) => {
     if (!req.session.user) {
       let url = client.getAuthorizeURL(`${req.protocol}://${req.hostname}/wx/user`, 'STATE', 'snsapi_userinfo')
       res.redirect(url)
     } else {
       next()
     }
-  })
-  app.get('/', users.index);
+  }, users.index);
   app.post('/orderings', orderings.create)
 
   // user routes
