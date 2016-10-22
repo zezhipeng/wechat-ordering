@@ -32,7 +32,8 @@ const fail = {
 module.exports = function (app, passport) {
   const pauth = passport.authenticate.bind(passport);
 
-  app.all('/wx/hear', wx.hear)
+  app.get('/wx/hear', wx.hear)
+  app.post('/wx/hear', wx.hear)
   app.get('/wx/user', wx.user)
   app.get('/wx/signature', wx.signature)
 
