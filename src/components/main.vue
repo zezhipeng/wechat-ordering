@@ -60,8 +60,10 @@ export default {
       }
     },
     order: function (newValue, oldValue) {
+      const vm = this
+
       setTimeout(function() {
-        this.orderLength = newValue.length        
+        vm.orderLength = newValue.length
       }, 600)
     }
   },

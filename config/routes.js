@@ -39,12 +39,13 @@ module.exports = function (app, passport) {
 
   // app.all('*', )
   app.get('/', (req, res, next) => {
-    if (!req.session.user) {
-      let url = client.getAuthorizeURL(`${req.protocol}://${req.hostname}/wx/user`, 'STATE', 'snsapi_userinfo')
-      res.redirect(url)
-    } else {
-      next()
-    }
+    // if (!req.session.user) {
+    //   let url = client.getAuthorizeURL(`${req.protocol}://${req.hostname}/wx/user`, 'STATE', 'snsapi_userinfo')
+    //   res.redirect(url)
+    // } else {
+    //   next()
+    // }
+    next()
   }, users.index);
   app.post('/orderings', orderings.create)
 
