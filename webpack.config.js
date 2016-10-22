@@ -49,14 +49,14 @@ module.exports = {
         loader: 'style!css!sass'
       },
       {
-          test: /\.(eot|svg|ttf|woff|woff2)$/,
-          loader: 'file?name=public/fonts/[name].[ext]'
+        test: /\.(eot|svg|ttf|woff|woff2)$/,
+        loader: 'file?name=public/fonts/[name].[ext]'
       }
     ]
   },
   resolve: {
     alias: {
-      'vue$': 'vue/dist/vue'
+      vuex: path.resolve(__dirname, './build/src')
     }
   },
   devServer: {

@@ -5,6 +5,7 @@
 
 <script>
 import mainContent from './components/main.vue'
+
 export default {
   data () {
     return {}

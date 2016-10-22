@@ -10,7 +10,7 @@ router.get('/hear', function(req, res) {
   var echostr = req.query.echostr
   var str = [token, timestamp, nonce].sort().join('')
   var sha = sha1(str)
-  console.log('Ruarua2016', sha)
+
   if (sha === signature) {
     res.send(echostr + '')
   }
@@ -24,7 +24,7 @@ router.post('/hear', function(req, res) {
   var echostr = req.body.echostr
   var str = [token, timestamp, nonce].sort().join('')
   var sha = sha1(str)
-  console.log('Ruarua2016:', sha)
+
   if (sha === signature) {
     res.send(echostr + '')
   }

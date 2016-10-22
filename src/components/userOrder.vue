@@ -24,6 +24,8 @@ div(style='padding-bottom: 37px; background: white')
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
+
 export default {
   props: ['order'],
   data () {
@@ -39,9 +41,23 @@ export default {
       })
     }
   },
-  computed: {},
+  computed: {
+    doneTodos () {
+      return this.$store.getters.doneTodos
+    }
+  },
+  created () {},
   mounted () {},
   methods: {
+    addTodoTo () {
+      let item = {
+        id: 3,
+        text: '3213',
+        done: true
+      }
+
+      this.$store.commit('addTodo', {item})
+    },
     add (data) {
       let item = data.item
       let $index = data.$index

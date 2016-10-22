@@ -54,19 +54,15 @@ export default {
         }
       })
 
-      if (exit) {
-
-        setTimeout(function() {
-          vm.orderLength++
-        }, 600)
-      } else {
+      if (!exit) {
         item.number = 1
         this.order.push(item)
-
-        setTimeout(function() {
-          vm.orderLength++
-        }, 600)
       }
+    },
+    order: function (newValue, oldValue) {
+      setTimeout(function() {
+        this.orderLength = newValue.length        
+      }, 600)
     }
   },
   data () {
