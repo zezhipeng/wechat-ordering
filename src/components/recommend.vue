@@ -24,12 +24,18 @@ import { swiper, swiperSlide, swiperPlugins } from 'vue-awesome-swiper'
 import TWEEN from 'tween'
 
 export default {
-  props: ['list', 'order'],
   data () {
     return {
     }
   },
-  computed: {},
+  computed: {
+    order () {
+      return this.$store.getters.order
+    },
+    list () {
+      return this.$store.getters.list
+    }
+  },
   mounted () {
 
   },
@@ -81,8 +87,7 @@ export default {
         scale: 0.5
       }, ball)
 
-      this.$emit('addOrder', item)
-
+      this.$store.commit('addOrder', {item})
       setTimeout(function() {
         $(ball).remove()
       }, 600)

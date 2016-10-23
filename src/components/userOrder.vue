@@ -14,20 +14,20 @@ div(style='padding-bottom: 37px; background: white')
           .text-footer
             .price {{item.price}} /{{item.unit}}
             .tools
-              span.icon(@click='minus({item: item, $index: $index})') indeterminate_check_box
+              span.icon(@click='minus(item)') indeterminate_check_box
               span(style='color: #666') {{item.number}}
-              span.icon(@click='add({item: item, $index: $index})') add_box
-  .footer-bar
-    .total 合计：
-      span ¥{{total}}
-    .pay-btn 结算({{order.length}})
+              span.icon(@click='add(item)') add_box
+  transition(name='fade')
+    .footer-bar(v-if='order.length')
+      .total 合计：
+        span ¥{{total}}
+      .pay-btn 结算({{order.length}})
 </template>
 
 <script>
 import { mapMutations } from 'vuex'
 
 export default {
-  props: ['order'],
   data () {
     return {
       total: 0
@@ -44,6 +44,9 @@ export default {
   computed: {
     doneTodos () {
       return this.$store.getters.doneTodos
+    },
+    order () {
+      return this.$store.getters.order
     }
   },
   created () {},
@@ -58,22 +61,11 @@ export default {
 
       this.$store.commit('addTodo', {item})
     },
-    add (data) {
-      let item = data.item
-      let $index = data.$index
-
-      item.number++
-      this.$set(this.$parent.order, $index, item)
+    add (item) {
+      this.$store.commit('addOrder', {item})
     },
-    minus (data) {
-      let item = data.item
-      let $index = data.$index
-      if (item.number === 1) {
-        this.order.splice($index, 1)
-      } else {
-        item.number--
-        this.$set(this.$parent.order, $index, item)
-      }
+    minus (item) {
+      this.$store.commit('removeOrder', {item})
     }
   },
   components: {}
@@ -121,6 +113,13 @@ export default {
 .fadeIn-enter, .fadeIn-leave-active {
   opacity: 0;
   transform: translateX(30px);
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: all .3s;
+}
+.fade-enter, .fade-leave-active {
+  opacity: 0;
 }
 
 .order-list {

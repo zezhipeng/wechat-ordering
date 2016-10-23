@@ -24,10 +24,12 @@
   .card-inner(style='margin: 0 16px')
     .tab-content(style='height: 100%')
       #ui_tab_example_1_red.tab-pane.fade.active.in
-        recommend-content(:list='list', :order='order', v-on:addOrder='addOrder')
-        menu-content(:list='list', :order='order', v-on:addOrder='addOrder')
+        recommend-content
+        menu-content
+        .card-footer
+          footer-bar
       #ui_tab_example_2_red.tab-pane.fade
-        user-order(:order='order')
+        user-order
       #ui_tab_example_3_red.tab-pane.fade
         p USER.
 </template>
@@ -36,129 +38,27 @@
 import recommendContent from './recommend.vue'
 import menuContent from './menuContent.vue'
 import userOrder from './userOrder.vue'
-import TWEEN from 'tween'
+import footerBar from './footerBar.vue'
 import _ from 'lodash'
 
 export default {
-  watch: {
-    orderCache: function (newValue, oldValue) {
-      let item = newValue[newValue.length - 1]
-      let exit = false
-      let vm = this
-
-      this.order.forEach((o, i) => {
-        if (o._id === item._id) {
-          exit = true
-          o.number++
-          vm.$set(vm.order, i, o)
-        }
-      })
-
-      if (!exit) {
-        item.number = 1
-        this.order.push(item)
-      }
-    },
-    order: function (newValue, oldValue) {
-      const vm = this
-
-      setTimeout(function() {
-        vm.orderLength = newValue.length
-      }, 600)
-    }
-  },
   data () {
     return {
-      order: [],
-      orderCache: [],
-      orderLength: 0,
-      list: [
-        {
-          _id: 1,
-          name: '烤乳猪',
-          price: 69,
-          stars: 3,
-          src: 'images/10.jpg',
-          thumb: 55,
-          unit: '份'
-        },
-        {
-          _id: 3,
-          name: '广州文昌鸡',
-          price: 56,
-          stars: 1,
-          src: 'images/11.jpg',
-          thumb: 40,
-          unit: '份'
-        },
-        {
-          _id: 4,
-          name: '白切鸡',
-          price: 44,
-          src: 'images/12.jpg',
-          thumb: 30,
-          unit: '份'
-        },
-        {
-          _id: 5,
-          name: '童年香肉',
-          price: 22,
-          stars: 2,
-          src: 'images/13.jpg',
-          thumb: 29,
-          recommend: true,
-          vt: '天啊，在洛杉矶居然能找到性价比这么高的食物啊，简直难以置信'
-        },
-        {
-          _id: 6,
-          name: '童茶香肉',
-          price: 23,
-          src: 'images/14.jpg',
-          thumb: 9,
-          unit: '份'
-        },
-        {
-          _id: 7,
-          name: '茶香肉',
-          price: 12,
-          stars: 4,
-          thumb: 0,
-          src: 'images/15.jpg',
-          unit: '份',
-          recommend: true,
-          vt: '天啊，在美国居然能找到这么好吃的东西，简直难以置信'
-
-        },
-        {
-          _id: 8,
-          name: '童年茶香',
-          price: 32,
-          src: 'images/16.jpg',
-          thumb: 1,
-          unit: '份'
-        },
-        {
-          _id: 9,
-          name: '童年茶肉',
-          price: 55,
-          src: 'images/17.jpg',
-          thumb: 2,
-          unit: '份'
-        }
-      ]
     }
   },
-  computed: {},
+  computed: {
+    orderLength () {
+      return this.$store.getters.orderLength
+    }
+  },
   mounted () {},
   methods: {
-    addOrder (item) {
-      this.orderCache.push(item)
-    }
   },
   components: {
     recommendContent,
     menuContent,
-    userOrder
+    userOrder,
+    footerBar
   }
 }
 </script>
@@ -218,12 +118,20 @@ export default {
 .tab-nav .tab-button span {
   font-size: 10px;
 }
+
 #order {
   position: relative;
 }
-#ui_tab_example_2_red {
-  height: 100%;
+
+.card-footer {
 
 }
 
+.card-inner {
+  margin: 0 !important;
+  padding: 0 16px 0 16px;
+}
+#ui_tab_example_1_red {
+  padding-bottom: 60px;
+}
 </style>

@@ -9,7 +9,7 @@ div
       .favorite
         span.icon(v-if='item.favorite') favorite
         span.icon(v-if='!item.favorite', @click='thumb({item: item, $index: $index})') favorite_border
-      .add(@click='add({item: item, $index: $index}, $event)')
+      .add.waves-attach.waves-effect(@click='add({item: item, $index: $index}, $event)')
         span.icon add_box
       .detail
         .name {{item.name}}
@@ -23,13 +23,17 @@ import _ from 'lodash'
 import TWEEN from 'tween'
 
 export default {
-  props: ['list', 'order'],
   data () {
     return {
     }
   },
   computed: {
-
+    list () {
+      return this.$store.getters.list
+    },
+    order () {
+      return this.$store.getters.order
+    }
   },
   mounted () {},
   methods: {
@@ -52,9 +56,8 @@ export default {
       animate()
     },
     thumb (data) {
-      data.item.favorite = true
-      data.item.thumb++
-      this.$set(this.list, data.$index, data.item)
+      // data.item.favorite = true
+      // data.item.thumb++
     },
     add (data, e) {
       let item = data.item
@@ -87,8 +90,7 @@ export default {
         scale: 0.5
       }, ball)
 
-      this.$emit('addOrder', item)
-
+      this.$store.commit('addOrder', {item})
       setTimeout(function() {
         $(ball).remove()
       }, 600)

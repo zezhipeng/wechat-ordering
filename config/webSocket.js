@@ -18,9 +18,17 @@ const config = require('./index')
 //   })
 // }))
 
-io.sockets.on("connection", function (socket) {
+io.on("connection", function (socket) {
   global.socket = socket
   socket.emit('msg', 'hello')
+
+  socket.on('addOrder', data => {
+    io.emit('addOrder', data)
+  })
+
+  socket.on('removeOrder', data => {
+    io.emit('removeOrder', data)
+  })
   // console.log(socket)
   // socket.on('mongoose:save', (e) => {
   //   console.log(e)

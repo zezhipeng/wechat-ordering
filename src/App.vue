@@ -27,12 +27,19 @@ html {
   background-color: #fff;
   width: 100%;
   height: 100%;
+  -webkit-overflow-scrolling: touch;
+
 }
 body {
   width: 100%;
   height: 100%;
+  -webkit-overflow-scrolling: touch;
+
 }
 
+div {
+  -webkit-overflow-scrolling: touch;
+}
 
 .slide-fade-enter-active {
   transition: all .3s ease;
