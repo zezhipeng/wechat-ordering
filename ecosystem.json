@@ -9,20 +9,21 @@
         "COMMON_VARIABLE": "true"
       },
       "instances": 0,
-      "exec_mode": "cluster_mode",
       "env_production" : {
         "NODE_ENV": "development",
         "PORT": "80"
       }
     }
   ],
-  "aliyun": {
-    "user": "root",
-    "host": "",
-    "port": "22",
-    "ref": "origin/master",
-    "repo": "git@github.com:zezhipeng/wechat-ordering.git",
-    "path": "wechat-ordering",
-    "post-deploy": "npm install --registry=https://registry.npm.taobao.org && pm2 startOrRestart ecosystem.json"
+  "deploy": {
+    "aliyun": {
+      "user": "root",
+      "host": "",
+      "port": "22",
+      "ref": "origin/master",
+      "repo": "git@github.com:zezhipeng/wechat-ordering.git",
+      "path": "wechat-ordering",
+      "post-deploy": "npm install --registry=https://registry.npm.taobao.org && pm2 startOrRestart ecosystem.json"
+    }
   }
 }
