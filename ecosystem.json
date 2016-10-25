@@ -18,10 +18,10 @@
   "deploy": {
     "aliyun": {
       "user": "root",
-      "host": "",
+      "host": "139.224.67.170",
       "port": "22",
       "ref": "origin master",
-      "repo": "http@github.com:zezhipeng/wechat-ordering.git",
+      "repo": "git@github.com:zezhipeng/wechat-ordering.git",
       "path": "wechat-ordering",
       "post-deploy": "npm install --registry=https://registry.npm.taobao.org && pm2 startOrRestart ecosystem.json"
     }
