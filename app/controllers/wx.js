@@ -57,6 +57,12 @@ exports.signature = async(function* (req, res) {
   APIService
     .getSignature('http://' + req.hostname + req.originalUrl)
     .then(signature => {
+      console.log(signature)
+      signature.debug = true
+      appId = 'wx33d67a99c493f926'
+      jsApiList = [
+        chooseWXPay
+      ]
       res.json(signature)
     })
 })

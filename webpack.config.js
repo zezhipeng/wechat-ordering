@@ -3,11 +3,14 @@ var webpack = require('webpack')
 var utils = require('./utils')
 
 module.exports = {
-  entry: './src/main.js',
+  entry: {
+    index: './src/main.js',
+    admin: './src/admin.js'
+  },
   output: {
     path: path.resolve(__dirname, './public'),
     publicPath: '/js/',
-    filename: 'build.js'
+    filename: '[name].js'
   },
   plugins: [
     new webpack.ProvidePlugin({

@@ -14,8 +14,9 @@ div
       .detail
         .name {{item.name}}
           span(style='margin-left: 5px')
-          span.icon(v-for='star in item.stars') star_border
+          span.icon(v-for='star in item.stars', style='color: #4ad4b8') star_border
         .price ¥ {{item.price}}  /{{item.unit}}
+      hr
 </template>
 
 <script>
@@ -119,7 +120,7 @@ export default {
   padding: 0;
 }
 .menu-list li {
-  padding: 10px 0 15px 0;
+  padding: 0;
   position: relative;
 }
 .menu-list li .favorite {
@@ -131,7 +132,7 @@ export default {
 }
 .menu-list li .add {
   position: absolute;
-  top: calc((100vw - 16px) / 16 * 9 - 40px);
+  top: calc((100vw - 16px) / 16 * 9 - 50px);
   right: 20px;
   font-size: 35px;
   color: white;

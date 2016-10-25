@@ -1,13 +1,13 @@
 <template lang="jade">
 .footer-menu
   span.icon filter_list
+  span.icon
   span.icon room_service
-  .search-group
-    .form-group-green
-      transition(name='bounce')
-        input.form-control.search-input(v-if='search')
-    .input-group-addon(@click='search = !search')
-      span.icon search
+  .input-animate(v-bind:class="{'active': search}")
+    transition(name='bounce')
+      input.search-input(v-if='search')
+
+    span.icon(@click='search = !search') search
 </template>
 
 <script>
@@ -40,9 +40,45 @@ export default {
   align-items: center;
   color: #666;
 
-  .search-input {
-    height: 100%;
-    width: 100%;
+  .input-animate {
+    height: 45px;
+    // width: e('calc(100vw - 30px)');
+    width: 45px;
+    border-radius: 30px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    background: white;
+    left: 50%;
+    transform: translateX(-50%);
+    overflow: hidden;
+
+    .icon {
+      transition: all 570ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .search-input {
+      width: e('calc(100% - 100px)');
+      margin: 0 auto;
+      border: 0 solid#fff;
+    }
+  }
+
+  .active {
+    width: e('calc(100vw - 30px)');
+    transform: translateX(-50%) translateY(-60px);
+    visibility: visible;
+    animation: searchActive 570ms cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 1px 3px 3px -2px;
+    justify-content: flex-start;
+
+    .icon {
+      position: absolute;
+      right: 10px;
+    }
   }
 
   span {
@@ -51,23 +87,7 @@ export default {
   }
 
   .search-group {
-    .search-input {
-      position: absolute;
-      left: calc(50% - 20px);
-      top: 0;
-      height: 40px;
-      width: 65vw;
-      transform-origin: right;
-      z-index: 11;
-      transform: translateX(-100%);
-      background: white;
-    }
-
     position: relative;
-    flex-grow: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
   }
 }
 
@@ -76,23 +96,60 @@ export default {
 }
 .bounce-leave-active {
   animation: searchOut 570ms cubic-bezier(0.4, 0.0, 0.2, 1);
+  // animation-delay: 375ms;
 }
 @keyframes searchIn {
   0% {
     width: 0;
+    opacity: 0;
   }
   100% {
-    width: 65vw;
+    width: e('calc(100% - 30px)');
+    opacity: 1;
   }
 }
 @keyframes searchOut {
   0% {
-    width: 65vw;
+    width: e('calc(100% - 30px)');
+    opacity: 1;
   }
   100% {
     width: 0;
+    opacity: 0;
   }
 }
+
+@keyframes searchActive {
+  0% {
+    width: 45px;
+    transform: translateX(-50%) translateY(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+    visibility: visible;
+  }
+  50% {
+    width: 45px;
+    transform: translateX(-50%) translateY(-60px);
+  }
+  100% {
+    width: e('calc(100vw - 30px)');
+    // transform: translateX(-50%) translateY(-80px);
+    visibility: visible;
+  }
+}
+
+@keyframes searchGroupIn {
+  0% {
+    transform: translateX(-50%) translateY(-80px);
+
+  }
+  100% {
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
 .fadeIcon-enter-active {
     opacity: 1;
     transition: all .5s cubic-bezier(1.0, 0.5, 0.8, 1.0);
@@ -101,6 +158,7 @@ export default {
     opacity: 0;
     transition: all .5s cubic-bezier(1.0, 0.5, 0.8, 1.0);
 }
+
 
 // .search-input-enter, .search-input-leave-active {
 //   // padding-left: 10px;
