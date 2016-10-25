@@ -22,7 +22,7 @@
       "port": "22",
       "ref": "origin master",
       "repo": "git@github.com:zezhipeng/wechat-ordering.git",
-      "path": "wechat-ordering",
+      "path": "/root/wechat-ordering",
       "post-deploy": "npm install --registry=https://registry.npm.taobao.org && pm2 startOrRestart ecosystem.json"
     }
   }
