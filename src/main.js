@@ -7,17 +7,17 @@ import store from './vuex/store'
 import 'sweetalert/dist/sweetalert.css'
 import 'sweetalert'
 
-fetch('/wx/signature')
-  .then(res => res.json())
-  .then(res => {
-    wx.config(res)
-    wx.ready(() => {
-      console.log('wx-sdk is ready')
-    })
-    wx.error(e => {
-      console.log('wx-sdk error:', e)
-    })
-  })
+// fetch('/wx/signature')
+//   .then(res => res.json())
+//   .then(res => {
+//     wx.config(res)
+//     wx.ready(() => {
+//       console.log('wx-sdk is ready')
+//     })
+//     wx.error(e => {
+//       console.log('wx-sdk error:', e)
+//     })
+//   })
 
 $(function() {
     FastClick.attach(document.body);
