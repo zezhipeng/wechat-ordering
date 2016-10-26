@@ -20,9 +20,15 @@ const OrderingSchema = new Schema ({
     type: Number,
     default: 0
   },
-  list: [{
+  orderings: [{
+    _id: String,
     name: String,
     price: Number,
+    stars: Number,
+    src: String,
+    thumb: Number,
+    unit: String,
+    number: String,
     status: {
       type: String,
       default: '未处理'
@@ -42,6 +48,16 @@ const OrderingSchema = new Schema ({
       default: Date.now
     }
   }
+})
+
+OrderingSchema.pre('save', function(next) {
+  console.log('this:', this)
+
+  if (global.socket) {
+    global.socket.emit('mongoose:save', this)
+  }
+
+  next()
 })
 
 mongoose.model('Ordering', OrderingSchema);

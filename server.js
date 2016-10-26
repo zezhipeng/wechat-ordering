@@ -30,15 +30,15 @@ const ws = require("./config/webSocket")
 
 module.exports = app
 
-// Bootstrap models
+// // Bootstrap models
 fs.readdirSync(models)
   .filter(file => ~file.search(/^[^\.].*\.js$/))
   .forEach(file => require(join(models, file)))
 
 // Bootstrap routes
-require('./config/passport')(passport)
-require('./config/express')(app, passport)
-require('./config/routes')(app, passport)
+// require('./config/passport')(passport)
+require('./config/express')(app)
+require('./config/routes')(app)
 
 connect()
   .on('error', console.log)
@@ -51,7 +51,7 @@ function listen () {
   const server = http.createServer(app)
 
   ws.listen(server)
-  
+
   server.listen(config.port, function () {
       console.log("server started on ", config.port)
   })

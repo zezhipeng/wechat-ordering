@@ -15,7 +15,7 @@ const methodOverride = require('method-override');
 const csrf = require('csurf');
 const cors = require('cors');
 const upload = require('multer')({ dest: 'uploads/' });
-
+const mongoose = require('mongoose')
 const mongoStore = require('connect-mongo')(session);
 const flash = require('connect-flash');
 const winston = require('winston');
@@ -28,14 +28,14 @@ const env = process.env.NODE_ENV || 'development';
  * Expose
  */
 
-module.exports = function (app, passport) {
+module.exports = function (app) {
 
   // Compression middleware (should be placed before express.static)
   app.use(compression({
     threshold: 512
   }));
 
-  app.use(cors());
+  // app.use(cors());
 
   // Static files middleware
   app.use(express.static(config.root + '/public'));
@@ -79,24 +79,24 @@ module.exports = function (app, passport) {
   }));
 
   // CookieParser should be above session
-  app.use(cookieParser());
-  app.use(cookieSession({ secret: 'secret' }));
+  // app.use(cookieParser());
+  // app.use(cookieSession({ secret: 'secret' }));
   app.use(session({
-    resave: false,
+    resave: true,
     saveUninitialized: true,
     secret: pkg.name,
     store: new mongoStore({
-      url: config.db,
-      collection : 'sessions'
+      mongooseConnection: mongoose.connection,
+      ttl: 7 * 24 * 60 * 60
     })
   }));
 
   // use passport session
-  app.use(passport.initialize());
-  app.use(passport.session());
+  // app.use(passport.initialize());
+  // app.use(passport.session());
 
   // connect flash for flash messages - should be declared after sessions
-  app.use(flash());
+  // app.use(flash());
 
   // should be declared after session and flash
   app.use(helpers(pkg.name));

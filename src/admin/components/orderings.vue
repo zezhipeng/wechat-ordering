@@ -1,12 +1,12 @@
 <template lang="jade">
 .tile-wrap
-  .tile
+  .tile(v-for='item in allOrderings')
     .tile-side.pull-left
       span.tableNumber 1
     .tile-side.pull-left
 
       .avatar.avatar-sm.avatar-brand-accent
-        img(src='images/1.jpg')
+        img(:src='item.src')
     .tile-action
       ul.nav.nav-list.margin-no.pull-right
         li
@@ -16,25 +16,7 @@
           a.text-black-sec.waves-attach.waves-effect(href='javascript:void(0)')
             span.icon delete
     .tile-inner
-      span.name 红烧肉 x 1
-      span.time 已等待 10 分钟
-  .tile
-    .tile-side.pull-left
-      span.tableNumber 1
-    .tile-side.pull-left
-
-      .avatar.avatar-sm.avatar-brand-accent
-        img(src='images/1.jpg')
-    .tile-action
-      ul.nav.nav-list.margin-no.pull-right
-        li
-          a.text-black-sec.waves-attach.waves-effect(href='javascript:void(0)')
-            span.icon check
-        li
-          a.text-black-sec.waves-attach.waves-effect(href='javascript:void(0)')
-            span.icon delete
-    .tile-inner
-      span.name 红烧肉 x 2
+      span.name {{item.name}}
       span.username 明月光照沟
       span.time 已等待 10 分钟
 </template>
@@ -44,7 +26,11 @@ export default {
   data () {
     return {}
   },
-  computed: {},
+  computed: {
+    allOrderings() {
+      return this.$store.getters.allOrderings
+    }
+  },
   mounted () {},
   methods: {},
   components: {

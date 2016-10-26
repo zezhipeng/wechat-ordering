@@ -31,7 +31,13 @@ exports.file = async(function* (req, res) {
 })
 
  exports.index = async(function* (req, res) {
-   respond(res, 'users/index')
+   let user = yield User.findOne({openid: 'ohie2vwWiN49QlqAsrQABcVXRvkA'}).exec()
+
+   req.session.user = user
+  //  console.log(req.session)
+   respond(res, 'users/index', {
+     user: user
+   })
  })
 
  /**
@@ -84,6 +90,7 @@ exports.authCallback = login;
  */
 
 exports.login = function (req, res) {
+  console.log(req.session)
   res.render('users/login', {
     title: 'Login'
   });

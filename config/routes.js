@@ -19,8 +19,8 @@ const sha1 = require('sha1')
  * Route middlewares
  */
 
-const articleAuth = [auth.requiresLogin, auth.article.hasAuthorization];
-const commentAuth = [auth.requiresLogin, auth.comment.hasAuthorization];
+// const articleAuth = [auth.requiresLogin, auth.article.hasAuthorization];
+// const commentAuth = [auth.requiresLogin, auth.comment.hasAuthorization];
 
 const fail = {
   failureRedirect: '/login'
@@ -30,8 +30,8 @@ const fail = {
  * Expose routes
  */
 
-module.exports = function (app, passport) {
-  const pauth = passport.authenticate.bind(passport);
+module.exports = function (app) {
+  // const pauth = passport.authenticate.bind(passport);
 
   // 微信接口
   app.get('/wx/hear', wx.hear)
@@ -51,6 +51,11 @@ module.exports = function (app, passport) {
     next()
   }, users.index);
   app.post('/orderings', orderings.create)
+  app.put('/orderings/:_id', orderings.edit)
+  app.delete('/orderings/:_id', orderings.del)
+  app.get('/orderings/:_id', orderings.get)
+  app.get('/orderings', orderings.getAll)
+
 
   // user routes
   app.get('/login', users.login);

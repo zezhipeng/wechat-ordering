@@ -14,7 +14,7 @@ div
       .detail
         .name {{item.name}}
           span(style='margin-left: 5px')
-          span.icon(v-for='star in item.stars', style='color: #4ad4b8') star_border
+          span.icon(v-for='star in item.stars', style='color: #FF6600') star_border
         .price ¥ {{item.price}}  /{{item.unit}}
       hr
 </template>

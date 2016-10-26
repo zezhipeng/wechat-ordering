@@ -4,11 +4,11 @@ div(style='padding-bottom: 37px; background: white')
     .background(v-if='!order.length')
       svg(xmlns='http://www.w3.org/2000/svg', width='130', height='124')
         g(fill='none', fill-rule='evenodd')
-          path(fill='#4AD4B8', d='M8.818 108.24l-4.294 10.782 60.262 3.868 60.88-3.868-7.985-8.043')
-          path(fill='#FFF', stroke='#4AD4B8', d='M.667 55.5v49.956l63.938 17.074 64.025-13.79V55.5L64.605 66.018z')
-          path(stroke='#4AD4B8', d='M64.642 122.846v-57.53')
-          path(fill='#4AD4B8', d='M31.094 89.032l-.244-38.854s-4.355-.913-9.313-5.03C16.58 41.03 15 35.574 15 35.574V1.102h8.657V31.79l8.823.13V1l8.63.07v30.85h9.136L50.17 1.07l9.325.032v34.473s-1.37 5.333-6.05 9.572c-4.682 4.24-10.586 5.065-10.586 5.065l.027 39.083-11.793-.263zM91.976 88.865l-.223-35.534-10.566-.273L81 13.337s1.547-5.642 8.283-9.728C96.018-.478 102.95.02 102.95.02l-.212 88.845H91.976z')
-      p(style='color: #4AD4B8') 空空如也，快点去点餐吧
+          path(fill='#FF6600', d='M8.818 108.24l-4.294 10.782 60.262 3.868 60.88-3.868-7.985-8.043')
+          path(fill='#FFF', stroke='#FF6600', d='M.667 55.5v49.956l63.938 17.074 64.025-13.79V55.5L64.605 66.018z')
+          path(stroke='#FF6600', d='M64.642 122.846v-57.53')
+          path(fill='#FF6600', d='M31.094 89.032l-.244-38.854s-4.355-.913-9.313-5.03C16.58 41.03 15 35.574 15 35.574V1.102h8.657V31.79l8.823.13V1l8.63.07v30.85h9.136L50.17 1.07l9.325.032v34.473s-1.37 5.333-6.05 9.572c-4.682 4.24-10.586 5.065-10.586 5.065l.027 39.083-11.793-.263zM91.976 88.865l-.223-35.534-10.566-.273L81 13.337s1.547-5.642 8.283-9.728C96.018-.478 102.95.02 102.95.02l-.212 88.845H91.976z')
+      p(style='color: #FF6600') 空空如也，快点去点餐吧
   transition(name='slide-fade')
     transition-group.order-list(tag='ul' v-if='order.length', name='fadeIn')
       li(v-for='(item, $index) in order', :key='item.name + item.src')
@@ -34,6 +34,7 @@ div(style='padding-bottom: 37px; background: white')
 <script>
 import { mapMutations } from 'vuex'
 import VAlert from './alert.vue'
+import _ from 'lodash'
 
 export default {
   data () {
@@ -43,10 +44,9 @@ export default {
   },
   watch: {
     order: function (newValue, oldValue) {
-      this.total = 0
-      newValue.forEach(v => {
-        this.total += v.price * v.number
-      })
+      this.total = _.reduce(newValue, (total, item) => {
+        return total += item.price * item.number
+      }, 0)
     }
   },
   computed: {
@@ -61,19 +61,20 @@ export default {
   mounted () {},
   methods: {
     submitOrder() {
-      swal("下单成功", "布噜布噜布噜布噜⋯", "success")
-      // fetch('/order', {
-      //   method: 'POST',
-      //   body: this.order
-      // })
-      // .then(res => res.json())
-      // .then(res => {
-      //   if (!res.success) {
-      //     // error
-      //     console.log(res.data)
-      //   } else {
-      //   }
-      // })
+      $.ajax({
+        url: '/orderings',
+        type: 'POST',
+        data: {
+          orderings: this.order,
+          tableNumber: 1
+        },
+        dataType: 'json'
+      })
+      .done(res => {
+        swal("下单成功", "布噜布噜布噜布噜⋯", "success")
+        console.log(res)
+      })
+
     },
     pay () {
       // function onBridgeReady(){
@@ -144,7 +145,7 @@ export default {
     color: #666;
 
     span {
-      color: #4AD4B8;
+      color: #FF6600;
     }
   }
 
@@ -154,7 +155,7 @@ export default {
     padding-right: 30px;
     color: white;
     font-size: 16px;
-    background: #4AD4B8;
+    background: #FF6600;
     display: flex;
     align-items: center;
   }
@@ -207,7 +208,7 @@ export default {
       flex-direction: column;
       justify-content: center;
       align-items: flex-start;
-      border-bottom: 1px solid#ddd;
+      // border-bottom: 1px solid#ddd;
 
       .text-footer {
         width: 100%;
@@ -274,10 +275,10 @@ export default {
 
 
 .sweet-alert .sa-icon.sa-success .sa-placeholder {
-  border: 4px solid rgba(74, 212, 184, 0.7) !important;
+  border: 4px solid rgba(255, 102, 0, 0.7) !important;
 }
 
 .sweet-alert .sa-icon.sa-success .sa-line {
-  background-color: rgba(74, 212, 184, 1) !important;
+  background-color: rgba(255, 102, 0, 1) !important;
 }
 </style>

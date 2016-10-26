@@ -24,10 +24,10 @@
   .card-inner(style='margin: 0 16px')
     .tab-content(style='height: 100%')
       #ui_tab_example_1_red.tab-pane.fade.active.in
-        recommend-content
-        menu-content
+        recommend-content.recommend-content(v-if='!search')
+        menu-content.menu-content(v-if='!search')
         .card-footer
-          footer-bar
+          footer-bar(:search='search')
       #ui_tab_example_2_red.tab-pane.fade
         user-order
       #ui_tab_example_3_red.tab-pane.fade
@@ -44,6 +44,7 @@ import _ from 'lodash'
 export default {
   data () {
     return {
+      search: false
     }
   },
   computed: {
@@ -84,7 +85,7 @@ export default {
 }
 
 .tab-nav {
-  background: #4AD4B8;
+  background: #FF6600;
   color: white;
   position: fixed;
   width: 100%;
@@ -100,7 +101,9 @@ export default {
 .tab-nav-white .tab-nav-indicator.animate {
   background-color: #fff;
 }
-
+.sweet-alert button {
+  background-color: #FF6600 !important;
+}
 .tab-nav .tab-button {
   display: flex;
   align-items: center;
@@ -123,15 +126,25 @@ export default {
   position: relative;
 }
 
-.card-footer {
-
-}
-
 .card-inner {
   margin: 0 !important;
   padding: 0 16px 0 16px;
 }
 #ui_tab_example_1_red {
   padding-bottom: 60px;
+
+  .recommend-content {
+    z-index: 3;
+    position: relative;
+  }
+
+  .card-footer {
+    z-index: 10;
+    position: relative;
+  }
+  .menu-content {
+    z-index: 3;
+    position: relative;
+  }
 }
 </style>

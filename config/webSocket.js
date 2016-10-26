@@ -19,7 +19,7 @@ const config = require('./index')
 // }))
 
 io.on("connection", function (socket) {
-  global.socket = socket
+  global.socket = io
   socket.emit('msg', 'hello')
 
   socket.on('addOrder', data => {

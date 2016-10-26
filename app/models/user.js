@@ -12,13 +12,13 @@ const Schema = mongoose.Schema
 const ObjectId = Schema.Types.ObjectId
 const Mixed = Schema.Types.Mixed
 
-const oAuthTypes = [
-  'github',
-  'twitter',
-  'facebook',
-  'google',
-  'linkedin'
-];
+// const oAuthTypes = [
+//   'github',
+//   'twitter',
+//   'facebook',
+//   'google',
+//   'linkedin'
+// ];
 
 /**
  * User Schema
@@ -55,7 +55,7 @@ const UserSchema = new Schema({
    unionid: String // 只有在用户将公众号绑定到微信开放平台帐号后，才会出现该字段。详见：获取用户个人信息（UnionID机制）
 });
 
-const validatePresenceOf = value => value && value.length;
+// const validatePresenceOf = value => value && value.length;
 
 /**
  * Virtuals
@@ -123,88 +123,88 @@ UserSchema.pre('save', function (next) {
   next()
 })
 
+mongoose.model('User', UserSchema);
+
 /**
  * Methods
  */
 
-UserSchema.methods = {
-
-  /**
-   * Authenticate - check if the passwords are the same
-   *
-   * @param {String} plainText
-   * @return {Boolean}
-   * @api public
-   */
-
-  authenticate: function (plainText) {
-    return this.encryptPassword(plainText) === this.hashed_password;
-  },
-
-  /**
-   * Make salt
-   *
-   * @return {String}
-   * @api public
-   */
-
-  makeSalt: function () {
-    return Math.round((new Date().valueOf() * Math.random())) + '';
-  },
-
-  /**
-   * Encrypt password
-   *
-   * @param {String} password
-   * @return {String}
-   * @api public
-   */
-
-  encryptPassword: function (password) {
-    if (!password) return '';
-    try {
-      return crypto
-        .createHmac('sha1', this.salt)
-        .update(password)
-        .digest('hex');
-    } catch (err) {
-      return '';
-    }
-  },
-
-  /**
-   * Validation is not required if using OAuth
-   */
-
-  skipValidation: function () {
-    return ~oAuthTypes.indexOf(this.provider);
-  }
-};
-
-/**
- * Statics
- */
-
-UserSchema.statics = {
-
-  /**
-   * Load
-   *
-   * @param {Object} options
-   * @param {Function} cb
-   * @api private
-   */
-
-  load: function (options, cb) {
-    options.select = options.select || 'name username';
-    return this.findOne(options.criteria)
-      .select(options.select)
-      .exec(cb);
-  }
-};
+// UserSchema.methods = {
+//
+//   /**
+//    * Authenticate - check if the passwords are the same
+//    *
+//    * @param {String} plainText
+//    * @return {Boolean}
+//    * @api public
+//    */
+//
+//   authenticate: function (plainText) {
+//     return this.encryptPassword(plainText) === this.hashed_password;
+//   },
+//
+//   /**
+//    * Make salt
+//    *
+//    * @return {String}
+//    * @api public
+//    */
+//
+//   makeSalt: function () {
+//     return Math.round((new Date().valueOf() * Math.random())) + '';
+//   },
+//
+//   /**
+//    * Encrypt password
+//    *
+//    * @param {String} password
+//    * @return {String}
+//    * @api public
+//    */
+//
+//   encryptPassword: function (password) {
+//     if (!password) return '';
+//     try {
+//       return crypto
+//         .createHmac('sha1', this.salt)
+//         .update(password)
+//         .digest('hex');
+//     } catch (err) {
+//       return '';
+//     }
+//   },
+//
+//   /**
+//    * Validation is not required if using OAuth
+//    */
+//
+//   skipValidation: function () {
+//     return ~oAuthTypes.indexOf(this.provider);
+//   }
+// };
+//
+// /**
+//  * Statics
+//  */
+//
+// UserSchema.statics = {
+//
+//   /**
+//    * Load
+//    *
+//    * @param {Object} options
+//    * @param {Function} cb
+//    * @api private
+//    */
+//
+//   load: function (options, cb) {
+//     options.select = options.select || 'name username';
+//     return this.findOne(options.criteria)
+//       .select(options.select)
+//       .exec(cb);
+//   }
+// };
 
 // UserSchema.use(events, {
 //   port: config.port
 // })
-
-mongoose.model('User', UserSchema);
