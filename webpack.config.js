@@ -5,7 +5,8 @@ var utils = require('./utils')
 module.exports = {
   entry: {
     index: './src/main.js',
-    admin: './src/admin.js'
+    admin: './src/admin.js',
+    vendor: ['vue', 'vue-router', 'vuex', 'firebase', 'lru-cache', 'es6-promise']
   },
   output: {
     path: path.resolve(__dirname, './public'),
@@ -24,7 +25,11 @@ module.exports = {
         test: /\.vue$/,
         loader: 'vue',
         options: {
-          // vue-loader options go here
+          postcss: [
+            require('autoprefixer')({
+              browsers: ['last 3 versions']
+            })
+          ]
         }
       },
       {
@@ -77,6 +82,10 @@ if (process.env.NODE_ENV === 'production') {
       'process.env': {
         NODE_ENV: '"production"'
       }
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      filename: 'client-vendor-bundle.js'
     }),
     new webpack.optimize.UglifyJsPlugin({
       compress: {

@@ -4,7 +4,6 @@
     .tile-side.pull-left
       span.tableNumber 1
     .tile-side.pull-left
-
       .avatar.avatar-sm.avatar-brand-accent
         img(:src='item.src')
     .tile-action
@@ -14,7 +13,7 @@
             span.icon check
         li
           a.text-black-sec.waves-attach.waves-effect(href='javascript:void(0)')
-            span.icon delete
+            span.icon print
     .tile-inner
       span.name {{item.name}}
       span.username 明月光照沟

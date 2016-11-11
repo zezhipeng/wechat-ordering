@@ -11,10 +11,5 @@ export default function createWebSocketPlugin (socket) {
       let user = store.getters.user
       store.commit('removeOrderSocket', {data})
     })
-    // store.subscribe(mutation => {
-    //   if (mutation.type === 'UPDATE_DATA') {
-    //     socket.emit('update', mutation.payload)
-    //   }
-    // })
   }
 }

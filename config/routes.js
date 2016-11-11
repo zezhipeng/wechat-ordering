@@ -56,15 +56,25 @@ module.exports = function (app) {
   app.get('/orderings/:_id', orderings.get)
   app.get('/orderings', orderings.getAll)
 
-
   // user routes
   app.get('/login', users.login);
   app.get('/signup', users.signup);
   app.get('/logout', users.logout);
+  app.get('/user/init', users.init);
 
   // 管理员
+  app.get('/api/init', admin.init)
+  app.get('/api/qiniu', admin.qiniu)
+  app.put('/api/model/:model', admin.update)
+  app.post('/api/model/:model', admin.create)
+  app.post('/admin/login', admin.login)
+  app.post('/admin/signUp', admin.signUp)
+  app.put('/api/update', admin.update)
   app.get('/admin', admin.index)
 
+  app.all('/api/tables', admin.tables)
+  app.all('/api/tables/:_id', admin.tables)
+  app.all('/api/user', admin.user)
   // app.post('/users', users.create);
   // app.post('/users/session',
   //   pauth('local', {

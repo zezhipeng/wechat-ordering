@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 const { wrap: async } = require('co');
 const { respond } = require('../utils');
 const User = mongoose.model('User');
-const Ordering = mongoose.model('Ordering')
+const Order = mongoose.model('Order')
 const client = require('../../config').client
 const APIService = require('../../config/wx/service');
 /**
@@ -33,11 +33,29 @@ exports.file = async(function* (req, res) {
  exports.index = async(function* (req, res) {
    let user = yield User.findOne({openid: 'ohie2vwWiN49QlqAsrQABcVXRvkA'}).exec()
 
+   req.session.table = req.query.table
+   req.session.trader = req.query.trader
    req.session.user = user
-  //  console.log(req.session)
+   res.cookie('user', user)
+
    respond(res, 'users/index', {
      user: user
    })
+ })
+
+ exports.init = async(function* (req, res) {
+   let _id = req.query._id
+   try {
+     let trader = yield Trader.findById(_id).exec()
+     let dishes = yield Dish.findOne({trader: _id}).exec()
+
+     res.json({
+       trader: trader,
+       dishes: dishes
+     })
+   } catch(e) {
+     res.send(e)
+   }
  })
 
  /**

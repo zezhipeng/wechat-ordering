@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { wrap: async } = require('co');
 const { respond } = require('../utils');
 const User = mongoose.model('User');
-const Ordering = mongoose.model('Ordering')
+const Order = mongoose.model('Order')
 const client = require('../../config').client
 const APIService = require('../../config/wx/service');
 const _ = require('lodash')
@@ -31,10 +31,10 @@ exports.create = async(function* (req, res) {
   }
 
 
-  ordering = new Ordering(ordering)
+  ordering = new Order(ordering)
 
   try {
-    let saveOrdering = yield ordering.save()
+    let saveOrder = yield ordering.save()
 
     res.json({
       success: 1,
@@ -55,7 +55,7 @@ exports.edit = async(function* (req, res) {
   let body = req.body
 
   try {
-    let ordering = yield Ordering.findByIdAndUpdate(_id, body).exec()
+    let ordering = yield Order.findByIdAndUpdate(_id, body).exec()
     console.log('ordering', ordering)
     res.json({
       success: 1,
@@ -73,7 +73,7 @@ exports.del = async(function* (req, res) {
   let _id = req.params._id
 
   try {
-    let ordering = yield Ordering.findByIdAndRemove(_id).exec()
+    let ordering = yield Order.findByIdAndRemove(_id).exec()
 
     res.json({
       success: 1
@@ -90,7 +90,7 @@ exports.get = async(function* (req, res) {
   let _id = req.params._id
 
   try {
-    let ordering = yield Ordering.findById(_id).exec()
+    let ordering = yield Order.findById(_id).exec()
 
     res.json({
       success: 1,
@@ -106,7 +106,7 @@ exports.get = async(function* (req, res) {
 
 exports.getAll = async(function* (req, res) {
   try {
-    let orderings = yield Ordering.find().exec()
+    let orderings = yield Order.find().exec()
 
     res.json({
       success: 1,

@@ -1,18 +1,23 @@
 import Vuex from 'vuex'
 import Vue from 'vue'
 import createWebSocketPlugin from './socket'
+import Cookies from 'js-cookie'
 // import * as getters from './getters'
 // import count from './modules/count'
-
 Vue.use(Vuex)
 
-const socket = io()
+let user = Cookies.getJSON('user')
+// user = JSON.parse(user)
+user = user.split('j:')[1]
+user = JSON.parse(user)
 
+const socket = io()
 const plugin = createWebSocketPlugin(socket)
 
 const store = new Vuex.Store({
   state: {
-    user: Math.random(),
+    user: user,
+    trader: {},
     order: [],
     orderCache: [],
     orderLength: 0,
@@ -51,6 +56,8 @@ const store = new Vuex.Store({
         src: 'images/13.jpg',
         thumb: 29,
         recommend: true,
+        recommendVt: '天啊，在洛杉矶居然能找到性价比这么高的食物啊，简直难以置信',
+        unit: '份',
         vt: '天啊，在洛杉矶居然能找到性价比这么高的食物啊，简直难以置信'
       },
       {
@@ -70,6 +77,8 @@ const store = new Vuex.Store({
         src: 'images/15.jpg',
         unit: '份',
         recommend: true,
+        recommendVt: '天啊，在洛杉矶居然能找到性价比这么高的食物啊，简直难以置信',
+
         vt: '天啊，在美国居然能找到这么好吃的东西，简直难以置信'
 
       },
@@ -92,9 +101,6 @@ const store = new Vuex.Store({
     ]
   },
   getters: {
-    doneTodos: state => {
-      return state.todos.filter(todo => todo.done)
-    },
     list: state => {
       return state.list
     },
@@ -104,11 +110,23 @@ const store = new Vuex.Store({
     orderLength: state => {
       return state.orderLength
     },
+    totalFee: state => {
+      return _.reduce(state.order, (total, item) => {
+        return total += item.price * item.number
+      }, 0)
+    },
     recommend: state => {
       return state.list.filter(item => item.recommend)
     },
     user: state => {
       return state.user
+    },
+    coupon: state => {
+      return state.user.coupon.filter(i => {
+        let due = new Date(i.due).getTime()
+
+        return !i.used && (now < due + 1000 * 60 * 60 * 24)
+      })
     }
   },
   mutations: {
@@ -146,6 +164,14 @@ const store = new Vuex.Store({
 
 module.exports = store
 
+
+function init() {
+  $.get(`/api/init?_id=${user._id}`)
+  .then(res => {
+    store.state.list = res.dishes
+    store.state.trader = res.trader
+  })
+}
 
 function addOrder(state, item) {
   let exit = false

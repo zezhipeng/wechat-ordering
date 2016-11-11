@@ -1,14 +1,35 @@
 <template lang="jade">
 ul.aside
-  li.waves-attach.waves-effect
-    span.icon inbox
-    span 新订单
-  li.waves-attach.waves-effect
-    span.icon playlist_add_check
-    span 已处理
-  li.waves-attach.waves-effect
-    span.icon delete
-    span 回收站
+  router-link(to='/orderings')
+    li.waves-attach.waves-effect
+      span.icon inbox
+      a 新订单
+  router-link(to='/doneList')
+    li.waves-attach.waves-effect
+      span.icon playlist_add_check
+      a 已处理
+  hr(style='width: 100%;')
+  router-link(to='/tables')
+    li.waves-attach.waves-effect
+      span.icon event_seat
+      a 桌位管理
+  router-link(to='/classes')
+    li.waves-attach.waves-effect
+      span.icon class
+      a 分类管理
+  router-link(to='/dishes')
+    li.waves-attach.waves-effect
+      span.icon restaurant_menu
+      a 菜品管理
+  hr(style='width: 100%;')
+  router-link(to='/cheer')
+    li.waves-attach.waves-effect
+      span.icon event_note
+      a 销售报表
+  router-link(to='/account')
+    li.waves-attach.waves-effect
+      span.icon account_box
+      a 营销管理
 </template>
 
 <script>
@@ -19,7 +40,11 @@ export default {
   },
   computed: {},
   mounted () {},
-  methods: {},
+  methods: {
+    page(url) {
+      this.$store.commit('page', url)
+    }
+  },
   components: {}
 }
 </script>
@@ -35,6 +60,9 @@ export default {
   color: #666;
   float: left;
 
+  a {
+    color: #666;
+  }
   li {
     width: 100%;
     height: 50px;

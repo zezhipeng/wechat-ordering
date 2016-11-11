@@ -7,8 +7,8 @@ const APIService = require('../../config/wx/service');
 const sha1 = require('sha1')
 
 exports.hear = async(function* (req, res) {
-  console.log(req.query)
-  console.log(req.body)
+  // console.log(req.query)
+  // console.log(req.body)
   let token = 'Ruarua2016'
   let signature = req.query.signature
   let nonce = req.query.nonce
@@ -16,7 +16,7 @@ exports.hear = async(function* (req, res) {
   let echostr = req.query.echostr || req.query.openid
   let str = [token, timestamp, nonce].sort().join('')
   let sha = sha1(str)
-  console.log(sha, signature)
+
   if (sha === signature) {
     res.send(echostr + '')
   }
@@ -54,16 +54,12 @@ exports.user = async(function* (req, res) {
   }
 })
 
-exports.signature = async(function* (req, res) {
+exports.signature = function (req, res) {
+  let url = req.query.url
   APIService
-    .getSignature('http://' + req.hostname + req.originalUrl)
+    .getSignature(url)
     .then(signature => {
-      console.log(signature)
-      signature.debug = true
-      appId = 'wx33d67a99c493f926'
-      jsApiList = [
-        chooseWXPay
-      ]
+      console.log('then:', signature)
       res.json(signature)
     })
-})
+}

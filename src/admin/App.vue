@@ -1,27 +1,31 @@
 <template lang="jade">
 #app
-  v-head
-  v-aside
-  .main
-    orderings
+  //- v-head
+  router-view
 </template>
 
 <script>
 import VHead from './layout/head.vue'
-import VAside from './layout/aside.vue'
-import orderings from './components/orderings.vue'
+// import VAside from './layout/aside.vue'
+// import orderings from './components/orderings.vue'
+// import tables from './components/tables.vue'
+// import dishes from './components/dishes.vue'
 
 export default {
   data () {
     return {}
   },
-  computed: {},
-  mounted () {},
+  computed: {
+    // page() {
+    //   return this.$store.getters.page
+    // }
+  },
+  mounted () {
+    // this.$store.dispatch('init')
+  },
   methods: {},
   components: {
-    VHead,
-    VAside,
-    orderings
+    VHead
   }
 }
 </script>
@@ -43,8 +47,23 @@ body, html {
 
   .main {
     float: left;
-    width: e('calc(100% - 400px)');
+    width: e('calc(100% - 250px)');
     padding-left: 20px;
   }
+}
+
+
+.fade-enter-active, .fade-leave-active {
+  transition: all .2s ease;
+}
+.fade-enter, .fade-leave-active {
+  opacity: 0;
+}
+
+.floatBtn {
+  position: fixed;
+  bottom: 40px;
+  right: 70px;
+  z-index: 100;
 }
 </style>
