@@ -27,8 +27,8 @@ const Mixed = Schema.Types.Mixed
 const UserSchema = new Schema({
    coupon: [
      {
-       due: Date,
-       minus: Number
+       type: ObjectId,
+       ref: 'Coupon'
      }
    ],
    order: {

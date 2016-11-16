@@ -61,12 +61,16 @@ module.exports = function (app) {
   app.get('/signup', users.signup);
   app.get('/logout', users.logout);
   app.get('/user/init', users.init);
+  app.get('/index/:trader/:table', users.index)
+  // app.get('/api/model/:model', users.init)
 
   // 管理员
-  app.get('/api/init', admin.init)
   app.get('/api/qiniu', admin.qiniu)
+  app.get('/api/init', admin.init)
   app.put('/api/model/:model', admin.update)
   app.post('/api/model/:model', admin.create)
+  app.delete('/api/model/:model', admin.delete)
+
   app.post('/admin/login', admin.login)
   app.post('/admin/signUp', admin.signUp)
   app.put('/api/update', admin.update)

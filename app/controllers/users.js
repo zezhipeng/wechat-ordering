@@ -8,9 +8,17 @@ const mongoose = require('mongoose');
 const { wrap: async } = require('co');
 const { respond } = require('../utils');
 const User = mongoose.model('User');
-const Order = mongoose.model('Order')
 const client = require('../../config').client
 const APIService = require('../../config/wx/service');
+const Dish = mongoose.model('Dish')
+const Trader = mongoose.model('Trader')
+const Order = mongoose.model('Order')
+
+const api = {
+  trader: Trader,
+  dishes: Dish,
+  orderings: Order
+}
 /**
  * Load
  */
@@ -32,9 +40,10 @@ exports.file = async(function* (req, res) {
 
  exports.index = async(function* (req, res) {
    let user = yield User.findOne({openid: 'ohie2vwWiN49QlqAsrQABcVXRvkA'}).exec()
-
-   req.session.table = req.query.table
-   req.session.trader = req.query.trader
+   console.log('table', req.params.table)
+   console.log('trader', req.params.trader)
+   req.session.table = req.params.table
+   req.session.trader = req.params.trader
    req.session.user = user
    res.cookie('user', user)
 
@@ -44,15 +53,14 @@ exports.file = async(function* (req, res) {
  })
 
  exports.init = async(function* (req, res) {
-   let _id = req.query._id
+   let _id = req.session.trader
+   console.log(_id)
    try {
-     let trader = yield Trader.findById(_id).exec()
-     let dishes = yield Dish.findOne({trader: _id}).exec()
+     let dishes = yield Dish.find({trader: _id}).exec()
 
-     res.json({
-       trader: trader,
-       dishes: dishes
-     })
+     console.log('dishes', dishes)
+
+     res.json(dishes)
    } catch(e) {
      res.send(e)
    }

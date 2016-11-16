@@ -10,6 +10,7 @@ const extend = require('util')._extend;
 const development = require('./env/development');
 const test = require('./env/test');
 const production = require('./env/production');
+const env = process.env.NODE_ENV || 'development';
 
 const notifier = {
   service: 'postmark',
@@ -22,7 +23,26 @@ const notifier = {
 
 const defaults = {
   root: path.join(__dirname, '..'),
-  notifier: notifier
+  notifier: notifier,
+  app: {
+    root: path.normalize(path.join(__dirname, '/..')),
+    env: env
+  },
+  build: {
+    env: require('./prod.env'),
+    assetsPublicPath: 'public',
+    assetsRoot: path.join(__dirname, '../'),
+    productionSourceMap: true,
+    assetsSubDirectory: 'public',
+    productionGzip: false,
+    productionGzipExtensions: ['js', 'css']
+  },
+  dev: {
+    env: require('./dev.env'),
+    assetsPublicPath: 'public',
+    cssSourceMap: false,
+    assetsSubDirectory: 'public'
+  }
 };
 
 /**

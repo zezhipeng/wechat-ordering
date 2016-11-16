@@ -22,6 +22,9 @@ const winston = require('winston');
 const helpers = require('view-helpers');
 const config = require('./');
 const pkg = require('../package.json');
+const multer = require('multer')
+const path = require('path')
+const webpack = require('webpack')
 
 const env = process.env.NODE_ENV || 'development';
 /**
@@ -33,8 +36,34 @@ module.exports = function (app) {
   // Compression middleware (should be placed before express.static)
   app.use(compression({
     threshold: 512
-  }));
+  }))
 
+  if (env === 'development') {
+    require('shelljs/global')
+
+    const assetsPath = path.join(config.build.assetsRoot, config.build.assetsSubDirectory)
+    const webpackConfig = process.env.NODE_ENV === 'production'
+      ? require('../build/webpack.prod.conf')
+      : require('../build/webpack.dev.conf')
+
+    const compiler = webpack(webpackConfig)
+
+    rm('-rf', assetsPath)
+
+    app.use(require('webpack-dev-middleware')(compiler, {
+      publicPath: webpackConfig.output.publicPath,
+      noInfo: false,
+      stats: {
+        colors: true,
+        chunks: false
+      }
+    }))
+    app.use(require('webpack-hot-middleware')(compiler, {
+      log: console.log,
+      path: '/__webpack_hmr',
+      heartbeat: 10 * 1000
+    }))
+  }
   // app.use(cors());
 
   // Static files middleware
@@ -68,7 +97,7 @@ module.exports = function (app) {
   // bodyParser should be above methodOverride
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
-  // app.use(upload);
+  app.use(multer())
   app.use(methodOverride(function (req) {
     if (req.body && typeof req.body === 'object' && '_method' in req.body) {
       // look in urlencoded POST bodies and delete it

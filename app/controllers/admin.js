@@ -34,10 +34,14 @@ exports.update = async(function* (req, res) {
 
   try {
     let update = yield api[model].findById(_id).exec()
-    update[key][operator](value)
+    if (operator === 'push') {
+      update[key][operator](value)
+    }
+    else if (operator === 'splice') {
+      update[key][operator](value, 1)
+    }
     update = yield update.save()
-
-    console.log(update)
+    console.log('after:', update)
     res.json(update)
   } catch(e) {
     res.send(e)
@@ -56,6 +60,29 @@ exports.create = async(function* (req, res) {
     res.json({success: 1})
   } catch(e) {
     res.send(e)
+  }
+})
+
+exports.delete = async(function* (req, res) {
+  let _id = req.query._id
+  let model = req.params.model
+
+  if (_id) {
+    try {
+      yield api[model].findByIdAndRemove(_id).exec()
+
+      let trader = yield Trader.findById(req.session.trader._id).exec()
+      let dishes = yield Dish.find({trader: req.session.trader._id}).exec()
+      let orderings = yield Order.find({trader: req.session.trader._id}).exec()
+
+      res.json({
+        trader: trader,
+        dishes: dishes,
+        orderings: orderings
+      })
+    } catch(e) {
+      res.send(e)
+    }
   }
 })
 
@@ -133,9 +160,6 @@ exports.init = async(function* (req, res) {
 })
 
 exports.tables = async(function* (req, res) {
-  console.log(req.body)
-  console.log(req.query)
-  console.log(req.method)
   const userId = req.session.user._id
   if (req.method === 'GET') {
     let tables = yield Table.find({user: userId}).exec()
