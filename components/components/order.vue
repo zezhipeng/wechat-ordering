@@ -44,7 +44,7 @@ div
         span.text 减
         span.number ¥{{couponNow.minus || 0}}
       .total 合计：
-        span ¥{{totalFee}}
+        span ¥{{tweeningValue}}
       .pay-btn(@click='submitOrder') 立即下单({{order.length}})
 </template>
 
@@ -52,6 +52,7 @@ div
 import { mapMutations } from 'vuex'
 // import VAlert from './alert.vue'
 import _ from 'lodash'
+import TWEEN from 'tween'
 
 export default {
   data () {
@@ -59,7 +60,8 @@ export default {
       showCoupon: false,
       couponNow: {
         minus: 0
-      }
+      },
+      tweeningValue: 0
     }
   },
   computed: {
@@ -74,27 +76,49 @@ export default {
     }
   },
   created () {},
-  mounted () {},
+  watch: {
+    'totalFee': function (newVal, oldVal) {
+      this.tween(oldVal, newVal)
+    }
+  },
+  mounted () {
+    this.tween(0, this.totalFee)
+  },
   methods: {
+    tween: function (startValue, endValue) {
+      var vm = this
+      function animate (time) {
+        requestAnimationFrame(animate)
+        TWEEN.update(time)
+      }
+      new TWEEN.Tween({ tweeningValue: startValue })
+        .to({ tweeningValue: endValue }, 500)
+        .onUpdate(function () {
+          vm.tweeningValue = this.tweeningValue.toFixed(0)
+        })
+        .start()
+      animate()
+    },
     useCoupon(coupon) {
       this.couponNow = coupon
     },
     submitOrder() {
-
-      // $.ajax({
-      //   url: '/orderings',
-      //   type: 'POST',
-      //   data: {
-      //     orderings: this.order,
-      //     tableNumber: 1
-      //   },
-      //   dataType: 'json'
-      // })
-      // .done(res => {
-      //   swal("下单成功", "布噜布噜⋯布噜布噜⋯", "success")
-      //   console.log(res)
-      // })
-
+      $.ajax({
+        url: '/orderings',
+        type: 'POST',
+        data: {
+          orderings: this.order,
+          coupon: this.couponNow
+        },
+        dataType: 'json'
+      })
+      .done(res => {
+        if (res.success) {
+          swal("下单成功", "布噜布噜⋯布噜布噜⋯", "success")
+        } else {
+          console.log(res)
+        }
+      })
     },
     pay () {
       // function onBridgeReady(){

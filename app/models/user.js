@@ -35,6 +35,12 @@ const UserSchema = new Schema({
      type: ObjectId,
      ref: 'Order'
    },
+   traders: [
+     {
+       type: ObjectId,
+       ref: 'Trader'
+     }
+   ],
    message: [
     {
       text: String,

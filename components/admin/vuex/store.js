@@ -17,32 +17,29 @@ const store = new Vuex.Store({
     trader: {},
     dishes: [],
     orderings: [],
+    coupon: [],
+    users: [],
     auth: {
       authorized: false
     }
   },
   getters: {
-    trader: state => {
-      return state.trader
-    },
-    tables: state => {
-      return state.trader.tables
-    },
-    classes: state => {
-      return state.trader.classes
-    },
-    orderings: state => {
-      return state.orderings
-    },
-    dishes: state => {
-      return state.dishes
-    }
+    trader: state => state.trader,
+    tables: state => state.trader.tables,
+    classes: state => state.trader.classes,
+    orderings: state => state.orderings.filter(v => v.status === '等待'),
+    done: state => state.orderings.filter(v => v.status === '完成'),
+    coupon: state => state.coupon,
+    users: state => state.users,
+    dishes: state => state.dishes
   },
   mutations: {
     trader (state, data) {
       state.auth.authorized = true
       state.trader = data
-      console.log(state)
+    },
+    coupon (state, data) {
+      state.coupon = data
     },
     tables (state, data) {
       state.user.tables = data
@@ -50,7 +47,7 @@ const store = new Vuex.Store({
     classes (state, data) {
       state.user.classes = data
     },
-    orderings (state, data) {
+    order (state, data) {
       state.orderings = data
     },
     dishes (state, data) {
@@ -58,9 +55,6 @@ const store = new Vuex.Store({
     },
     receiveData (state, {data}) {
       console.log('admin:', data)
-    },
-    newOrdering (state, data) {
-      state.orderings.push(data)
     },
     update(state, req) {
       state.user[req.key] = req.data
@@ -80,6 +74,17 @@ const store = new Vuex.Store({
         commit('trader', res.trader)
         commit('dishes', res.dishes)
         commit('orderings', res.orderings)
+      })
+    },
+    reflash({commit}, req) {
+      $.ajax({
+        url: `/api/reflash/${req.model}`
+      })
+      .then(res => {
+        if (res.success) {
+          console.log(res.data)
+          commit(req.model, res.data)
+        }
       })
     },
     update ({commit}, req) {
@@ -107,7 +112,7 @@ const store = new Vuex.Store({
         dataType: 'json'
       })
       .then(res => {
-        init()
+        commit(req.model, res.data)
       })
     },
     login ({commit}, res) {
@@ -144,10 +149,10 @@ init()
 function init() {
   $.get('/api/init')
   .then(res => {
-    console.log(res)
-    store.state.trader = res.trader
-    store.state.orderings = res.orderings
-    store.state.dishes = res.dishes
+    Object.keys(res).forEach(key => {
+      store.state[key] = res[key]
+    })
+
     store.state.auth.authorized = true
   })
 }

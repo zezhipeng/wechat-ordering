@@ -6,30 +6,65 @@ const Order = mongoose.model('Order')
 const client = require('../../config').client
 const APIService = require('../../config/wx/service');
 const _ = require('lodash')
+const Coupon = mongoose.model('Coupon')
+const Trader = mongoose.model('Trader')
 
 exports.create = async(function* (req, res) {
-  let user = req.session.user
-  let orderings = req.body.orderings
-  let tableNumber = req.body.tableNumber
+  const user = req.session.user
+  const orderings = req.body.orderings
+  const table = req.session.table
+  const trader = req.session.trader
+  const coupon = req.body.coupon
 
   try {
-    let totalFee = _.reduce(orderings, (total, item) => {
+    var fee = _.reduce(orderings, (total, item) => {
       return total += item.price * item.number
     }, 0)
 
-    var ordering = {
-      tableNumber: tableNumber,
-      user: user._id,
-      totalFee: totalFee,
-      orderings: orderings,
+    var couponNow
+
+    if (coupon._id) {
+      couponNow = yield Coupon.findOne({trader: trader, _id: coupon._id}).exec()
     }
+
+    var totalFee = fee
+
+    if (couponNow && typeof totalFee !== 'undefined') {
+      if (couponNow.due > Date.now()) {
+        totalFee = totalFee - couponNow.minus
+      }
+    }
+
+    var dishes = _.reduce(orderings, (report, item) => {
+      let i = {
+        price: item.price,
+        src: item.src,
+        name: item.name,
+        number: item.number
+      }
+      report.push(i)
+
+      return report
+    }, [])
+
+    let _trader = yield Trader.findById(trader).exec()
+    let _table = _.find(_trader.tables, v => v._id == table)
+
+    var ordering = {
+      table: _table.name,
+      user: user._id,
+      fee: fee,
+      totalFee: totalFee,
+      dishes: dishes,
+      trader: trader
+    }
+
   } catch (e) {
     yield res.json({
       success: 0,
       msg: e
     })
   }
-
 
   ordering = new Order(ordering)
 

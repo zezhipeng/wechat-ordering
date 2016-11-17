@@ -50,6 +50,13 @@ const routes = [
         component: require('./admin/components/orderings.vue')
       },
       {
+        path: 'done',
+        meta: {
+          auth: true
+        },
+        component: require('./admin/components/done.vue')
+      },
+      {
         path: 'dishes',
         meta: {
           auth: true
@@ -76,6 +83,20 @@ const routes = [
           auth: true
         },
         component: require('./admin/components/coupon.vue')
+      },
+      {
+        path: 'cheer',
+        meta: {
+          auth: true
+        },
+        component: require('./admin/components/cheer.vue')
+      },
+      {
+        path: 'users',
+        meta: {
+          auth: true
+        },
+        component: require('./admin/components/users.vue')        
       }
     ]
   },

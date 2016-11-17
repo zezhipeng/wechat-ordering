@@ -10,6 +10,7 @@ const Trader = mongoose.model('Trader')
 const Dish = mongoose.model('Dish')
 const sha1 = require('sha1')
 const qiniu = require('qiniu')
+const Coupon = mongoose.model('Coupon')
 
 qiniu.conf.ACCESS_KEY = 'cw7SuaudV3y-NbqWLoyeMash8bo0SsZMVKj4O6l1'
 qiniu.conf.SECRET_KEY = 'oryX3EukelCKUOBD-9vYKX7cKzhOTGFh_VVB8gmE'
@@ -17,7 +18,8 @@ qiniu.conf.SECRET_KEY = 'oryX3EukelCKUOBD-9vYKX7cKzhOTGFh_VVB8gmE'
 const api = {
   trader: Trader,
   dishes: Dish,
-  orderings: Order
+  order: Order,
+  coupon: Coupon
 }
 
 exports.index = async(function* (req, res) {
@@ -41,7 +43,7 @@ exports.update = async(function* (req, res) {
       update[key][operator](value, 1)
     }
     update = yield update.save()
-    console.log('after:', update)
+
     res.json(update)
   } catch(e) {
     res.send(e)
@@ -51,13 +53,18 @@ exports.update = async(function* (req, res) {
 exports.create = async(function* (req, res) {
   let body = req.body
   let model = req.params.model
-  console.log(body)
+
   body.trader = req.session.trader._id
   try {
     let schema = new api[model](body)
     schema = yield schema.save()
     console.log(schema)
-    res.json({success: 1})
+    let data = yield api[model].find({trader: body.trader}).exec()
+
+    res.json({
+      success: 1,
+      data: data
+    })
   } catch(e) {
     res.send(e)
   }
@@ -88,7 +95,7 @@ exports.delete = async(function* (req, res) {
 
 exports.login = async(function* (req, res) {
   let body = req.body
-  console.log('body', body)
+
   body.password = sha1(body.password)
   try {
     let trader = yield Trader.findOne(body).exec()
@@ -114,7 +121,6 @@ exports.login = async(function* (req, res) {
 })
 exports.signUp = async(function* (req, res) {
   let body = req.body
-  console.log('body', body)
 
   body.password = sha1(body.password)
 
@@ -147,12 +153,35 @@ exports.init = async(function* (req, res) {
   try {
     let trader = yield Trader.findById(_id).exec()
     let dishes = yield Dish.find({trader: _id}).exec()
-    let orderings = yield Order.find({trader: _id}).exec()
+    let orderings = yield Order.find({trader: _id}).populate('user').exec()
+    let coupon = yield Coupon.find({trader: _id}).exec()
+    let users = yield User.find({traders: $in: [_id]}).exec()
 
     res.json({
       trader: trader,
       dishes: dishes,
+      coupon: coupon,
+      users: users,
       orderings: orderings
+    })
+  } catch(e) {
+    res.send(e)
+  }
+})
+
+exports.reflash = async(function* (req, res) {
+  const model = req.params.model
+
+  try {
+    if (model === 'order') {
+      var data = yield api[model].find({trader: req.session.trader._id}).populate('user').exec()
+    } else {
+      var data = yield api[model].find({trader: req.session.trader._id}).exec()
+    }
+
+    res.json({
+      success: 1,
+      data: data
     })
   } catch(e) {
     res.send(e)
@@ -174,13 +203,13 @@ exports.tables = async(function* (req, res) {
       yield table.save()
 
       let tables = yield Table.find({user: userId}).exec()
-      console.log(tables)
+
       res.json({
         success: 1,
         data: tables
       })
     } catch(e) {
-      console.log(e)
+
       res.send(e)
     }
   }

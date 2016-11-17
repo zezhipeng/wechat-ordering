@@ -4,7 +4,7 @@ ul.aside
     li.waves-attach.waves-effect
       span.icon inbox
       a 新订单
-  router-link(to='/doneList')
+  router-link(to='/done')
     li.waves-attach.waves-effect
       span.icon playlist_add_check
       a 已处理
@@ -28,8 +28,12 @@ ul.aside
       a 销售报表
   router-link(to='/coupon')
     li.waves-attach.waves-effect
-      span.icon account_box
+      span.icon card_giftcard
       a 营销管理
+  router-link(to='/users')
+    li.waves-attach.waves-effect
+      span.icon supervisor_account
+      a 用户管理
 </template>
 
 <script>

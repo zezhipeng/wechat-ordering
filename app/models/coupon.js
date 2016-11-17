@@ -11,7 +11,7 @@ const CouponSchema = new Schema ({
     type: ObjectId,
     ref: 'Trader'
   },
-  due: Date,
+  due: String,
   minus: Number,
   limit: Number,
   counter: Number

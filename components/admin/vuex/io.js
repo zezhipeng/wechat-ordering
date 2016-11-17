@@ -4,8 +4,11 @@ export default function createWebSocketPlugin (socket) {
       store.commit('receiveData', {data})
     })
     socket.on('mongoose:save', data => {
-      console.log(data)
-      store.commit('newOrdering', data)
+      let req = {
+        model: data.model
+      }
+
+      store.dispatch('reflash', req)
     })
   }
 }

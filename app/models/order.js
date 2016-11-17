@@ -7,10 +7,7 @@ const ObjectId = Schema.Types.ObjectId
 const Mixed = Schema.Types.Mixed
 
 const OrderSchema = new Schema ({
-  table: {
-    type: ObjectId,
-    ref: 'Table'
-  },
+  table: String,
   user: {
     type: ObjectId,
     ref: 'User'
@@ -23,10 +20,16 @@ const OrderSchema = new Schema ({
     type: Number,
     default: 0
   },
+  fee: {
+    type: Number,
+    default: 0
+  },
   dishes: [
     {
-      type: ObjectId,
-      ref: 'Dish'
+      price: Number,
+      src: String,
+      name: String,
+      number: Number
     }
   ],
   //
@@ -47,8 +50,11 @@ const OrderSchema = new Schema ({
 })
 
 OrderSchema.pre('save', function(next) {
+  let req = {
+    model: 'order'
+  }
   if (global.socket) {
-    global.socket.emit('mongoose:save', this)
+    global.socket.emit('mongoose:save', req)
   }
 
   next()

@@ -26,7 +26,9 @@ const TraderSchema = new Schema({
    },
    tables: [
      {
-       name: String,
+       name: {
+         type: String, unique: true
+       },
        size: Number
      }
    ],

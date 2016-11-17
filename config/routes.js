@@ -67,6 +67,7 @@ module.exports = function (app) {
   // 管理员
   app.get('/api/qiniu', admin.qiniu)
   app.get('/api/init', admin.init)
+  app.get('/api/reflash/:model', admin.reflash)
   app.put('/api/model/:model', admin.update)
   app.post('/api/model/:model', admin.create)
   app.delete('/api/model/:model', admin.delete)

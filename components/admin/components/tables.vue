@@ -65,13 +65,13 @@ export default {
       $('#qr').empty()
       console.log(this.trader)
       console.log(item)
-      var qrcode = qr(`http://192.168.31.138:3000/index/${this.trader._id}/${item._id}`, {
+      var qrcode = qr(`http://192.168.1.4:3000/index/${this.trader._id}/${item._id}`, {
           width: 128,
           height: 128
       })
       $('#qr').append(qrcode)
     },
-    add(item) {
+    add() {
       let value = this.data
 
       if (!value) {
