@@ -47,3 +47,7 @@ echo "mongodb-org-tools hold" | sudo dpkg --set-selections
 ```sh
 sudo service mongod start
 ```
+
+### ssh 公钥路径
+
+- ~/.ssh/id_rsa.pub

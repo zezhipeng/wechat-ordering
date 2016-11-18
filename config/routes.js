@@ -71,6 +71,7 @@ module.exports = function (app) {
   app.put('/api/model/:model', admin.update)
   app.post('/api/model/:model', admin.create)
   app.delete('/api/model/:model', admin.delete)
+  app.put('/api/updateOrder', admin.updateOrder)
 
   app.post('/admin/login', admin.login)
   app.post('/admin/signUp', admin.signUp)

@@ -50,6 +50,24 @@ exports.update = async(function* (req, res) {
   }
 })
 
+exports.updateOrder = async(function* (req, res) {
+  let body = req.body
+  let key = body.key
+  let value = body.value
+  let trader = req.session.trader._id
+  let _id = body._id
+
+  try {
+    let order = yield Order.findOne({trader: trader, _id: _id}).exec()
+    order[key] = value
+    let _order = yield order.save()
+    console.log(_order)
+    res.json(_order)
+  } catch(e) {
+    res.send(e)
+  }
+})
+
 exports.create = async(function* (req, res) {
   let body = req.body
   let model = req.params.model
@@ -155,7 +173,7 @@ exports.init = async(function* (req, res) {
     let dishes = yield Dish.find({trader: _id}).exec()
     let orderings = yield Order.find({trader: _id}).populate('user').exec()
     let coupon = yield Coupon.find({trader: _id}).exec()
-    let users = yield User.find({traders: $in: [_id]}).exec()
+    let users = yield User.find({traders: {$in: [_id]}}).exec()
 
     res.json({
       trader: trader,

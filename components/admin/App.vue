@@ -2,6 +2,7 @@
 #app
   //- v-head
   router-view
+  .snackbar
 </template>
 
 <script>
@@ -58,6 +59,14 @@ body, html {
 }
 .fade-enter, .fade-leave-active {
   opacity: 0;
+}
+
+.fadeLeft-enter-active, .fadeLeft-leave-active {
+  transition: all .3s;
+}
+.fadeLeft-enter, .fadeLeft-leave-active {
+  opacity: 0;
+  transform: translateX(30px);
 }
 
 .floatBtn {

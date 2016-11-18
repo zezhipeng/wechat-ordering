@@ -2,53 +2,54 @@
 .col-md-8
   .row
     .tile-wrap
-      .tile(v-for='item, $index in orderings')
-        .tile-content(@click='showTile($index)')
-          .tile-side.pull-left
-            span.tableNumber {{$index + 1}}
-          .tile-side.pull-left
-            span {{item.table}}
-          .tile-side.pull-left
-            .avatar.avatar-sm.avatar-brand-accent
-              img(:src='item.user.headimgurl')
-          .tile-side.pull-left
-            span.name {{item.user.nickname}}
-          .tile-inner
-            span.time 历时 {{moment.preciseDiff(item.meta.createdAt, Date.now())}}
-          //- .tile-action.tile-action-show
-          //-   ul.nav.nav-list.margin-no.pull-right
-          //-     li
-          //-       a.text-black-sec.waves-attach.waves-effect
-          //-         span.icon view_list
-        transition(name='growUp')
-          .tile-footer(v-if='tileCollapse == $index')
-            .tile-footer-content
-              table.table(style='box-shadow: none; background-color: #f7f7f7')
-                thead
-                  tr
-                    th 名称
-                    th 价格
-                    th 数量
-                    th 总价
-                tbody
-                  tr(v-for='dish in item.dishes')
-                    td {{dish.name}}
-                    td ¥{{dish.price}}
-                    td x {{dish.number}}
-                    td ¥ {{dish.price * dish.number}}
-                  tr
-                    td
-                    td
-                    td 总费用:
-                    td(style='color: #FF6600; font-size: 20px') ¥ {{item.totalFee}}
+      transition-group(name='fadeLeft')
+        .tile.tile-column(v-for='item, $index in orderings', :key='item._id')
+          .tile-content(@click='showTile($index)')
+            .tile-side.pull-left
+              span.tableNumber {{$index + 1}}
+            .tile-side.pull-left
+              span {{item.table}}
+            .tile-side.pull-left
+              .avatar.avatar-sm.avatar-brand-accent
+                img(:src='item.user.headimgurl')
+            .tile-side.pull-left
+              span.name {{item.user.nickname}}
+            .tile-inner
+              span.time 历时 {{moment.preciseDiff(item.meta.createdAt, Date.now())}}
+            //- .tile-action.tile-action-show
+            //-   ul.nav.nav-list.margin-no.pull-right
+            //-     li
+            //-       a.text-black-sec.waves-attach.waves-effect
+            //-         span.icon view_list
+          transition(name='growUp')
+            .tile-footer(v-if='tileCollapse == $index')
+              .tile-footer-content
+                table.table(style='box-shadow: none; background-color: #f7f7f7')
+                  thead
+                    tr
+                      th 名称
+                      th 价格
+                      th 数量
+                      th 总价
+                  tbody
+                    tr(v-for='dish in item.dishes')
+                      td {{dish.name}}
+                      td ¥{{dish.price}}
+                      td x {{dish.number}}
+                      td ¥ {{dish.price * dish.number}}
+                    tr
+                      td
+                      td
+                      td 总费用:
+                      td(style='color: #FF6600; font-size: 20px') ¥ {{item.totalFee}}
 
-            .tile-action
-              a.btn.btn-flat.waves-attach.waves-effect(data-toggle='tile', href='#ui_tile_example_2')
-                span.icon print
-                | 打印
-              a.btn.btn-flat.waves-attach.waves-effect(href='javascript:void(0)')
-                span.icon check
-                | 完成
+              .tile-action
+                a.btn.btn-flat.waves-attach.waves-effect(data-toggle='tile', href='#ui_tile_example_2')
+                  span.icon print
+                  | 打印
+                a.btn.btn-flat.waves-attach.waves-effect(@click='orderFinish(item)')
+                  span.icon check
+                  | 完成
 </template>
 
 <script>
@@ -60,7 +61,8 @@ require('moment/locale/zh-cn')
 export default {
   data () {
     return {
-      tileCollapse: null
+      tileCollapse: null,
+      orderCache: {}
     }
   },
   computed: {
@@ -182,14 +184,51 @@ export default {
           } else {
               return buildStringFromValues(yDiff, mDiff, dDiff, hourDiff, minDiff, secDiff);
           }
-
-
       }
       return moment
     }
   },
-  mounted () {},
+  mounted () {
+
+  },
   methods: {
+    orderFinish(item) {
+      const vm = this
+
+      let req = {
+        model: 'orderings',
+        _id: item._id,
+        key: 'status',
+        value: '完成'
+      }
+
+      this.orderCache = req
+
+      $('.snackbar').snackbar({
+        alive: 4000,
+        content: `<div>已移动到"已完成"中 <a class="backToOrder" data-dismiss='snackbar'>撤销</a></div>`
+      })
+
+      this.tileCollapse = null
+      this.$store.dispatch('updateOrder', req)
+
+      $('.backToOrder').click(e => {
+        vm.orderCache.value = '等待'
+        vm.tileCollapse = null
+        vm.$store.dispatch('updateOrder', vm.orderCache)
+      })
+    },
+    backToOrder(item) {
+      let req = {
+        model: 'orderings',
+        _id: item._id,
+        key: 'status',
+        value: '等待'
+      }
+
+      this.tileCollapse = null
+      this.$store.dispatch('updateOrder', req)
+    },
     totalFee(dishes) {
       return _.reduce(dishes, (total, item) => {
         return total += item.price * item.number
@@ -225,7 +264,7 @@ export default {
   font-size: 25px;
 }
 
-.tile {
+.tile-column {
   flex-direction: column;
 
   .tile-content {

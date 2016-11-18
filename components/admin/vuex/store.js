@@ -38,6 +38,9 @@ const store = new Vuex.Store({
       state.auth.authorized = true
       state.trader = data
     },
+    orderings (state, data) {
+      state.orderings = data
+    },
     coupon (state, data) {
       state.coupon = data
     },
@@ -99,6 +102,20 @@ const store = new Vuex.Store({
       })
       .then(res => {
         commit(model, res)
+      })
+    },
+    updateOrder({commit}, req) {
+      let model = req.model
+
+      $.ajax({
+        type: 'PUT',
+        url: `/api/updateOrder`,
+        data: req,
+        dataType: 'json'
+      })
+      .then(res => {
+        console.log(res)
+        // commit(model, res)
       })
     },
     create ({commit}, req) {
