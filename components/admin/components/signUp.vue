@@ -11,7 +11,7 @@
             .card-inner
               p.text-center
                 span
-                  img(alt='Login', src='images/users/avatar-001.jpg', style='height: 72px; width: 72px; border-radius: 50%; overflow: hidden')
+                  img(alt='Login', src='http://og2h60o77.bkt.clouddn.com/avatar-001.jpg', style='height: 72px; width: 72px; border-radius: 50%; overflow: hidden')
               form.form
                 .form-group.form-group-label
                   .row

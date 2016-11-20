@@ -317,29 +317,13 @@ $(function() {
   clear: both;
 
   .dish {
-    display: inline-block;
+    display: block;
     margin-left: .5%;
     min-height: 20px;
     width: 250px;
-    margin: 0 10px;
-
-    &.active {
-      .dish-content {
-        left: 0px;
-        right: 0px;
-        bottom: 0px;
-        top: 0px;
-        min-width: 0px;
-        z-index: 100;
-        cursor: inherit;
-      }
-    }
+    margin: 0 10px 20px 10px;
 
     .dish-content {
-      position: absolute;
-      top: 0;
-      bottom: 100%;
-      right: auto;
       cursor: pointer;
       background: #fff;
       height: 270px;
@@ -348,6 +332,14 @@ $(function() {
       padding: 8px;
       box-shadow: 0 2px 2px #ddd;
       border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+
+      p {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+      }
       &:hover {
         .tool {
           visibility: visible;
