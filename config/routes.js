@@ -62,7 +62,7 @@ module.exports = function (app) {
   app.get('/logout', users.logout);
   app.get('/user/init', users.init);
 
-  if process.env.NODE_ENV === 'test' {
+  if (process.env.NODE_ENV === 'test') {
     app.get('/index/:trader/:table', (req, res, next) => {
       if (!req.session.user || !req.session.user._id) {
         req.session.trader = req.params.trader
