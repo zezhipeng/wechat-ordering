@@ -5,7 +5,7 @@ const User = mongoose.model('User');
 const client = require('../../config').client
 const APIService = require('../../config/wx/service');
 const sha1 = require('sha1')
-
+console.log(client)
 exports.hear = async(function* (req, res) {
   // console.log(req.query)
   // console.log(req.body)

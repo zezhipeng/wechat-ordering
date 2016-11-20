@@ -64,7 +64,7 @@ export default {
     createQrCode (item) {
       $('#qr').empty()
 
-      var qrcode = qr(`${window.location.host}/index/${this.trader._id}/${item._id}`, {
+      var qrcode = qr(`http://${window.location.host}/index/${this.trader._id}/${item._id}`, {
           width: 128,
           height: 128
       })
