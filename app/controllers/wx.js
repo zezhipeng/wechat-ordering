@@ -7,12 +7,12 @@ const APIService = require('../../config/wx/service');
 const sha1 = require('sha1')
 console.log(client)
 exports.hear = async(function* (req, res) {
-  // console.log(req.query)
-  // console.log(req.body)
+  console.log(req.query)
+  console.log(req.body)
   let token = 'Ruarua2016'
-  let signature = req.query.signature
-  let nonce = req.query.nonce
-  let timestamp = req.query.timestamp
+  let signature = req.query.signature || req.body.signature
+  let nonce = req.query.nonce || req.body.nonce
+  let timestamp = req.query.timestamp || req.body.timestamp
   let echostr = req.query.echostr || req.query.openid
   let str = [token, timestamp, nonce].sort().join('')
   let sha = sha1(str)
