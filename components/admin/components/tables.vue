@@ -63,9 +63,8 @@ export default {
   methods: {
     createQrCode (item) {
       $('#qr').empty()
-      console.log(this.trader)
-      console.log(item)
-      var qrcode = qr(`http://192.168.1.4:3000/index/${this.trader._id}/${item._id}`, {
+
+      var qrcode = qr(`${window.location.host}/index/${this.trader._id}/${item._id}`, {
           width: 128,
           height: 128
       })
