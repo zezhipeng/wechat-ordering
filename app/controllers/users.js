@@ -39,6 +39,41 @@ exports.file = async(function* (req, res) {
 })
 
  exports.index = async(function* (req, res) {
+   let user = req.session.user
+   let trader = req.params.trader
+   let table = req.params.table
+
+   try {
+     if (user.traders) {
+       let exitTrader = user.traders.filter(i => {
+         return i == trader
+       })
+       if (!exitTrader.length) {
+         user.traders.push(trader)
+
+         yield user.save()
+       } else {
+         user.traders = []
+         user.traders.push(trader)
+
+         yield user.save()
+       }
+     }
+   } catch(e) {
+     res.send(e)
+   }
+
+   req.session.table = table
+   req.session.trader = trader
+   req.session.user = user
+   res.cookie('user', user)
+
+   respond(res, 'users/index', {
+     user: user
+   })
+ })
+
+ exports.indexDev = async(function* (req, res) {
    let user = yield User.findOne({openid: 'ohie2vwWiN49QlqAsrQABcVXRvkA'}).exec()
    let trader = req.params.trader
    let table = req.params.table

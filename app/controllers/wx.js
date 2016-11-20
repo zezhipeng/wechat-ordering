@@ -23,7 +23,8 @@ exports.hear = async(function* (req, res) {
 })
 
 exports.user = async(function* (req, res) {
-  let code = req.query.code
+  const code = req.query.code || req.body.code
+
   if (code) {
     client.getUserByCode(code, (err, cb) => {
       if (cb) {
@@ -34,7 +35,7 @@ exports.user = async(function* (req, res) {
 
         if (exitUser) {
           req.session.user = exitUser
-          res.redirect('/')
+          res.redirect(`/index/${req.session.trader}/${req.session.table}`)
         } else {
           const user = new User(cb)
 
@@ -43,7 +44,7 @@ exports.user = async(function* (req, res) {
             .save()
             .then(res => {
               req.session.user = user
-              res.redirect('/')
+              res.redirect(`/index/${req.session.trader}/${req.session.table}`)
             })
           } catch (e) {
             console.log(e)

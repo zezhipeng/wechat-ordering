@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "start": "DEBUG=koa-views,$DEBUG NODE_ENV=development node-dev server.js",
-    "adinno": "DEBUG=koa-views,$DEBUG NODE_ENV=development PORT=2333 node server.js",
+    "adinno": "DEBUG=koa-views,$DEBUG NODE_ENV=test PORT=2333 node server.js",
     "build": "node build/build.js",
     "test": "NODE_ENV=test node-dev server.js"
   },

@@ -41,15 +41,15 @@ module.exports = function (app) {
 
   // app.all('*', )
   // 用户接口
-  app.get('/', (req, res, next) => {
-    // if (!req.session.user) {
-    //   let url = client.getAuthorizeURL(`${req.protocol}://${req.hostname}/wx/user`, 'STATE', 'snsapi_userinfo')
-    //   res.redirect(url)
-    // } else {
-    //   next()
-    // }
-    next()
-  }, users.index);
+  // app.get('/', (req, res, next) => {
+  //   // if (!req.session.user) {
+  //   //   let url = client.getAuthorizeURL(`${req.protocol}://${req.hostname}/wx/user`, 'STATE', 'snsapi_userinfo')
+  //   //   res.redirect(url)
+  //   // } else {
+  //   //   next()
+  //   // }
+  //   next()
+  // }, users.index);
   app.post('/orderings', orderings.create)
   app.put('/orderings/:_id', orderings.edit)
   app.delete('/orderings/:_id', orderings.del)
@@ -61,8 +61,27 @@ module.exports = function (app) {
   app.get('/signup', users.signup);
   app.get('/logout', users.logout);
   app.get('/user/init', users.init);
-  app.get('/index/:trader/:table', users.index)
+
+  if process.env.NODE_ENV === 'test' {
+    app.get('/index/:trader/:table', (req, res, next) => {
+      if (!req.session.user || !req.session.user._id) {
+        req.session.trader = req.params.trader
+        req.session.table = req.params.table
+
+        let url = client.getAuthorizeURL(`${req.protocol}://${req.hostname}/wx/user`, 'STATE', 'snsapi_userinfo')
+        res.redirect(url)
+
+      } else {
+        next()
+      }
+    }, users.index)
+  } else {
+    app.get('/index/:trader/:table', users.indexDev)
+  }
+
   // app.get('/api/model/:model', users.init)
+
+
 
   // 管理员
   app.get('/api/qiniu', admin.qiniu)
