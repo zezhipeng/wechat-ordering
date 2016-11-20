@@ -69,7 +69,8 @@ exports.file = async(function* (req, res) {
    res.cookie('user', user)
 
    respond(res, 'users/index', {
-     user: user
+     user: user,
+     page: '/user/main'
    })
  })
 
@@ -104,7 +105,8 @@ exports.file = async(function* (req, res) {
    res.cookie('user', user)
 
    respond(res, 'users/index', {
-     user: user
+     user: user,
+     page: '/user/main'
    })
  })
 

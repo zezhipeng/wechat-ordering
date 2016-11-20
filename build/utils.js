@@ -6,25 +6,34 @@ var hotMiddlewareScript = 'webpack-hot-middleware/client?path=/__webpack_hmr&tim
 var env = process.env.NODE_ENV || 'development'
 
 exports.entry = function() {
-  var url = path.join(__dirname, '../components/')
-  var files = glob.sync(path.join(url, '*.js'))
-  var report = {}
+  var url = path.join(__dirname, '../components')
+  // var files = glob.sync(path.join(url, '*.js'))
 
-  files.forEach(function(val) {
-    var key = val.split(url)[1]
-
-    key = key.split('.js')[0]
-
-    if (env === 'development') {
-      report[key] = [
+  if (env === 'development') {
+    var report = {
+      'user/main': [
         'eventsource-polyfill',
         'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000',
-        val
+        `${url}/user/main`
+      ],
+      'admin/main': [
+        'eventsource-polyfill',
+        'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000',
+        `${url}/admin/main`
       ]
-    } else {
-      report[key] = val
     }
-  })
+  } else {
+    var report = {
+      'user/main': [
+        'eventsource-polyfill',
+        `${url}/user/main`
+      ],
+      'admin/main': [
+        'eventsource-polyfill',
+        `${url}/admin/main`
+      ]
+    }
+  }
 
   return report
 }

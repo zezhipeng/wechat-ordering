@@ -46,7 +46,7 @@ connect()
   .once('open', listen)
 
 function listen () {
-  if (app.get('env') === 'test') return
+  // if (app.get('env') === 'test') return
 
   const server = http.createServer(app)
 

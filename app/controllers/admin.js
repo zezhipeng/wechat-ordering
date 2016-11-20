@@ -23,7 +23,9 @@ const api = {
 }
 
 exports.index = async(function* (req, res) {
-  respond(res, 'admin/index')
+  respond(res, 'admin/index', {
+    page: '/admin/main'
+  })
 })
 
 exports.update = async(function* (req, res) {
