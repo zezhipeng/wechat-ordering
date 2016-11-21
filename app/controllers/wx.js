@@ -5,6 +5,16 @@ const User = mongoose.model('User');
 const client = require('../../config').client
 const APIService = require('../../config/wx/service');
 const sha1 = require('sha1')
+const Promise = require('bluebird')
+
+function getUserByCode(code) {
+  return new Promise((resolve, reject) => {
+    client.getUserByCode(code, (err, cb) => {
+      if (err) reject(err)
+      resolve(cb)
+    })
+  })
+}
 
 exports.hear = async(function* (req, res) {
   console.log(req.query)
@@ -25,35 +35,33 @@ exports.hear = async(function* (req, res) {
 
 exports.user = async(function* (req, res) {
   const code = req.query.code || req.body.code
-  console.log('code', code)
+
   if (code) {
-    client.getUserByCode(code, (err, cb) => {
-      if (cb) {
-        console.log(cb)
-        let openid = cb.openid
-        let exitUser = yield User
-          .findOne({openid: openid})
-          .exec()
+    let cb = yield getUserByCode(code)
 
-        if (exitUser) {
-          req.session.user = exitUser
-          res.redirect(`/index/${req.session.trader}/${req.session.table}`)
-        } else {
-          const user = new User(cb)
+    if (cb) {
+      var openid = cb.openid
 
-          try {
-            user
-              .save()
-              .then(res => {
-                req.session.user = user
-                res.redirect(`/index/${req.session.trader}/${req.session.table}`)
-              })
-          } catch (e) {
-            console.log(e)
-          }
+      var exitUser = User.findOne({openid: openid}).exec()
+
+      if (exitUser) {
+        req.session.user = exitUser
+        res.redirect(`/index/${req.session.trader}/${req.session.table}`)
+      } else {
+        const user = new User(cb)
+
+        try {
+          user
+            .save()
+            .then(res => {
+              req.session.user = user
+              res.redirect(`/index/${req.session.trader}/${req.session.table}`)
+            })
+        } catch (e) {
+          console.log(e)
         }
       }
-    })
+    }
   }
 })
 
