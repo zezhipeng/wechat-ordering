@@ -5,7 +5,7 @@ const User = mongoose.model('User');
 const client = require('../../config').client
 const APIService = require('../../config/wx/service');
 const sha1 = require('sha1')
-console.log(client)
+
 exports.hear = async(function* (req, res) {
   console.log(req.query)
   console.log(req.body)
@@ -16,20 +16,22 @@ exports.hear = async(function* (req, res) {
   let echostr = req.query.echostr || req.query.openid
   let str = [token, timestamp, nonce].sort().join('')
   let sha = sha1(str)
-
+  console.log(sha)
   if (sha === signature) {
+    console.log(echostr)
     res.send(echostr + '')
   }
 })
 
 exports.user = async(function* (req, res) {
   const code = req.query.code || req.body.code
-
+  console.log('code', code)
   if (code) {
     client.getUserByCode(code, (err, cb) => {
       if (cb) {
+        console.log(cb)
         let openid = cb.openid
-        let exitUser = User
+        let exitUser = yield User
           .findOne({openid: openid})
           .exec()
 
@@ -41,11 +43,11 @@ exports.user = async(function* (req, res) {
 
           try {
             user
-            .save()
-            .then(res => {
-              req.session.user = user
-              res.redirect(`/index/${req.session.trader}/${req.session.table}`)
-            })
+              .save()
+              .then(res => {
+                req.session.user = user
+                res.redirect(`/index/${req.session.trader}/${req.session.table}`)
+              })
           } catch (e) {
             console.log(e)
           }
