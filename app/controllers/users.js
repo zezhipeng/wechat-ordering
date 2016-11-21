@@ -44,24 +44,19 @@ exports.file = async(function* (req, res) {
    var trader = req.params.trader
    var table = req.params.table
 
-   try {
-     if (user.traders) {
-       let exitTrader = _.find(user.trader, trader)
-       console.log('exitTrader', exitTrader)
-       if (!exitTrader || !exitTrader.length) {
-         user.traders.push(trader)
+   let exitTrader = _.find(user.traders, trader)
+   console.log('exitTrader', exitTrader)
+   if (!exitTrader || !exitTrader.length) {
+     user.traders.push(trader)
 
-         yield user.save()
-       } else {
+     yield user.save()
+   } else {
 
-         user.traders.push(trader)
+     user.traders.push(trader)
 
-         yield user.save()
-       }
-     }
-   } catch(e) {
-     res.send(e)
+     yield user.save()
    }
+
 
    req.session.table = table
    req.session.trader = trader
