@@ -8,11 +8,9 @@ const sha1 = require('sha1')
 const Promise = require('bluebird')
 
 function getUserByCode(code) {
-  console.log(code)
   return new Promise((resolve, reject) => {
     client.getUserByCode(code, (err, cb) => {
       if (err) reject(err)
-      console.log(cb)
       resolve(cb)
     })
   })
@@ -41,25 +39,24 @@ exports.user = async(function* (req, res) {
   if (code) {
     let cb = yield getUserByCode(code)
 
-    console.log(cb)
+    console.log('user:', cb)
     if (cb) {
       var openid = cb.openid
 
       var exitUser = yield User.findOne({openid: openid}).exec()
-
-      if (exitUser) {
+      console.log('exitUser', exitUser)
+      if (exitUser || typeof exitUser !== 'undefined') {
         req.session.user = exitUser
         res.redirect(`/index/${req.session.trader}/${req.session.table}`)
       } else {
         const user = new User(cb)
 
+        console.log('newUser', user)
         try {
-          user
-            .save()
-            .then(res => {
-              req.session.user = user
-              res.redirect(`/index/${req.session.trader}/${req.session.table}`)
-            })
+          user = yield user.save()
+          console.log('saveUser', user)
+          req.session.user = user
+          res.redirect(`/index/${req.session.trader}/${req.session.table}`)
         } catch (e) {
           console.log(e)
         }
