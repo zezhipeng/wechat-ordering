@@ -8,9 +8,11 @@ const sha1 = require('sha1')
 const Promise = require('bluebird')
 
 function getUserByCode(code) {
+  console.log(code)
   return new Promise((resolve, reject) => {
     client.getUserByCode(code, (err, cb) => {
       if (err) reject(err)
+      console.log(cb)
       resolve(cb)
     })
   })
@@ -34,11 +36,12 @@ exports.hear = async(function* (req, res) {
 })
 
 exports.user = async(function* (req, res) {
-  const code = req.query.code || req.body.code
+  var code = req.query.code || req.body.code
 
   if (code) {
     let cb = yield getUserByCode(code)
 
+    console.log(cb)
     if (cb) {
       var openid = cb.openid
 
