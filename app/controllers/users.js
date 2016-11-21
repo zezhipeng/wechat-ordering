@@ -44,6 +44,8 @@ exports.file = async(function* (req, res) {
    var trader = req.params.trader
    var table = req.params.table
 
+   user = yield User.findById(user._id).exec()
+   console.log(user)
    let exitTrader = _.find(user.traders, trader)
    console.log('exitTrader', exitTrader)
    if (!exitTrader || !exitTrader.length) {
