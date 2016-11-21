@@ -45,7 +45,7 @@ exports.user = async(function* (req, res) {
     if (cb) {
       var openid = cb.openid
 
-      var exitUser = User.findOne({openid: openid}).exec()
+      var exitUser = yield User.findOne({openid: openid}).exec()
 
       if (exitUser) {
         req.session.user = exitUser
