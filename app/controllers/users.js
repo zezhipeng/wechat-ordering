@@ -13,6 +13,7 @@ const APIService = require('../../config/wx/service');
 const Dish = mongoose.model('Dish')
 const Trader = mongoose.model('Trader')
 const Order = mongoose.model('Order')
+const _ = require('lodash')
 
 const api = {
   trader: Trader,
@@ -39,21 +40,20 @@ exports.file = async(function* (req, res) {
 })
 
  exports.index = async(function* (req, res) {
-   let user = req.session.user
-   let trader = req.params.trader
-   let table = req.params.table
+   var user = req.session.user
+   var trader = req.params.trader
+   var table = req.params.table
 
    try {
      if (user.traders) {
-       let exitTrader = user.traders.filter(i => {
-         return i == trader
-       })
-       if (!exitTrader.length) {
+       let exitTrader = _.find(user.trader, trader)
+       console.log('exitTrader', exitTrader)
+       if (!exitTrader || !exitTrader.length) {
          user.traders.push(trader)
 
          yield user.save()
        } else {
-         user.traders = []
+
          user.traders.push(trader)
 
          yield user.save()
