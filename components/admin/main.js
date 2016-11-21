@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import store from './vuex/store'
 import VueRouter from 'vue-router'
+// import { Vue2Dragula } from 'vue2-dragula'
 
 import '../assets/css/base.css'
 import '../assets/css/project.css'
@@ -18,6 +19,12 @@ import '../assets/js/tab'
 import '../assets/js/tile'
 
 Vue.use(VueRouter)
+// Vue.use(Vue2Dragula, {
+//   logging: {
+//     plugin: true,
+//     service: true
+//   }
+// })
 
 const routes = [
   {

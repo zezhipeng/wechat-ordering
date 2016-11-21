@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "start": "DEBUG=koa-views,$DEBUG NODE_ENV=development node-dev server.js",
-    "adinno": "PORT=2333 NODE_ENV=test node server.js",
+    "adinno": "PORT=2333 NODE_ENV=test pm2 start server.js",
     "build": "node build/build.js",
     "test": "NODE_ENV=test node-dev server.js"
   },
@@ -22,6 +22,7 @@
     "cross-env": "~3.1.1",
     "csurf": "~1.9.0",
     "dotenv": "~2.0.0",
+    "dragula": "^3.7.2",
     "errorhandler": "^1.1.1",
     "express": "^4.8.0",
     "express-restify-mongoose": "^4.1.3",
@@ -65,6 +66,7 @@
     "vue-awesome-swiper": "^2.2.0",
     "vue-headroom": "^0.2.0",
     "vue-router": "^2.0.1",
+    "vue2-dragula": "github:kristianmandrup/vue2-dragula#master",
     "vuex": "^2.0.0",
     "vuex-router-sync": "^2.1.1",
     "wechat-oauth": "^1.1.1",

@@ -92,7 +92,7 @@ const store = new Vuex.Store({
     },
     update ({commit}, req) {
       let model = req.model
-      req._id = store.state[model]._id
+      req._id = req._id || store.state[model]._id
 
       $.ajax({
         type: 'PUT',
@@ -101,7 +101,11 @@ const store = new Vuex.Store({
         dataType: 'json'
       })
       .then(res => {
-        commit(model, res)
+        if (model === 'user') {
+          init()
+        } else {
+          commit(model, res)
+        }
       })
     },
     updateOrder({commit}, req) {
@@ -166,6 +170,7 @@ init()
 function init() {
   $.get('/api/init')
   .then(res => {
+    console.log(res)
     Object.keys(res).forEach(key => {
       store.state[key] = res[key]
     })

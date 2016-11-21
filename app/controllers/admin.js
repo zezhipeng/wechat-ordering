@@ -19,6 +19,7 @@ const api = {
   trader: Trader,
   dishes: Dish,
   order: Order,
+  user: User,
   coupon: Coupon
 }
 
@@ -35,7 +36,7 @@ exports.update = async(function* (req, res) {
   let value = body.value
   let model = req.params.model
   let _id = body._id
-
+  console.log(body)
   try {
     let update = yield api[model].findById(_id).exec()
     if (operator === 'push') {
@@ -43,6 +44,9 @@ exports.update = async(function* (req, res) {
     }
     else if (operator === 'splice') {
       update[key][operator](value, 1)
+    }
+    else {
+      update[key] = value
     }
     update = yield update.save()
 
@@ -175,7 +179,7 @@ exports.init = async(function* (req, res) {
     let dishes = yield Dish.find({trader: _id}).exec()
     let orderings = yield Order.find({trader: _id}).populate('user').exec()
     let coupon = yield Coupon.find({trader: _id}).exec()
-    let users = yield User.find({traders: {$in: [_id]}}).exec()
+    let users = yield User.find({traders: {$in: [_id]}}).populate('coupon').exec()
 
     res.json({
       trader: trader,
