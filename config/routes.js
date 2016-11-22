@@ -67,8 +67,8 @@ module.exports = function (app) {
       if (!req.session.user || !req.session.user._id) {
         req.session.trader = req.params.trader
         req.session.table = req.params.table
-
-        let url = client.getAuthorizeURL(`${req.protocol}://${req.hostname}/wx/user`, 'STATE', 'snsapi_userinfo')
+        let port = process.env.PORT
+        let url = client.getAuthorizeURL(`${req.protocol}://${req.hostname}:${port}/wx/user`, 'STATE', 'snsapi_userinfo')
         res.redirect(url)
 
       } else {
