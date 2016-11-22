@@ -45,19 +45,16 @@ exports.file = async(function* (req, res) {
    var table = req.params.table
 
    user = yield User.findById(user._id).exec()
-   console.log(user)
-   let exitTrader = _.find(user.traders, trader)
-   console.log('exitTrader', exitTrader)
-   if (!exitTrader || !exitTrader.length) {
-     user.traders.push(trader)
 
-     yield user.save()
-   } else {
+   let exitTrader = user.traders.indexOf(trader)
 
+   if (exitTrader === -1) {
      user.traders.push(trader)
 
      yield user.save()
    }
+
+   user = yield User.findById(user._id).populate('coupon order traders').exec()
 
 
    req.session.table = table
@@ -72,29 +69,21 @@ exports.file = async(function* (req, res) {
  })
 
  exports.indexDev = async(function* (req, res) {
-   let user = yield User.findOne({openid: 'ohie2vwWiN49QlqAsrQABcVXRvkA'}).exec()
+   let user = yield User.findOne({openid: 'ohie2vwWiN49QlqAsrQABcVXRvkA'}).populate('coupon order traders').exec()
    let trader = req.params.trader
    let table = req.params.table
 
-   try {
-     if (user.traders) {
-       let exitTrader = user.traders.filter(i => {
-         return i == trader
-       })
-       if (!exitTrader.length) {
-         user.traders.push(trader)
+   user = yield User.findById(user._id).exec()
 
-         yield user.save()
-       } else {
-         user.traders = []
-         user.traders.push(trader)
+   let exitTrader = user.traders.indexOf(trader)
 
-         yield user.save()
-       }
-     }
-   } catch(e) {
-     res.send(e)
+   if (exitTrader === -1) {
+     user.traders.push(trader)
+
+     yield user.save()
    }
+
+   user = yield User.findById(user._id).populate('coupon order traders').exec()
 
    req.session.table = table
    req.session.trader = trader
@@ -109,11 +98,9 @@ exports.file = async(function* (req, res) {
 
  exports.init = async(function* (req, res) {
    let _id = req.session.trader
-   console.log(_id)
+
    try {
      let dishes = yield Dish.find({trader: _id}).exec()
-
-     console.log('dishes', dishes)
 
      res.json(dishes)
    } catch(e) {

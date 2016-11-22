@@ -55,9 +55,6 @@ const store = new Vuex.Store({
         return total += item.price * item.number
       }, 0)
     },
-    coupon: state => {
-      return state.user.coupon
-    },
     recommend: state => {
       return state.list.filter(item => item.recommend)
     },
@@ -66,8 +63,15 @@ const store = new Vuex.Store({
     },
     coupon: state => {
       return state.user.coupon.filter(i => {
-        let due = new Date(i.due).getTime()
-
+        let date = i.due.match(/\d+/g)
+        let due = new Date()
+        due.setYear(date[0])
+        due.setMonth(date[1])
+        due.setDate(date[2])
+        due = due.getTime()
+        let now = Date.now()
+        console.log(due)
+        console.log(now)
         return !i.used && (now < due + 1000 * 60 * 60 * 24)
       })
     }

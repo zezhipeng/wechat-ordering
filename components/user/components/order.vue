@@ -16,12 +16,11 @@ div
   transition(name='slide-fade')
     .order-list(tag='ul' v-if='order.length', name='fadeIn')
       li.coupon
-        a(data-toggle='collapse', href='#ui_collapse_example')
+        a(@click='toggleCoupon')
           span.collapsed-hide  可用优惠券 {{coupon.length}}
-          span.collapsed-show
-            span.icon expand_less
-        ul#ui_collapse_example.collapsible-region.collapse(aria-expanded='false', style='height: 0px;')
-          li(v-for='item in coupon',  :key='item._id', @click='useCoupon(item)') ¥{{item.price}}
+          span.icon expand_more
+        ul(style='display: none')
+          li(v-for='item in coupon',  :key='item._id', @click='useCoupon(item)', v-bind:class='{"checked": couponNow === item}') ¥{{item.minus}}
             span 实付金额满{{item.limit}}
               span 有效期至{{item.due}}
       transition-group(name='fadeIn')
@@ -42,7 +41,7 @@ div
     .footer-bar(v-if='order.length')
       .coupon
         span.text 减
-        span.number ¥{{couponNow.minus || 0}}
+        span.number ¥{{couponShow}}
       .total 合计：
         span ¥{{tweeningValue}}
       .pay-btn(@click='submitOrder') 立即下单({{order.length}})
@@ -58,6 +57,7 @@ export default {
   data () {
     return {
       showCoupon: false,
+      couponShow: 0,
       couponNow: {
         minus: 0
       },
@@ -69,7 +69,10 @@ export default {
       return this.$store.getters.order
     },
     totalFee () {
-      return this.$store.getters.totalFee
+      let totalFee = this.$store.getters.totalFee - this.couponNow.minus
+      return totalFee > 0
+        ? totalFee
+        : 0
     },
     coupon () {
       return this.$store.getters.coupon
@@ -78,14 +81,20 @@ export default {
   created () {},
   watch: {
     'totalFee': function (newVal, oldVal) {
-      this.tween(oldVal, newVal)
+      this.tween(oldVal, newVal, 'tweeningValue')
+    },
+    'couponNow': function (newVal, oldVal) {
+      this.tween(oldVal.minus, newVal.minus, 'couponShow')
     }
   },
   mounted () {
-    this.tween(0, this.totalFee)
+    this.tween(0, this.totalFee, 'tweeningValue')
   },
   methods: {
-    tween: function (startValue, endValue) {
+    toggleCoupon() {
+      $('.order-list .coupon ul').slideToggle(275)
+    },
+    tween(startValue, endValue, tweeningValue) {
       var vm = this
       function animate (time) {
         requestAnimationFrame(animate)
@@ -94,13 +103,19 @@ export default {
       new TWEEN.Tween({ tweeningValue: startValue })
         .to({ tweeningValue: endValue }, 500)
         .onUpdate(function () {
-          vm.tweeningValue = this.tweeningValue.toFixed(0)
+          vm[tweeningValue] = this.tweeningValue.toFixed(0)
         })
         .start()
       animate()
     },
     useCoupon(coupon) {
-      this.couponNow = coupon
+      if (this.couponNow === coupon) {
+        this.couponNow = {
+          minus: 0
+        }
+      } else {
+        this.couponNow = coupon
+      }
     },
     submitOrder() {
       $.ajax({
@@ -231,27 +246,34 @@ export default {
   padding: 0;
 
   .coupon {
-    display: flex;
-    flex-direction: column;
-    height: 40px;
-    justify-content: center;
-    // justify-content: space-between;
-    // height: 40px;
-    // align-items: center;
+    display: block;
+    height: auto;
+
+    a {
+      text-align: center;
+      width: 100%;
+      display: block;
+      height: 40px;
+      line-height: 40px;
+    }
     .content {
       color: #666;
       height: 40px;
+      width: 100%;
     }
     ul {
-      display: none;
-      height: 0;
       width: 100%;
       padding: 0;
-      transition: all 500ms ease;
-    }
-    .active {
-      display: block;
-      height: auto;
+
+      li {
+        border-top: 1px solid#ddd;
+
+        &.checked {
+          border: 2px solid#FF7058;
+
+        }
+      }
+
     }
   }
 
