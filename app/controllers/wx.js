@@ -49,7 +49,7 @@ exports.user = async(function* (req, res) {
         req.session.user = exitUser
         res.redirect(`/index/${req.session.trader}/${req.session.table}`)
       } else {
-        const user = new User(cb)
+        var user = new User(cb)
 
         console.log('newUser', user)
         try {
