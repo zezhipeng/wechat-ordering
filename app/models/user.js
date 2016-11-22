@@ -56,6 +56,7 @@ const UserSchema = new Schema({
    sex: Number,
    province: String,
    city: String,
+   language: String,
    country: String,
    headimgurl: String,
    privilege: Schema.Types.Mixed, //用户特权信息，json 数组，如微信沃卡用户为（chinaunicom）

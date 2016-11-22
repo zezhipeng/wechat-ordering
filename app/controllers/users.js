@@ -56,7 +56,6 @@ exports.file = async(function* (req, res) {
 
    user = yield User.findById(user._id).populate('coupon order traders').exec()
 
-
    req.session.table = table
    req.session.trader = trader
    req.session.user = user

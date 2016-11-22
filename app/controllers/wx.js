@@ -45,7 +45,7 @@ exports.user = async(function* (req, res) {
 
       var exitUser = yield User.findOne({openid: openid}).exec()
       console.log('exitUser', exitUser)
-      if (exitUser || typeof exitUser !== 'undefined') {
+      if (exitUser) {
         req.session.user = exitUser
         res.redirect(`/index/${req.session.trader}/${req.session.table}`)
       } else {
