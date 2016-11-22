@@ -149,12 +149,13 @@ exports.signUp = async(function* (req, res) {
   body.password = sha1(body.password)
 
   try {
+    console.log('body', body)
     var trader = new Trader({
       name: body.name,
       password: body.password
     })
-
-    yield trader.save()
+    console.log('trader:', trader)
+    trader = yield trader.save()
     req.session.trader = trader
     res.cookie('trader', trader)
 
