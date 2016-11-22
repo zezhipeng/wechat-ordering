@@ -155,8 +155,8 @@ exports.signUp = async(function* (req, res) {
       password: body.password,
       tables: []
     })
-    console.log('trader:', trader)
-    trader = yield trader.save()
+
+    trader.save()
     req.session.trader = trader
     res.cookie('trader', trader)
 
