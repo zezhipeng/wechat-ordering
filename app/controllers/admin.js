@@ -152,7 +152,8 @@ exports.signUp = async(function* (req, res) {
     console.log('body', body)
     var trader = new Trader({
       name: body.name,
-      password: body.password
+      password: body.password,
+      tables: []
     })
     console.log('trader:', trader)
     trader = yield trader.save()
