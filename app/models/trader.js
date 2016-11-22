@@ -98,13 +98,13 @@ const TraderSchema = new Schema({
  * Pre-save hook
  */
 
-TraderSchema.pre('save', function (next) {
-  if (global.socket) {
-    global.socket.emit('mongoose:save', this)
-  }
-
-  next()
-})
+// TraderSchema.pre('save', function (next) {
+//   if (global.socket) {
+//     global.socket.emit('mongoose:save', this)
+//   }
+//
+//   next()
+// })
 
 mongoose.model('Trader', TraderSchema);
 
