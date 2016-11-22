@@ -3,6 +3,7 @@ import App from './App.vue'
 import store from './vuex/store'
 import VueRouter from 'vue-router'
 // import { Vue2Dragula } from 'vue2-dragula'
+import { sync } from 'vuex-router-sync'
 
 import '../assets/css/base.css'
 import '../assets/css/project.css'
@@ -117,6 +118,8 @@ const routes = [
 const router = new VueRouter({
   routes
 })
+
+sync(store, router)
 
 router.beforeEach((to, from, next) => {
   let auth = to.matched[0].meta.auth

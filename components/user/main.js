@@ -33,13 +33,12 @@ function init() {
     { path: '*', component: require('./components/menu.vue') }
   ]
 
-  console.log('vue')
   const router = new VueRouter({
     mode: 'history',
     routes
   })
 
-  // sync(store, router)
+  sync(store, router)
 
   new Vue({
     el: '#app',

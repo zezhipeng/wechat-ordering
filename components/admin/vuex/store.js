@@ -165,7 +165,7 @@ const store = new Vuex.Store({
   plugins: [plugin]
 })
 
-init()
+setTimeout(init, 1500)
 
 function init() {
   $.get('/api/init')
