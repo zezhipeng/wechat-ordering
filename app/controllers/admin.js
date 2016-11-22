@@ -150,7 +150,7 @@ exports.signUp = async(function* (req, res) {
 
   try {
     var trader = new Trader({
-      name: body.name
+      name: body.name,
       password: body.password
     })
 
