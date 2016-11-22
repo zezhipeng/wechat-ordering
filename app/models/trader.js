@@ -24,12 +24,7 @@ const TraderSchema = new Schema({
      type: Number,
      default: 0
    },
-   tables: [
-     {
-       name: String,
-       size: Number
-     }
-   ],
+   tables: Mixed,
    classes: [
      {
        name: String,
