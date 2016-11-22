@@ -144,12 +144,12 @@ exports.login = async(function* (req, res) {
 
 })
 exports.signUp = async(function* (req, res) {
-  let body = req.body
+  var body = req.body
 
   body.password = sha1(body.password)
 
   try {
-    let trader = new Trader(body)
+    var trader = new Trader(body)
 
     yield trader.save()
     req.session.trader = trader
@@ -160,6 +160,8 @@ exports.signUp = async(function* (req, res) {
       data: trader
     })
   } catch(e) {
+    console.log('signUp', e)
+
     res.send(e)
   }
 
