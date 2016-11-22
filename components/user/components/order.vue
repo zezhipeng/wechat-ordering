@@ -93,6 +93,9 @@ export default {
   methods: {
     toggleCoupon() {
       $('.order-list .coupon ul').slideToggle(275)
+      setTimeout(function() {
+        $('.order-list .coupon ul').show()
+      }, 275)
     },
     tween(startValue, endValue, tweeningValue) {
       var vm = this
