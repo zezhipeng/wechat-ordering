@@ -19,6 +19,8 @@ const store = new Vuex.Store({
     orderings: [],
     coupon: [],
     users: [],
+    print: {
+    },
     auth: {
       authorized: false
     }
@@ -31,12 +33,16 @@ const store = new Vuex.Store({
     done: state => state.orderings.filter(v => v.status === '完成'),
     coupon: state => state.coupon,
     users: state => state.users,
+    print: state => state.print,
     dishes: state => state.dishes
   },
   mutations: {
     trader (state, data) {
       state.auth.authorized = true
       state.trader = data
+    },
+    print (state, data) {
+      state.print = data
     },
     orderings (state, data) {
       state.orderings = data
@@ -53,6 +59,9 @@ const store = new Vuex.Store({
     order (state, data) {
       state.orderings = data
     },
+    users (state, data) {
+      state.users = data
+    },
     dishes (state, data) {
       state.dishes = data
     },
@@ -61,11 +70,6 @@ const store = new Vuex.Store({
     },
     update(state, req) {
       state.user[req.key] = req.data
-    },
-    login(state, res) {
-      if (res.success) {
-        state.auth.authorized = true
-      }
     }
   },
   actions: {
@@ -144,8 +148,14 @@ const store = new Vuex.Store({
         dataType: 'json'
       })
       .then(res => {
-        if (res.success) {
-          commit('login', res)
+        if (!res.success) {
+          window.alert(res.msg)
+        } else {
+          state.auth.authorized = true
+
+          Object.keys(res).forEach(key => {
+            store.state[key] = res[key]
+          })
         }
       })
     },

@@ -1,7 +1,7 @@
 <template lang="jade">
 div
   hr
-  .item-title(style='margin-top: 30px; display: flex; align-items: center')
+  .item-title(style='margin-top: 10px; display: flex; align-items: center')
     svg(xmlns='http://www.w3.org/2000/svg', width='36', height='36')
       g(fill='none', fill-rule='evenodd')
         circle(cx='18', cy='18', r='18', fill='#F9A825')
@@ -13,20 +13,23 @@ div
         path(fill='#4CDBC4', d='M10.85 16.207h14.293v.486H10.85z')
         path(fill='#54C0EB', d='M10.85 17.3h14.293v.486H10.85z')
     span(style='margin-left: 14px;') 菜单
-  transition-group.menu-list(tag='ul', name='list')
-    li.menu-item(v-for='item, $index in list', :key='item._id')
-      .img
-        img.img-responsive(:src='"//og2h60o77.bkt.clouddn.com/" + item.src')
-      .footer
-        .line
-          .name {{item.name}}
-            span(style='margin-left: 14px;')
-            span.icon(v-for='i in item.stars') star_border
-          .add(@click='add({item: item, $index: $index}, $event)')
-            span.icon add
-        .line2
-          span.price {{item.price}} /{{item.unit}}
-          span.vt {{item.vt}}
+  ul.filterClasses
+    li(v-for='(value, key) of filterClasses')
+      .classesTitle(v-bind:data-key='key') {{key}}
+      transition-group.menu-list(tag='ul', name='list')
+        li.menu-item.active(v-for='item, $index in value', :key='item._id')
+          .img
+            img.img-responsive(:src='"//og2h60o77.bkt.clouddn.com/" + item.src')
+          .footer
+            .line
+              .name {{item.name}}
+                span.br(style='margin-left: 14px;')
+                span.icon(v-for='i in item.stars') star_border
+              .add(@click='add({item: item, $index: $index}, $event)')
+                span.icon add
+            .line2
+              span.price {{item.price}} /{{item.unit}}
+              span.vt {{item.vt}}
 </template>
 <script>
 import _ from 'lodash'
@@ -39,18 +42,18 @@ export default {
     }
   },
   computed: {
-    list () {
-      return this.$store.getters.list
+    filterClasses () {
+      return this.$store.getters.filterClasses
     },
     order () {
       return this.$store.getters.order
+    },
+    classes() {
+      return this.$store.getters.classes
     }
   },
   mounted () {},
   methods: {
-    shuffle () {
-      this.list = _.shuffle(this.list)
-    },
     tween: function (startValue, endValue, el) {
       function animate () {
         requestAnimationFrame(animate)
@@ -106,7 +109,18 @@ export default {
 </script>
 
 <style lang="less">
-
+.filterClasses {
+  list-style: none;
+  padding: 0;
+  .classesTitle {
+    color: #666;
+    height: 25px;
+    line-height: 25px;
+    background: #eee;
+    margin-bottom: 2px;
+    padding-left: 5px;
+  }
+}
 .ball {
   width: 22px;
   height: 22px;
@@ -125,15 +139,20 @@ export default {
 }
 .list-enter-active, .list-leave-active {
   transition: all 1s;
+  opacity: 1;
 }
 .list-enter, .list-leave-active {
   opacity: 0;
-  transform: translateY(30px);
+  transform: translateY(20px);
 }
 
 .menu-list {
   list-style: none;
   padding: 0;
+
+  &.active {
+
+  }
 
   li {
     padding: 8px;

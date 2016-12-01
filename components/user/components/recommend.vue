@@ -1,6 +1,5 @@
 <template lang="jade">
-div
-
+.recommend-main
   .item-title(style='margin-top: 60px; display: flex; align-items: center')
     svg(width='36px', height='37px', viewbox='0 0 36 37', version='1.1', xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink')
       // Generator: Sketch 40 (33762) - http://www.bohemiancoding.com/sketch
@@ -135,7 +134,7 @@ export default {
 <style lang="less">
 .item-title {
   font-size: 20px;
-  padding: 10px 10px 15px 0;
+  padding: 5px 5px 8px 0;
   color: #666;
 }
 .recommend-content {

@@ -1,7 +1,8 @@
 <template lang="jade">
-.card-main
+.card-main.app
   v-header
-  .dishes-content
+  v-side
+  .dishes-content(v-bind:class='{"active": aside}')
     recommend(v-if='recommends.length')
     menu-content(v-if='list.length')
     transition(name='slide-fade')
@@ -23,6 +24,7 @@
 import VHeader from '../layout/header.vue'
 import recommend from './recommend.vue'
 import menuContent from './menuContent.vue'
+import VSide from '../layout/VSide.vue'
 
 export default {
   data () {
@@ -34,6 +36,9 @@ export default {
     },
     recommends () {
       return this.$store.getters.recommends
+    },
+    aside () {
+      return this.$store.getters.aside
     }
   },
   mounted () {},
@@ -41,12 +46,17 @@ export default {
   components: {
     VHeader,
     menuContent,
-    recommend
+    recommend,
+    VSide
   }
 }
 </script>
 
 <style lang="less">
+.app {
+  display: flex;
+  flex-direction: row;
+}
 .dishes-content {
   padding: 0 15px;
   overflow: scroll;
@@ -54,5 +64,63 @@ export default {
   height: 100%;
   -webkit-overflow-scrolling: touch;
   background: #f3f3f3;
+  transition: all .3s ease;
+  .swiper-wrapper {
+    height: 290px;
+  }
+  &.active {
+    width: e('calc(100% - 80px)');
+    .classesTitle {
+      border-left: 4px solid#ddd;
+    }
+    .menu-list {
+
+      .menu-item {
+        display: flex;
+        margin-bottom: 5px;
+
+        .img {
+          width: 100px;
+          overflow: hidden;
+          img {
+            max-width: 120px
+          }
+        }
+        .footer {
+          width: e('calc(100% - 80px)');
+          overflow: hidden;
+          padding-left: 20px;
+          display: flex;
+          flex-direction: column;
+          .line {
+            margin-top: 0;
+          }
+          .line2 {
+            height: auto;
+            display: flex;
+            flex-direction: column;
+
+            .price {
+              font-size: 10px;
+            }
+            .vt {
+              font-size: 10px;
+              width: e('calc(100% - 20px)')
+            }
+          }
+          .name {
+            font-size: 15px;
+            .br {
+              display: block;
+            }
+          }
+        }
+      }
+    }
+    .recommend-main {
+      display: none;
+    }
+  }
 }
+
 </style>

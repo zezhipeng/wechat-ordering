@@ -3,7 +3,7 @@ div
   v-head
   v-aside
   .main
-    transition(name="fade" mode="out-in")
+    transition(name="fade-right" mode="out-in")
       router-view
 </template>
 

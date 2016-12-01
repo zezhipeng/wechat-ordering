@@ -133,12 +133,24 @@ exports.login = async(function* (req, res) {
         msg: '用户不存在或密码错误'
       })
     }
+    const _id = trader._id
+    let dishes = yield Dish.find({trader: _id}).exec()
+    let orderings = yield Order.find({trader: _id}).populate('user').exec()
+    let coupon = yield Coupon.find({trader: _id}).exec()
+    let users = yield User.find({traders: {$in: [_id]}}).populate('coupon').exec()
 
     res.json({
       success: 1,
-      data: trader
+      data: {
+        trader: trader,
+        dishes: dishes,
+        coupon: coupon,
+        users: users,
+        orderings: orderings
+      }
     })
   } catch(e) {
+    console.log(e)
     res.send(e)
   }
 

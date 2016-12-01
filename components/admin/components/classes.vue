@@ -28,9 +28,9 @@
             span.icon add
             a.btn.btn-flat.waves-attach.waves-effect(@click='add(data)') 添加
         .fbtn-container
-  .floatBtn
-    a.fbtn.fbtn-brand-accent.fbtn-lg.waves-attach.waves-circle.waves-light.waves-effect(style='padding-top: 18px;', @click='updateTrader')
-      span.icon save
+  //- .floatBtn
+  //-   a.fbtn.fbtn-brand-accent.fbtn-lg.waves-attach.waves-circle.waves-light.waves-effect(style='padding-top: 18px;', @click='updateTrader')
+  //-     span.icon save
 </template>
 
 <script>

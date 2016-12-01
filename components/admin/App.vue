@@ -1,25 +1,40 @@
 <template lang="jade">
 #app
-  //- v-head
-  router-view
+  router-view.noPrint
+  .print
+    table.table(style='box-shadow: none; background-color: #f7f7f7')
+      thead
+        tr
+          th 名称
+          th 价格
+          th 数量
+          th 总价
+      tbody
+        tr(v-for='dish in print.dishes')
+          td {{dish.name}}
+          td ¥{{dish.price}}
+          td x {{dish.number}}
+          td ¥ {{dish.price * dish.number}}
+        tr
+          td
+          td
+          td 总费用:
+          td(style='color: #FF6600; font-size: 20px') ¥ {{print.totalFee}}
+
   .snackbar
 </template>
 
 <script>
 import VHead from './layout/head.vue'
-// import VAside from './layout/aside.vue'
-// import orderings from './components/orderings.vue'
-// import tables from './components/tables.vue'
-// import dishes from './components/dishes.vue'
 
 export default {
   data () {
     return {}
   },
   computed: {
-    // page() {
-    //   return this.$store.getters.page
-    // }
+    print() {
+      return this.$store.getters.print
+    }
   },
   mounted () {
     // this.$store.dispatch('init')
@@ -60,6 +75,13 @@ body, html {
 .fade-enter, .fade-leave-active {
   opacity: 0;
 }
+.fade-right-enter-active, .fade-right-leave-active {
+  transition: all .2s ease;
+}
+.fade-right-enter, .fade-right-leave-active {
+  opacity: 0;
+  transform: translateX(-20px);
+}
 
 .fadeLeft-enter-active, .fadeLeft-leave-active {
   transition: all .3s;
@@ -74,5 +96,18 @@ body, html {
   bottom: 40px;
   right: 70px;
   z-index: 100;
+}
+
+.print {
+  display: none;
+}
+
+@media print {
+  .noPrint {
+    display: none;
+  }
+  .print {
+    display: block;
+  }
 }
 </style>

@@ -44,7 +44,7 @@
                       td(style='color: #FF6600; font-size: 20px') ¥ {{item.totalFee}}
 
               .tile-action
-                a.btn.btn-flat.waves-attach.waves-effect(data-toggle='tile', href='#ui_tile_example_2')
+                a.btn.btn-flat.waves-attach.waves-effect(data-toggle='tile', href='#ui_tile_example_2', @click='print(item)')
                   span.icon print
                   | 打印
                 a.btn.btn-flat.waves-attach.waves-effect(@click='orderFinish(item)')
@@ -192,6 +192,12 @@ export default {
 
   },
   methods: {
+    print(item) {
+      this.$store.commit('print', item)
+      setTimeout(function() {
+        window.print()
+      }, 500)
+    },
     orderFinish(item) {
       const vm = this
 
@@ -311,11 +317,12 @@ export default {
   transform-origin: top;
 }
 .growUp-leave-active {
-  transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+  transition: all 0 cubic-bezier(1.0, 0.5, 0.8, 1.0);
   transform-origin: top;
 }
 .growUp-enter, .growUp-leave-active {
   opacity: 0;
   transform: scale(1, 0);
 }
+
 </style>

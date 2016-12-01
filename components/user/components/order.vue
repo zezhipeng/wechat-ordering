@@ -44,7 +44,7 @@ div
         span.number ¥{{couponShow}}
       .total 合计：
         span ¥{{tweeningValue}}
-      .pay-btn(@click='submitOrder') 立即下单({{order.length}})
+      .pay-btn(@click='submitOrder', v-bind:disabled='ordering') 立即下单({{order.length}})
 </template>
 
 <script>
@@ -58,6 +58,7 @@ export default {
     return {
       showCoupon: false,
       couponShow: 0,
+      ordering: false,
       couponNow: {
         minus: 0
       },
@@ -121,6 +122,8 @@ export default {
       }
     },
     submitOrder() {
+      this.ordering = true
+      var vm = this
       $.ajax({
         url: '/orderings',
         type: 'POST',
@@ -133,9 +136,17 @@ export default {
       .done(res => {
         if (res.success) {
           swal("下单成功", "布噜布噜⋯布噜布噜⋯", "success")
+          // vm.$router.order = []
+          console.log(vm)
+          vm.$router.push({path: '/naccount'})
         } else {
-          console.log(res)
+          $('.snackbar').snackbar({
+            alive: 2000,
+            content: `<div>下单失败</div>`
+          })
         }
+
+        this.ordering = false
       })
     },
     pay () {

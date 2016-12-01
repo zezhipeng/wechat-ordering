@@ -21,10 +21,12 @@ const store = new Vuex.Store({
     order: [],
     orderCache: [],
     orderLength: 0,
+    aside: false,
     searchText: '',
     list: []
   },
   getters: {
+    aside: state => state.aside,
     list: state => {
       if (state.searchText.length) {
         return state.list.filter(v => {
@@ -35,6 +37,18 @@ const store = new Vuex.Store({
         return state.list
       }
     },
+    filterClasses: state => {
+      var report = {}
+
+      state.trader.classes.forEach(i => {
+        report[i.name] = state.list.filter(item => {
+          return item.class === i.name
+        })
+      })
+      
+      return report
+    },
+    classes: state => state.trader.classes,
     recommends: state => {
       if (!state.searchText.length) {
         return state.list.filter(v => {
@@ -77,6 +91,9 @@ const store = new Vuex.Store({
     }
   },
   mutations: {
+    aside (state, data) {
+      state.aside = data
+    },
     searchText (state, text) {
       state.searchText = text
     },
@@ -183,8 +200,8 @@ function init() {
     url: '/user/init'
   })
   .then(res => {
-    console.log('res', res)
-    store.state.list = res
+    store.state.list = res.dishes
+    store.state.trader = res.trader
   })
 }
 

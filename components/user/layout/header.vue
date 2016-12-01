@@ -30,6 +30,9 @@ export default {
     }
   },
   computed: {
+    aside() {
+      return this.$store.getters.aside
+    }
   },
   mounted () {
     this.elemHeight = this.$el.offsetHeight
@@ -43,6 +46,9 @@ export default {
       if (this.search) {
         this.searchText = ''
         this.search = !this.search
+      }
+      else {
+        this.$store.commit('aside', !this.aside)
       }
     },
     _handleScroll () {
@@ -66,13 +72,16 @@ export default {
       this.currentScrollY = this._getScrollY()
 
       const action = checkActions(this)
-      let isAction = $('.header').hasClass('action')
+      if (!this.aside) {
+        let isAction = $('.header').hasClass('action')
 
-      if (action === 'up' && isAction) {
-        $('.header').removeClass('action')
-      }
-      else if (action === 'down' && !isAction) {
-        $('.header').addClass('action')
+        if (action === 'up' && isAction) {
+          $('.header').removeClass('action')
+        }
+        else if (action === 'down' && !isAction) {
+          $('.header').addClass('action')
+        }
+
       }
 
       this.lastScrollY = this.currentScrollY

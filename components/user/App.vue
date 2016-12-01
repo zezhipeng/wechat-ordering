@@ -8,6 +8,7 @@
       span.icon restaurant_menu
     router-link.menu-item.shoppingCart(to='/order' v-bind:data-badge='orderLength')
       span.icon.shoppingCart shopping_cart
+  .snackbar
 </template>
 
 <script>

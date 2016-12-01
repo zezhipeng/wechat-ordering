@@ -69,8 +69,13 @@ export default {
       })
       .then(res => {
         console.log(res)
-        if (res.success) {
-          this.$store.commit('trader', res.data)
+        if (!res.success) {
+          window.alert(res.msg)
+        } else {
+          Object.keys(res.data).forEach(key => {
+            this.$store.commit(key, res.data[key])
+          })
+
           this.$router.push({name: 'home'})
         }
       })

@@ -100,8 +100,12 @@ exports.file = async(function* (req, res) {
 
    try {
      let dishes = yield Dish.find({trader: _id}).exec()
-
-     res.json(dishes)
+     let trader = yield Trader.findById(_id).exec()
+     
+     res.json({
+       dishes: dishes,
+       trader: trader
+     })
    } catch(e) {
      res.send(e)
    }
