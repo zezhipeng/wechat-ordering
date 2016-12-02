@@ -106,8 +106,35 @@ body, html {
   .noPrint {
     display: none;
   }
+  html, body {
+    max-height: 210mm;
+    width: 58mm
+  }
   .print {
     display: block;
+    font-size: 9pt;
+    font-weight: bold;
   }
 }
+
+@page {
+  size: 55mm 210mm;
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 0;
+}
+@page :left {
+  margin: 0;
+  padding: 0;
+}
+@page :right {
+  margin: 0;
+  padding: 0;
+}
+@page :first {
+	margin: 0;
+  padding: 0;
+}
+
 </style>
