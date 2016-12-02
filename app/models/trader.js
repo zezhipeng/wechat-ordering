@@ -27,7 +27,14 @@ const TraderSchema = new Schema({
          type: String,
          unique: true
        },
-
+       status: {
+         type: String,
+         default: '空闲'
+       },
+       updateAt: {
+         type: Date,
+         default: Date.now
+       },
        size: Number
      }
    ],

@@ -154,7 +154,9 @@ const store = new Vuex.Store({
           state.auth.authorized = true
 
           Object.keys(res).forEach(key => {
-            store.state[key] = res[key]
+            if (key !== 'success') {
+              store.state[key] = res[key]              
+            }
           })
         }
       })
@@ -175,12 +177,9 @@ const store = new Vuex.Store({
   plugins: [plugin]
 })
 
-setTimeout(init, 1500)
-
 function init() {
   $.get('/api/init')
   .then(res => {
-    console.log(res)
     Object.keys(res).forEach(key => {
       store.state[key] = res[key]
     })

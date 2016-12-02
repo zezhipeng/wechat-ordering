@@ -61,6 +61,7 @@ module.exports = function (app) {
   app.get('/signup', users.signup);
   app.get('/logout', users.logout);
   app.get('/user/init', users.init);
+  app.get('/myOrder', users.myOrder)
 
   if (process.env.NODE_ENV === 'test') {
     app.get('/index/:trader/:table', (req, res, next) => {

@@ -1,8 +1,7 @@
 <template lang="jade">
 .aside(v-bind:class='{"active": aside}')
   ul
-    li(v-for='item in classes')
-      a(@click='slideTo(item.name)') {{item.name}}
+    li(v-for='item in classes', @click='slideTo(item.name)') {{item.name}}
 </template>
 
 <script>
@@ -64,10 +63,18 @@ export default {
       background: white;
       color: #666;
       text-align: center;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      word-break: normal;
+      white-space: nowrap;
       border-bottom: 1px solid#ddd;
       a {
         color: #666;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        word-wrap: break-word;
       }
+
     }
   }
 }

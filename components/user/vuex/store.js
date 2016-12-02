@@ -23,9 +23,11 @@ const store = new Vuex.Store({
     orderLength: 0,
     aside: false,
     searchText: '',
+    myOrder: [],
     list: []
   },
   getters: {
+    myOrder: state => state.myOrder,
     aside: state => state.aside,
     list: state => {
       if (state.searchText.length) {
@@ -45,7 +47,7 @@ const store = new Vuex.Store({
           return item.class === i.name
         })
       })
-      
+
       return report
     },
     classes: state => state.trader.classes,
@@ -91,6 +93,12 @@ const store = new Vuex.Store({
     }
   },
   mutations: {
+    myOrder (state, data) {
+      state.myOrder = data
+    },
+    order (state, data) {
+      state.order = data
+    },
     aside (state, data) {
       state.aside = data
     },
@@ -202,6 +210,7 @@ function init() {
   .then(res => {
     store.state.list = res.dishes
     store.state.trader = res.trader
+    store.state.myOrder = res.myOrder
   })
 }
 

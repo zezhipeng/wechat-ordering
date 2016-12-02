@@ -110,6 +110,10 @@ export default {
           }
           .name {
             font-size: 15px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            word-break: normal;
+            white-space: nowrap;
             .br {
               display: block;
             }

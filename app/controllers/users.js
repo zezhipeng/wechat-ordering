@@ -1,4 +1,4 @@
-'use strict';
+ 'use strict';
 
 /**
  * Module dependencies.
@@ -101,9 +101,11 @@ exports.file = async(function* (req, res) {
    try {
      let dishes = yield Dish.find({trader: _id}).exec()
      let trader = yield Trader.findById(_id).exec()
-     
+     let myOrder = yield Order.find({user: req.session.user._id}).sort('-meta.createdAt').populate({path: 'trader', select: 'name'}).exec()
+
      res.json({
        dishes: dishes,
+       myOrder: myOrder,
        trader: trader
      })
    } catch(e) {
@@ -111,6 +113,10 @@ exports.file = async(function* (req, res) {
    }
  })
 
+ exports.myOrder = async(function* (req, res) {
+   let myOrder = yield Order.find({user: req.session.user._id}).sort('-meta.createdAt').populate({path: 'trader', select: 'name'}).exec()
+   res.json(myOrder)
+ })
  /**
   * Create user
   */

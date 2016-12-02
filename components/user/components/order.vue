@@ -136,9 +136,8 @@ export default {
       .done(res => {
         if (res.success) {
           swal("下单成功", "布噜布噜⋯布噜布噜⋯", "success")
-          // vm.$router.order = []
-          console.log(vm)
-          vm.$router.push({path: '/naccount'})
+          vm.$router.push({path: '/account'})
+          vm.$store.commit('order', [])
         } else {
           $('.snackbar').snackbar({
             alive: 2000,
