@@ -2,8 +2,10 @@
 #app
   router-view.noPrint
   .print
-    h1 {{trader.name}}
-    table.table(style='box-shadow: none; background-color: #f7f7f7')
+    h4 [商家]{{ trader.name}}
+    h4 [下单时间] {{fdate(trader.meta.createdAt)}}
+    h4 [用户] {{print.user.nickname}}
+    table.table
       thead
         tr
           th 名称
@@ -20,13 +22,14 @@
           td
           td
           td 总费用:
-          td(style='color: #FF6600; font-size: 20px') ¥ {{print.totalFee}}
+          td(style='font-size: 20px') ¥ {{print.totalFee}}
 
   .snackbar
 </template>
 
 <script>
 import VHead from './layout/head.vue'
+import moment from 'moment'
 
 export default {
   data () {
@@ -44,7 +47,11 @@ export default {
   mounted () {
     // this.$store.dispatch('init')
   },
-  methods: {},
+  methods: {
+    fdate(date) {
+      return moment(date).format('YYYY年MM月DD日 hh:mm')
+    }
+  },
   components: {
     VHead
   }
@@ -123,22 +130,18 @@ body, html {
 }
 
 @page {
-  size: 55mm 210mm;
-  left: 0;
-  right: 0;
-  margin: 0;
-  padding: 0;
+  size: 58mm 210mm;
 }
 @page :left {
-  margin: 0;
+  margin: 8mm;
   padding: 0;
 }
 @page :right {
-  margin: 0;
+  margin: 8mm;
   padding: 0;
 }
 @page :first {
-	margin: 0;
+  margin: 8mm;
   padding: 0;
 }
 
