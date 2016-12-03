@@ -2,27 +2,35 @@
 #app
   router-view.noPrint
   .print
-    h4 [商家]{{ trader.name}}
-    h4 [下单时间] {{fdate(trader.meta.createdAt)}}
-    h4 [用户] {{print.user.nickname}}
+    h6 [商家]
+    h6 {{trader.name}}
+    h6 [下单时间]
+    h6(v-if='print.meta') {{fdate(print.meta.createdAt)}}
+    h6 [用户]
+    h6(v-if='print.user') {{print.user.nickname}}
     table.table
-      thead
-        tr
-          th 名称
-          th 价格
-          th 数量
-          th 总价
+      //- thead
+      //-   tr
+      //-     th 名称
+      //-     th 价格
+      //-     th 数量
+      //-     th 总价
       tbody
+        //- tr
+        //-   td [商家]
+        //-   td.second {{trader.name}}
+        //- tr(v-if='print.meta')
+        //-   td [下单时间]
+        //-   td.second {{fdate(print.meta.createdAt)}}
+        //- tr(v-if='print.user')
+        //-   td [用户]
+        //-   td.second {{print.user.nickname}}
         tr(v-for='dish in print.dishes')
-          td {{dish.name}}
-          td ¥{{dish.price}}
-          td x {{dish.number}}
-          td ¥ {{dish.price * dish.number}}
+          td {{dish.name}} x {{dish.number}}
+          td.second ¥ {{dish.price * dish.number}}
         tr
-          td
-          td
           td 总费用:
-          td(style='font-size: 20px') ¥ {{print.totalFee}}
+          td.second(style='font-size: 20px') ¥ {{print.totalFee}}
 
   .snackbar
 </template>
@@ -120,29 +128,48 @@ body, html {
   }
   html, body {
     max-height: 210mm;
-    width: 58mm
+    width: 40mm;
   }
   .print {
+    h6 {
+      margin: 5px 0;
+    }
     display: block;
-    font-size: 9pt;
-    font-weight: bold;
+    .table {
+      width: 40mm;
+    }
+    tr {
+      width: 40mm;
+      padding: 0 10mm;
+      td {
+        font-size: 10px !important;
+         overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+      .second {
+        text-align: right;
+        max-width: 25mm;
+      }
+    }
   }
 }
 
 @page {
-  size: 58mm 210mm;
+  size: 40mm 210mm;
+  padding: 0 4mm;
 }
-@page :left {
-  margin: 8mm;
-  padding: 0;
-}
-@page :right {
-  margin: 8mm;
-  padding: 0;
-}
-@page :first {
-  margin: 8mm;
-  padding: 0;
-}
+// @page :left {
+//   margin: 10mm;
+//   padding: 10mm;
+// }
+// @page :right {
+//   margin: 10mm;
+//   padding: 10mm;
+// }
+// @page :first {
+//   margin: 10mm;
+//   padding: 10mm;
+// }
 
 </style>
