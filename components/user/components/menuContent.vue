@@ -132,6 +132,7 @@ export default {
   font-size: 15px;
   border-radius: 50%;
   background: #ff4081;
+  z-index: 100;
 }
 .list-item {
   display: inline-block;

@@ -2,6 +2,7 @@
 #app
   router-view.noPrint
   .print
+    h1 {{trader.name}}
     table.table(style='box-shadow: none; background-color: #f7f7f7')
       thead
         tr
@@ -34,6 +35,10 @@ export default {
   computed: {
     print() {
       return this.$store.getters.print
+    },
+    trader() {
+      return this.$store.getters.trader
+
     }
   },
   mounted () {
