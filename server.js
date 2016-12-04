@@ -50,7 +50,7 @@ function listen () {
 
   const server = http.createServer(app)
 
-  ws.listen(server)
+  ws(server, app)
 
   server.listen(config.port, function () {
       console.log("server started on ", config.port)

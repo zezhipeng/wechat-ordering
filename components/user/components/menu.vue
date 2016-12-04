@@ -18,6 +18,7 @@
             path(fill='#4CDBC4', d='M30.14 45.02h39.7v1.13h-39.7z')
             path(fill='#54C0EB', d='M30.14 48.056h39.7v1.13h-39.7z')
         //- p(style='color: #f9a825') 菜品还在研发当中⋯
+  .alertMsg
 </template>
 
 <script>
@@ -37,8 +38,23 @@ export default {
     recommends () {
       return this.$store.getters.recommends
     },
+    snackbar() {
+      return this.$store.getters.snackbar
+    },
     aside () {
       return this.$store.getters.aside
+    }
+  },
+  watch: {
+    'snackbar': function (newVal, oldVal) {
+      var el = document.createElement('DIV')
+
+      $(el).html(newVal)
+      $(el).addClass('alert-item')
+      $('.alertMsg').append(el)
+      setTimeout(function() {
+        $(el).remove()
+      }, 3000)
     }
   },
   mounted () {},
@@ -126,5 +142,29 @@ export default {
     }
   }
 }
+.alertMsg {
+  position: fixed;
+  bottom: 50px;
+  right: 0;
+  z-index: 3;
 
+  .alert-item {
+    background-color: rgba(0,0,0,.87);
+    box-shadow: 0 1px 10px rgba(0,0,0,.5);
+    height: 44px;
+    line-height: 44px;
+    padding: 0 16px;
+    color: white;
+    border-radius: 3px;
+    animation: fadeLeft .2s;
+  }
+}
+@keyframes fadeLeft {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
 </style>

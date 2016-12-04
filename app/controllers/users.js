@@ -68,7 +68,8 @@ exports.file = async(function* (req, res) {
  })
 
  exports.indexDev = async(function* (req, res) {
-   let user = yield User.findOne({openid: 'ohie2vwWiN49QlqAsrQABcVXRvkA'}).populate('coupon order traders').exec()
+   let openid = req.query.openid || 'ohie2v--jSQ2sX2FjzSTmh8qvI-8'
+   let user = yield User.findOne({openid: openid}).populate('coupon order traders').exec()
    let trader = req.params.trader
    let table = req.params.table
 

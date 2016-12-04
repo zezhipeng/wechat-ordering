@@ -24,9 +24,11 @@ const store = new Vuex.Store({
     aside: false,
     searchText: '',
     myOrder: [],
+    snackbar: '暂无',
     list: []
   },
   getters: {
+    snackbar: state => state.snackbar,
     myOrder: state => state.myOrder,
     aside: state => state.aside,
     list: state => {
@@ -117,6 +119,7 @@ const store = new Vuex.Store({
       let item = data.item
 
       if (state.user._id !== data.user._id ) {
+        state.snackbar = `<div><span style='color: #ff4081'>${data.user.nickname}</span>添加了<span style='color: #ff4081'> ${item.name}</span></div>`
         addOrder(state, item)
       }
     },
@@ -124,8 +127,15 @@ const store = new Vuex.Store({
       let item = data.item
 
       if (state.user._id !== data.user._id) {
+        state.snackbar = `<div><span style='color: #ff4081'>${data.user.nickname}</span>删掉了<span style='color: #ff4081'> ${item.name}</span></div>`
         removeOrder(state, item)
       }
+    },
+    commitOrder (state, data) {
+
+    },
+    initOrder (state, data) {
+      state.order = data
     },
     receiveData (state, data) {
       console.log('receiveData', data)
@@ -211,6 +221,7 @@ function init() {
     store.state.list = res.dishes
     store.state.trader = res.trader
     store.state.myOrder = res.myOrder
+
   })
 }
 

@@ -31,8 +31,6 @@
         tr
           td 总费用:
           td.second(style='font-size: 20px') ¥ {{print.totalFee}}
-
-  .snackbar
 </template>
 
 <script>
@@ -47,6 +45,7 @@ export default {
     print() {
       return this.$store.getters.print
     },
+
     trader() {
       return this.$store.getters.trader
 
@@ -54,6 +53,12 @@ export default {
   },
   mounted () {
     // this.$store.dispatch('init')
+  },
+  watch: {
+    'snackbar': function (newVal, oldVal) {
+      console.log(newVal)
+      console.log(oldVal)
+    }
   },
   methods: {
     fdate(date) {

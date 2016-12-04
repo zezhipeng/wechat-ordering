@@ -1,7 +1,13 @@
 export default function createWebSocketPlugin (socket) {
   return store => {
-    socket.on('msg', data => {
-      store.commit('receiveData', data)
+    socket.on('initOrder', data => {
+      store.state.orderLength = data.length
+
+      store.state.order = data
+    })
+    socket.on('commitOrder', data => {
+      console.log('commit', store.state.order)
+      socket.emit('commitOrder', store.state.order)
     })
     socket.on('addOrder', data => {
       store.commit('addOrderSocket', {data})
