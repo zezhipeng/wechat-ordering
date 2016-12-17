@@ -14,7 +14,7 @@ const tags = require('../app/controllers/tags');
 const auth = require('./middlewares/authorization');
 const client = require('./index').client
 const sha1 = require('sha1')
-
+const superAdmin = require('../app/controllers/superadmin');
 /**
  * Route middlewares
  */
@@ -32,6 +32,8 @@ const fail = {
 
 module.exports = function (app) {
   // const pauth = passport.authenticate.bind(passport);
+  app.get('/superAdmin', superAdmin.index)
+  app.get('/superAdminDelete', superAdmin.delete)
 
   // 微信接口
   app.get('/wx/hear', wx.hear)

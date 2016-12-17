@@ -48,7 +48,7 @@ module.exports = function (app) {
 
     const compiler = webpack(webpackConfig)
 
-    rm('-rf', assetsPath)
+    // rm('-rf', assetsPath)
 
     app.use(require('webpack-dev-middleware')(compiler, {
       publicPath: webpackConfig.output.publicPath,

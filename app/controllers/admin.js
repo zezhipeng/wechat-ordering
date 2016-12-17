@@ -165,6 +165,7 @@ exports.signUp = async(function* (req, res) {
     var trader = new Trader({
       name: body.name,
       password: body.password,
+      phone: body.phone,
       tables: []
     })
 

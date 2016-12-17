@@ -17,6 +17,7 @@ const TraderSchema = new Schema({
    password: {
      type: String
    },
+   phone: String,
    role: {
      type: Number,
      default: 0

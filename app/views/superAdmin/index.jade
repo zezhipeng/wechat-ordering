@@ -1,0 +1,75 @@
+doctype html
+html
+  head
+    link(href='//og2h60o77.bkt.clouddn.com/base.css', rel='stylesheet')
+    link(href='//og2h60o77.bkt.clouddn.com/project.css', rel='stylesheet')
+
+  body
+    header.header.header-transparent.header-waterfall.ui-header.affix-top
+      ul.nav.nav-list.pull-left
+        li
+          a(data-toggle='menu')
+            span.icon.icon-lg menu
+      a.header-logo.header-affix-hide.margin-left-no.margin-right-no.affix-top(data-offset-top='213', data-spy='affix') 超级管理员
+      span.header-logo.header-affix.margin-left-no.margin-right-no.affix-top(data-offset-top='213', data-spy='affix') 超级管理员
+      ul.nav.nav-list.pull-right
+        li.dropdown.margin-right
+          a.dropdown-toggle.padding-left-no.padding-right-no(data-toggle='dropdown')
+            span.access-hide John Smith
+            span.avatar.avatar-sm
+              img(alt='alt text for John Smith avatar', src='http://og2h60o77.bkt.clouddn.com/avatar-001.jpg')
+    main.content
+      .content-header.ui-content-header
+        .container
+          .row
+            .col-lg-6.col-lg-offset-3.col-md-8.col-md-offset-2
+              h1.content-heading 商家管理
+      .container-fuild
+        .row
+          .col-md-12
+            .col-md-6.col-md-offset-3
+              section.content-inner.margin-top-no
+                .card
+                  .card-main
+                    .card-inner
+                      p
+                        | 商家名即登录的用户名
+              //- pre #{traders[0]}
+              table.table
+                thead
+                  tr
+                    th #
+                    th 商家名
+                    th 电话
+                    th 用户数
+                    th 删除
+                tbody
+                  each item, index in traders
+                    tr
+                      td #{index + 1}
+                      td #{item.name}
+                      td #{item.phone}
+                      td #{item.users.length}
+                      td 
+                        button.btn.btn-flat.waves-attach.delete(data-id='#{item._id}')
+                          span.icon delete
+            .col-md-3
+              form#form
+                .card
+                  .card-main
+                    .card-inner
+                      .form-group.form-group-label
+                        label.floating-label(for='') 商家名
+                        input.form-control#name(type='text')
+                      .form-group.form-group-label
+                        label.floating-label(for='') 电话
+                        input.form-control#phone(type='text')
+                      .form-group.form-group-label
+                        label.floating-label(for='') 密码
+                        input.form-control#password(type='text')
+                      button.btn.btn-flat.waves-attach(type='submit') 添加
+    script(src='//cdn.bootcss.com/jquery/3.1.1/jquery.min.js')
+    script(src='//og2h60o77.bkt.clouddn.com/base.js')
+    script(src='//og2h60o77.bkt.clouddn.com/project.js')
+    script(src='/superAdmin.js')
+      
