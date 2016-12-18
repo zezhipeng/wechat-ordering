@@ -71,5 +71,39 @@ html
     script(src='//cdn.bootcss.com/jquery/3.1.1/jquery.min.js')
     script(src='//og2h60o77.bkt.clouddn.com/base.js')
     script(src='//og2h60o77.bkt.clouddn.com/project.js')
-    script(src='/superAdmin.js')
-      
+    script.
+      $('#form').submit(function(e) {
+        e.preventDefault()
+
+        var name = $('#name').val()
+        var phone = $('#phone').val()
+        var password = $('#password').val()
+
+        var data = {
+          name: name,
+          password: password,
+          phone: phone
+        }
+
+        $.ajax({
+          type: 'POST',
+          url: '/admin/signUp',
+          data: data,
+          dataType: 'json'
+        })
+        .then(function(res) {
+          window.location.reload()
+        })
+      })
+
+      $('.delete').on('click', function(e) {
+        var _id = $(this).data('id')
+        $.ajax({
+          url: '/superAdminDelete?_id=' + _id
+        })
+        .then(function(res) {
+          window.location.reload()
+        })
+      })
+
+        
