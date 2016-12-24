@@ -14,6 +14,10 @@ const DishSchema = new Schema ({
   name: String,
   class: String,
   price: Number,
+  online: {
+    type: Boolean,
+    default: true
+  },
   stars: Number,
   src: String,
   thumb: Number,

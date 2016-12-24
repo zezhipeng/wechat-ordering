@@ -23,13 +23,13 @@
   .col-md-5
     .card
       .card-main
-        .card-inner
+        form.card-inner
           .form-group.form-group-label
             label.floating-label 名称
-            input.form-control(type='text', v-model='data.name')
+            input.form-control(type='text', v-model='data.name', required)
           .form-group.form-group-label
             label.floating-label 人数
-            input.form-control(type='text', number, v-model='data.size')
+            input.form-control(type='text', number, v-model='data.size', required)
           .card-action-btn.pull-left
             span.icon add
             a.btn.btn-flat.waves-attach.waves-effect(@click='add') 添加
@@ -73,7 +73,11 @@ export default {
     add() {
       let value = this.data
 
-      if (!value) {
+      if (!value || !value.name || !value.size) {
+        $('.snackbar').snackbar({
+          alive: 4000,
+          content: `<div>请填写完整表单</div>`
+        })
         return
       }
 

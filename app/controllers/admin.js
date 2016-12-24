@@ -45,12 +45,23 @@ exports.update = async(function* (req, res) {
     else if (operator === 'splice') {
       update[key][operator](value, 1)
     }
+    else if (key === 'online'){
+      update.online = !update.online
+      
+      yield update.save()
+
+      var dishes = yield Dish.find({trader: req.session.trader._id}).exec()
+
+      return res.json(dishes)
+    }
     else {
       update[key] = value
     }
-    update = yield update.save()
+    yield update.save()
+
 
     res.json(update)
+
   } catch(e) {
     res.send(e)
   }

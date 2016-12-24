@@ -22,7 +22,7 @@ ul.aside
       span.icon restaurant_menu
       a 菜品管理
   hr(style='width: 100%;')
-  router-link(to='/cheer')
+  router-link(to='/chart')
     li.waves-attach.waves-effect
       span.icon event_note
       a 销售报表

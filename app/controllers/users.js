@@ -100,7 +100,7 @@ exports.file = async(function* (req, res) {
    let _id = req.session.trader
 
    try {
-     let dishes = yield Dish.find({trader: _id}).exec()
+     let dishes = yield Dish.find({trader: _id, online: true}).exec()
      let trader = yield Trader.findById(_id).exec()
      let myOrder = yield Order.find({user: req.session.user._id}).sort('-meta.createdAt').populate({path: 'trader', select: 'name'}).exec()
 

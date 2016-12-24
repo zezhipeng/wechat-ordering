@@ -95,6 +95,9 @@ const store = new Vuex.Store({
     }
   },
   mutations: {
+    orderLength (state, data) {
+      state.orderLength = data
+    },
     myOrder (state, data) {
       state.myOrder = data
     },
@@ -139,6 +142,22 @@ const store = new Vuex.Store({
     },
     receiveData (state, data) {
       console.log('receiveData', data)
+    }
+  },
+  actions: {
+    assessOrder ({commit}, req) {
+      let model = req.model
+
+      $.ajax({
+        type: 'PUT',
+        url: `/api/updateOrder`,
+        data: req,
+        dataType: 'json'
+      })
+      .then(res => {
+        console.log(res)
+        // commit(model, res)
+      })
     }
   },
   plugins: [plugin]

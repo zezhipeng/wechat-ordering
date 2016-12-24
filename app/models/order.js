@@ -24,6 +24,13 @@ const OrderSchema = new Schema ({
     type: Number,
     default: 0
   },
+  assess: {
+    text: String,
+    stars: {
+      type: Number,
+      default: 0
+    }
+  },
   dishes: [
     {
       price: Number,

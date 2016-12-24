@@ -34,6 +34,140 @@ const store = new Vuex.Store({
     coupon: state => state.coupon,
     users: state => state.users,
     print: state => state.print,
+    today: state => {
+      var today = new Date().getDate()
+      var data = _.filter(state.orderings, order => {
+        var _month = new Date(order.meta.createdAt).getDate()
+        return month === _month
+      })
+      var r
+
+      r = _.reduce(data, (sum, item) => {
+        item.dishes.forEach(dish => {
+          sum = sum + dish.price * dish.number
+        })
+
+        return sum
+      }, 0)
+
+      return r
+    },
+    thisMonth: state => {
+      var month = new Date().getMonth()
+      var data = _.filter(state.orderings, order => {
+        var _month = new Date(order.meta.createdAt).getMonth()
+        return month === _month
+      })
+      var r
+
+      r = _.reduce(data, (sum, item) => {
+        item.dishes.forEach(dish => {
+          sum = sum + dish.price * dish.number
+        })
+
+        return sum
+      }, 0)
+
+      return r
+    },
+    lastMonth: state => {
+      var month = new Date().getMonth() - 1
+      var data = _.filter(state.orderings, order => {
+        var _month = new Date(order.meta.createdAt).getMonth()
+        return month === _month
+      })
+      var r
+
+      r = _.reduce(data, (sum, item) => {
+        item.dishes.forEach(dish => {
+          sum = sum + dish.price * dish.number
+        })
+
+        return sum
+      }, 0)
+
+      return r
+    },
+    daily: state => {
+      var month = new Date().getMonth() + 1
+      var d= new Date()
+      var y = new Date(d.getFullYear(), month, 0).getDate()
+      var r = []
+
+      for (var i = 0; i < y + 1; ++i) {
+        var items = _.filter(state.orderings, order => {
+          return new Date(order.meta.createdAt).getDate() === i
+        })
+
+        r[i] = _.reduce(items, (sum, item) => {
+          _.forEach(item.dishes, dish => {
+            sum = sum + dish.price * dish.number
+          })
+
+          return sum
+        }, 0)
+      }
+
+      return r
+    },
+    today: state => {
+      var month = new Date().getDate()
+      var data = _.filter(state.orderings, order => {
+        var _month = new Date(order.meta.createdAt).getDate()
+        return month === _month
+      })
+      var r
+
+      r = _.reduce(data, (sum, item) => {
+        item.dishes.forEach(dish => {
+          sum = sum + dish.price * dish.number
+        })
+
+        return sum
+      }, 0)
+
+      return r
+    },
+    dishesLabels: state => {
+      var r = []
+
+      for (var i = 0; i < state.dishes.length; ++i) {
+        r.push(state.dishes[i].name)
+      }
+
+      return r
+    },
+    dishesData: state => {
+      var month = new Date().getMonth()
+      var data = _.filter(state.orderings, order => {
+        var _month = new Date(order.meta.createdAt).getMonth()
+        return month === _month
+      })
+      var r = []
+
+      for (var i = 0; i < state.dishes.length; ++i) {
+        var count = _.reduce(data, (c, item) => {
+          let a = _.filter(item.dishes, dish => {
+
+            return dish.name === state.dishes[i].name
+          })
+          var _a = {
+            number: 0
+          }
+          a = a.length
+            ? a[0]
+            : _a
+
+          c = c + a.number
+
+          return c
+        }, 0)
+
+        r.push(count)
+      }
+      console.log(r)
+      return r
+    },
     dishes: state => state.dishes
   },
   mutations: {
@@ -101,15 +235,11 @@ const store = new Vuex.Store({
       $.ajax({
         type: 'PUT',
         url: `/api/model/${model}`,
-        data: req,
+        data: req.body,
         dataType: 'json'
       })
       .then(res => {
-        if (model === 'user') {
-          init()
-        } else {
-          commit(model, res)
-        }
+        init()
       })
     },
     updateOrder({commit}, req) {
@@ -155,7 +285,7 @@ const store = new Vuex.Store({
 
           Object.keys(res).forEach(key => {
             if (key !== 'success') {
-              store.state[key] = res[key]              
+              store.state[key] = res[key]
             }
           })
         }

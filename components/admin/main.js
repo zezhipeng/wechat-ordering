@@ -93,11 +93,11 @@ const routes = [
         component: require('./components/coupon.vue')
       },
       {
-        path: 'cheer',
+        path: 'chart',
         meta: {
           auth: true
         },
-        component: require('./components/cheer.vue')
+        component: require('./components/chart.vue')
       },
       {
         path: 'users',

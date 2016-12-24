@@ -2,6 +2,7 @@
 .col-md-8
   .row
     .tile-wrap
+      h2(v-if='!done.length') 暂无数据
       transition-group(name='fadeLeft')
         .tile(v-for='item, $index in done', :key='item._id')
           .tile-side.pull-left
@@ -11,7 +12,6 @@
           .tile-side.pull-left
             .avatar.avatar-sm.avatar-brand-accent
               img(:src='item.user.headimgurl')
-          .tile-side.pull-left
           .tile-action
             ul.nav.nav-list.margin-no.pull-right
               li
@@ -20,6 +20,7 @@
                   span.icon sync
           .tile-inner
             span.text-overflow {{item.user.nickname}}
+            span {{item.assess.text}}
 
 </template>
 

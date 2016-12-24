@@ -50,7 +50,11 @@ export default {
     add(item) {
       let value = this.data
 
-      if (!value) {
+      if (!value || !value.name) {
+        $('.snackbar').snackbar({
+          alive: 4000,
+          content: `<div>请填写完整表单</div>`
+        })
         return
       }
 

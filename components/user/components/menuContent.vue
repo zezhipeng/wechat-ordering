@@ -19,7 +19,7 @@ div
       transition-group.menu-list(tag='ul', name='list')
         li.menu-item.active(v-for='item, $index in value', :key='item._id')
           .img
-            img.img-responsive(:src='"//og2h60o77.bkt.clouddn.com/" + item.src')
+            img.img-responsive(:src='"//og2h60o77.bkt.clouddn.com/" + item.src + "?imageMogr2/thumbnail/330x220"')
           .footer
             .line
               .name {{item.name}}

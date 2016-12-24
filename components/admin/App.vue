@@ -1,6 +1,7 @@
 <template lang="jade">
 #app
   router-view.noPrint
+  .snackbar.noPrint
   .print
     h6 [商家]
     h6 {{trader.name}}

@@ -72,7 +72,11 @@ export default {
     add() {
       let body = this.data
 
-      if (!body) {
+      if (!this.data || !this.data.minus || !this.data.counter || !this.data.limit || !this.data.due) {
+        $('.snackbar').snackbar({
+          alive: 4000,
+          content: `<div>请填写完整表单</div>`
+        })
         return
       }
 

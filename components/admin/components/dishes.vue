@@ -16,6 +16,8 @@
           transition(name='fade')
             .stepper-vert(v-if='!dishForm', style='background-color: #f3f3f3')
               .stepper-vert-inner
+                h2(v-if='!dishes.length') 暂无数据
+
                 div(v-for='dishClass in trader.classes')
                   .stepper
                     .stepper-step
@@ -24,8 +26,12 @@
                   .stepper-vert-content
                     .dishes
                       .dish(v-for='dish, index in dishes', v-if='dish.class == dishClass.name', v-bind:class="{'active': dish == editedDish}")
-                        .dish-content
+                        .dish-content(v-bind:class='{"sleep": !dish.online}')
                           .tool
+                            a.delete(v-if='!dish.online', @click='toggleOnline(dish)')
+                              span.icon accessibility
+                            a.delete(v-if='dish.online', @click='toggleOnline(dish)')
+                              span.icon airline_seat_individual_suite
                             a.delete(@click='deleteMid(dish)', data-backdrop='static', data-toggle='modal', href='#dialog')
                               span.icon delete
                           img(:src='"http://og2h60o77.bkt.clouddn.com/" + dish.src')
@@ -80,7 +86,7 @@
                       .form-group.form-group-label.uploader
                         qiniu(:bucket='bucket', v-on:complete='complete', v-if='!data.src')
                         p(v-if='!data.src') 添加图片
-                        img.img-responsive(:src="'http://og2h60o77.bkt.clouddn.com/' + data.src", v-if='data.src')
+                        img.img-responsive(:src="'http://og2h60o77.bkt.clouddn.com/' + data.src + '?imageMogr2/thumbnail/330x220'", v-if='data.src')
                         //- label.floating-label 图片
                         //- input.form-control(type='file', v-on:change='inputFile')
                       .form-group
@@ -168,7 +174,11 @@ export default {
     addClass() {
       let value = this.newClass
 
-      if (!value) {
+      if (!value || !value.name) {
+        $('.snackbar').snackbar({
+          alive: 4000,
+          content: `<div>请填写完整表单</div>`
+        })
         return
       }
 
@@ -183,6 +193,13 @@ export default {
       this.newClass = {}
     },
     createDish() {
+      if (!this.data || !this.data.name || !this.data.price || !this.data.unit || !this.data.class || !this.data.vt || !this.data.src) {
+        $('.snackbar').snackbar({
+          alive: 4000,
+          content: `<div>请填写完整表单</div>`
+        })
+        return
+      }
       this.dishForm = !this.dishForm
 
       let req = {
@@ -192,6 +209,18 @@ export default {
 
       this.$store.dispatch('create', req)
       this.data = {}
+    },
+    toggleOnline(item) {
+      let req = {
+        model: 'dishes',
+        body: {
+          _id: item._id,
+          key: 'online',
+          value: !item.online
+        }
+      }
+      console.log(req)
+      this.$store.dispatch('update', req)
     },
     deleteDish() {
       // console.log(item)
@@ -211,94 +240,6 @@ export default {
     qiniu
   }
 }
-
-function openSchool() {
-  $('.school-container li .school-block').click(function() {
-    if (!$(this).hasClass('active')) {
-      $(this).addClass('active');
-
-      var setLeftPos = $('.school-container li .school-block.active').position().left,
-        setRightPos = -setLeftPos + $('.school-container').width() - $(this).width(),
-        schoolBlock = $(this);
-      state = $(this).children('.state');
-
-      $(schoolBlock).css('left', setLeftPos);
-      $(schoolBlock).css('right', setRightPos);
-
-      $(schoolBlock).animate({
-        'bottom': '0',
-        'top': '0',
-        'min-width': ''
-      }, {
-        duration: 250,
-        queue: false
-      });
-      $(schoolBlock).animate({
-        'left': '0',
-        'right': '0'
-      }, {
-        duration: 250,
-        queue: false
-      });
-      $(state).animate({
-        width: '40%'
-      }, {
-        duration: 250,
-        queue: false
-      });
-
-      setTimeout(function() {
-        $('.schools').css('width', '59%');
-        $('.school-list').addClass('fade');
-        $('.closeSchool').addClass('fade');
-      }, 300);
-
-      $('.closeSchool').click(function() {
-        $('.school-container li .school-block.active').dequeue().animate({
-          'bottom': '100%',
-          'top': '0',
-          'min-width': '200px',
-          'left': setLeftPos,
-          'right': setRightPos
-        }, 250, function() {
-          $('.school-container li .school-block.active').removeClass('active');
-          var setLeftPos = 0;
-          var setRightPos = 0;
-
-        });
-        $(state).animate({
-          width: '96%'
-        }, {
-          duration: 250,
-          queue: false
-        });
-
-        $('.schools').css('width', '1%');
-        $('.school-list').removeClass('fade');
-        $('.closeSchool').removeClass('fade');
-        $('.map').removeClass('slide');
-      });
-    } else {
-      console.log('doesnt');
-    }
-  });
-
-  $('.address').click(function() {
-    $('.map').addClass('slide');
-    $('.slide').click(function() {
-      $('.map').removeClass('slide');
-    });
-  });
-
-}
-
-function functionInit() {
-  openSchool();
-}
-
-$(function() {
-  functionInit();
-});
 </script>
 
 <style lang="less">
@@ -334,7 +275,18 @@ $(function() {
       border-radius: 4px;
       position: relative;
       overflow: hidden;
-
+      &.sleep {
+        &:before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 100%;
+          width: 100%;
+          z-index: 2;
+          background: rgba(0, 0, 0, 0.3);
+        }
+      }
       p {
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -348,15 +300,16 @@ $(function() {
       }
       .tool {
         transition: all 175ms cubic-bezier(0.4, 0, 0.2, 1);
-        opacity: 0;
-        visibility: hidden;
         position: absolute;
-        top: 8px;
+        top: 12px;
         right: 8px;
+        z-index: 3;
         font-size: 20px;
-        background: rgba(0, 0, 0, 0.5);
-        padding: 2px 3px;
+        // padding: 2px 3px;
         a {
+          background: rgba(0, 0, 0, 0.5);
+          padding: 2px 3px;
+          margin: 0 3px;
           color: white !important;
         }
       }

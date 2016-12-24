@@ -2,6 +2,7 @@
 .col-md-8
   .row
     .tile-wrap
+      h2(v-if='!orderings.length') 暂无数据
       transition-group(name='fadeLeft')
         .tile.tile-column(v-for='item, $index in orderings', :key='item._id')
           .tile-content(@click='showTile($index)')

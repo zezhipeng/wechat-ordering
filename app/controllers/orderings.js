@@ -16,68 +16,66 @@ exports.create = async(function* (req, res) {
   const trader = req.session.trader
   const coupon = req.body.coupon
 
-  try {
-    var fee = _.reduce(orderings, (total, item) => {
-      return total += item.price * item.number
-    }, 0)
+  var fee = _.reduce(orderings, (total, item) => {
+    return total += item.price * item.number
+  }, 0)
 
-    var couponNow
+  var couponNow
 
-    if (coupon._id) {
-      couponNow = yield Coupon.findOne({trader: trader, _id: coupon._id}).exec()
+  if (coupon && coupon._id) {
+    couponNow = yield Coupon.findOne({trader: trader, _id: coupon._id}).exec()
+  }
+
+  var totalFee = fee
+
+  if (couponNow && typeof totalFee !== 'undefined') {
+    if (couponNow.due > Date.now()) {
+      totalFee = totalFee - couponNow.minus
     }
+  }
 
-    var totalFee = fee
-
-    if (couponNow && typeof totalFee !== 'undefined') {
-      if (couponNow.due > Date.now()) {
-        totalFee = totalFee - couponNow.minus
-      }
+  var dishes = _.reduce(orderings, (report, item) => {
+    let i = {
+      price: item.price,
+      src: item.src,
+      name: item.name,
+      number: item.number
     }
+    report.push(i)
 
-    var dishes = _.reduce(orderings, (report, item) => {
-      let i = {
-        price: item.price,
-        src: item.src,
-        name: item.name,
-        number: item.number
-      }
-      report.push(i)
+    return report
+  }, [])
+  let _trader = yield Trader.findById(trader).exec()
+  let _table = _.find(_trader.tables, v => v._id == table)
 
-      return report
-    }, [])
-
-    let _trader = yield Trader.findById(trader).exec()
-    let _table = _.find(_trader.tables, v => v._id == table)
-
-    var ordering = {
-      table: _table.name,
-      user: user._id,
-      fee: fee,
-      totalFee: totalFee,
-      dishes: dishes,
-      trader: trader
-    }
-
-  } catch (e) {
-    yield res.json({
+  if (!_table) {
+    return res.json({
       success: 0,
-      msg: e
+      msg: '桌位不存在'
     })
+  }
+
+  var ordering = {
+    table: _table.name,
+    user: user._id,
+    fee: fee,
+    totalFee: totalFee,
+    dishes: dishes,
+    trader: trader
   }
 
   ordering = new Order(ordering)
 
   try {
-    let saveOrder = yield ordering.save()
+    let saveOrder = ordering.save()
 
-    res.json({
+    return res.json({
       success: 1,
       data: ordering,
       msg: '订单已提交'
     })
   } catch (e) {
-    yield res.json({
+    return res.json({
       success: 0,
       msg: '订单创建错误'
     })
