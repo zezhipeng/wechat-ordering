@@ -9,6 +9,9 @@ export default function createWebSocketPlugin (socket) {
       }
 
       store.dispatch('reflash', req)
+    }),
+    socket.on('service', data => {
+      store.commit('service', data)
     })
   }
 }

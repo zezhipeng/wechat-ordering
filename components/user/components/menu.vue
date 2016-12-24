@@ -19,6 +19,7 @@
             path(fill='#54C0EB', d='M30.14 48.056h39.7v1.13h-39.7z')
         //- p(style='color: #f9a825') 菜品还在研发当中⋯
   .alertMsg
+
 </template>
 
 <script>
@@ -73,6 +74,17 @@ export default {
   display: flex;
   flex-direction: row;
 }
+
+.service {
+  position: fixed;
+  bottom: 70px;
+  color: #fff;
+  font-size: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+}
+
 .dishes-content {
   padding: 0 15px;
   overflow: scroll;

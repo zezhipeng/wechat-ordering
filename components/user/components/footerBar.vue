@@ -49,6 +49,9 @@ export default {
   justify-content: space-around;
   align-items: center;
   color: #666;
+  .service {
+
+  }
 }
 
 .search-enter-active, .search-leave-active {

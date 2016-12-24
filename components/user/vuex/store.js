@@ -142,6 +142,12 @@ const store = new Vuex.Store({
     },
     receiveData (state, data) {
       console.log('receiveData', data)
+    },
+    service (state, data) {
+      var table = window.table
+      console.log(table)
+      socket.emit('service', {table: table, user: state.user})
+
     }
   },
   actions: {

@@ -34,7 +34,9 @@ module.exports = function(server, app) {
         io.to(table).emit('initOrder', data)
       }
     })
-
+    socket.on('service', data => {
+      io.emit('service', data)
+    })
     socket.on('addOrder', data => {
       io.to(table).emit('addOrder', data)
     })

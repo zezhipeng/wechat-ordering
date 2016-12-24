@@ -18,6 +18,7 @@ const store = new Vuex.Store({
     dishes: [],
     orderings: [],
     coupon: [],
+    service: '',
     users: [],
     print: {
     },
@@ -27,6 +28,7 @@ const store = new Vuex.Store({
   },
   getters: {
     trader: state => state.trader,
+    service: state => state.service,
     tables: state => state.trader.tables,
     classes: state => state.trader.classes,
     orderings: state => state.orderings.filter(v => v.status === '等待'),
@@ -171,6 +173,15 @@ const store = new Vuex.Store({
     dishes: state => state.dishes
   },
   mutations: {
+    service (state, data) {
+      var table
+
+      _.filter(state.trader.tables, _table => {
+        if (_table._id === data.table) table = _table
+      })
+
+      state.service = `${table.name}号桌${data.user.nickname}需要服务`
+    },
     trader (state, data) {
       state.auth.authorized = true
       state.trader = data
@@ -235,10 +246,12 @@ const store = new Vuex.Store({
       $.ajax({
         type: 'PUT',
         url: `/api/model/${model}`,
-        data: req.body,
+        data: req,
         dataType: 'json'
       })
       .then(res => {
+        console.log(res)
+
         init()
       })
     },

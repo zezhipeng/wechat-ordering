@@ -23,8 +23,11 @@ html(lang='en')
     
   body
     #app
+    
+  script.
+    window.table = '#{table}'
+    
   if process.env.NODE_ENV === 'test'
     script(src='/js/manifest.js')
     script(src='/js/vendor.js')
-
   script(src='/js/#{page}.js')

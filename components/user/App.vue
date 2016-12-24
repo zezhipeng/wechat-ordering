@@ -2,12 +2,24 @@
 #app
   router-view
   .swiper-menu
-    router-link.menu-item(to='/account')
-      span.icon account_box
     router-link.menu-item(to='/menu')
       span.icon restaurant_menu
     router-link.menu-item.shoppingCart(to='/order' v-bind:data-badge='orderLength')
       span.icon.shoppingCart shopping_cart
+    router-link.menu-item(to='/account')
+      span.icon account_box
+    .menu-item(data-backdrop='static', data-toggle='modal', href='#ul2')
+      span.icon room_service
+
+  #ul2.modal.modal-va-middle.fade(aria-hidden='true', role='dialog', tabindex='-1')
+    .modal-dialog.modal-xs
+      .modal-content
+        .modal-heading
+          p.modal-title 需要服务？
+        .modal-footer
+          p.text-right
+            a.btn.btn-flat.btn-brand-accent.waves-attach.waves-effect(data-dismiss='modal') 取消
+            a.btn.btn-flat.btn-brand-accent.waves-attach.waves-effect(data-dismiss='modal', @click='service') 确认
   .snackbar
 </template>
 
@@ -33,7 +45,9 @@ export default {
 
   },
   methods: {
-
+    service() {
+      this.$store.commit('service', {})
+    }
   },
   components: {
 

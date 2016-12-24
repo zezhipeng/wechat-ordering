@@ -1,6 +1,7 @@
 <template lang="jade">
 .col-md-12
   .col-md-7
+    button.btn.btn-brand-accent.waves-attach.waves-effect(@click='allQr', data-toggle='modal', data-backdrop='static', href='#modal') 所有的二维码
     table.table
       thead
         tr
@@ -45,6 +46,8 @@
 
 <script>
 import qr from 'qr-element'
+import _ from 'lodash'
+
 export default {
   data () {
     return {
@@ -61,6 +64,27 @@ export default {
   },
   mounted () {},
   methods: {
+    allQr() {
+      $('#qr').empty()
+
+      _.forEach(this.tables, table => {
+        var qrcode = qr(`http://${window.location.host}/index/${this.trader._id}/${table._id}`, {
+            width: 128,
+            height: 128
+        })
+        var content = document.createElement('div')
+        var title = document.createElement('div')
+
+        title.innerText = table.name
+        title.className = 'qr-title'
+
+        $(content).append(title)
+        $(content).append(qrcode)
+
+        $('#qr').append(content)
+      })
+
+    },
     createQrCode (item) {
       $('#qr').empty()
 
@@ -72,7 +96,7 @@ export default {
     },
     add() {
       let value = this.data
-
+      console.log(this.data)
       if (!value || !value.name || !value.size) {
         $('.snackbar').snackbar({
           alive: 4000,
@@ -108,8 +132,11 @@ export default {
 
 <style lang="less">
 #modal {
+  .qr-title {
+    text-align: center;
+  }
   .modal-dialog {
-    width: 200px;
+    // width: 200px;
     display: flex;
     justify-content: center;
     align-items: center;

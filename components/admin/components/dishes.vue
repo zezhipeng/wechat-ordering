@@ -213,13 +213,11 @@ export default {
     toggleOnline(item) {
       let req = {
         model: 'dishes',
-        body: {
-          _id: item._id,
-          key: 'online',
-          value: !item.online
-        }
+        _id: item._id,
+        key: 'online',
+        value: !item.online
       }
-      console.log(req)
+
       this.$store.dispatch('update', req)
     },
     deleteDish() {
@@ -247,6 +245,16 @@ export default {
   position: relative;
   z-index: 2;
   width: 100%;
+}
+#qr {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 800px;
+  min-width: 450px;
+
+  div {
+    margin: 10px
+  }
 }
 .dishes {
   display: flex;

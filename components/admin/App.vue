@@ -46,7 +46,9 @@ export default {
     print() {
       return this.$store.getters.print
     },
-
+    service() {
+      return this.$store.getters.service
+    },
     trader() {
       return this.$store.getters.trader
 
@@ -59,6 +61,12 @@ export default {
     'snackbar': function (newVal, oldVal) {
       console.log(newVal)
       console.log(oldVal)
+    },
+    'service': function (newVal, oldVal) {
+      $('.snackbar').snackbar({
+        alive: 10000,
+        content: `<div>${newVal}</div>`
+      })
     }
   },
   methods: {

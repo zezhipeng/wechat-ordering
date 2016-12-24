@@ -85,14 +85,14 @@ export default {
       $(ball).css('left', e.clientX - 10 + 'px')
       // console.log(e)
       $('body').append(ball)
-
+      console.log($('body').width())
       this.tween({
         top: e.clientY - 10,
         left: e.clientX - 10,
         scale: 1.1
       }, {
         top: $('body').height(),
-        left: $('body').width() - $('body').width() / 6 + 8,
+        left: $('body').width() - $('body').width() / 1.5 + 23,
         scale: 1
       }, ball)
 
