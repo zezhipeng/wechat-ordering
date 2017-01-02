@@ -25,6 +25,12 @@ const DishSchema = new Schema ({
     type: Boolean,
     default: false
   },
+  like: [
+    {
+      type: ObjectId,
+      ref: 'User'
+    }
+  ],
   recommendVt: String,
   vt: String,
   unit: String

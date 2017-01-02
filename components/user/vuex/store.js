@@ -79,6 +79,9 @@ const store = new Vuex.Store({
     user: state => {
       return state.user
     },
+    like: state => {
+      return _.find(state.dishes, state.user._id)
+    },
     coupon: state => {
       return state.user.coupon.filter(i => {
         let date = i.due.match(/\d+/g)
@@ -95,6 +98,9 @@ const store = new Vuex.Store({
     }
   },
   mutations: {
+    list (state, data) {
+      state.list = data
+    },
     orderLength (state, data) {
       state.orderLength = data
     },
@@ -142,6 +148,9 @@ const store = new Vuex.Store({
     },
     receiveData (state, data) {
       console.log('receiveData', data)
+    },
+    toggleLike (state, data) {
+      // var dish = _.find(state.dishes, {_id: data._id})
     },
     service (state, data) {
       var table = window.table

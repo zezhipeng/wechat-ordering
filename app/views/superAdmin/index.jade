@@ -3,7 +3,16 @@ html
   head
     link(href='//og2h60o77.bkt.clouddn.com/base.css', rel='stylesheet')
     link(href='//og2h60o77.bkt.clouddn.com/project.css', rel='stylesheet')
-
+    style.
+      .input-group {
+        display: flex;
+      }
+      .input-group input {
+        max-width: 80px;
+      }
+      .card {
+        box-shadow: none !important;
+      }
   body
     header.header.header-transparent.header-waterfall.ui-header.affix-top
       ul.nav.nav-list.pull-left
@@ -27,47 +36,100 @@ html
       .container-fuild
         .row
           .col-md-12
-            .col-md-6.col-md-offset-3
-              section.content-inner.margin-top-no
-                .card
-                  .card-main
-                    .card-inner
-                      p
-                        | 商家名即登录的用户名
-              //- pre #{traders[0]}
-              table.table
-                thead
-                  tr
-                    th #
-                    th 商家名
-                    th 电话
-                    th 用户数
-                    th 删除
-                tbody
-                  each item, index in traders
-                    tr
-                      td #{index + 1}
-                      td #{item.name}
-                      td #{item.phone}
-                      td #{item.users.length}
-                      td 
-                        button.btn.btn-flat.waves-attach.delete(data-id='#{item._id}')
-                          span.icon delete
-            .col-md-3
-              form#form
-                .card
-                  .card-main
-                    .card-inner
-                      .form-group.form-group-label
-                        label.floating-label(for='') 商家名
-                        input.form-control#name(type='text')
-                      .form-group.form-group-label
-                        label.floating-label(for='') 电话
-                        input.form-control#phone(type='text')
-                      .form-group.form-group-label
-                        label.floating-label(for='') 密码
-                        input.form-control#password(type='text')
-                      button.btn.btn-flat.waves-attach(type='submit') 添加
+            .card
+              .card-main
+                nav.tab-nav.margin-top-no
+                  ul.nav.nav-justified
+                    li.active
+                      a.waves-attach.waves-effect(data-toggle='tab', href='#ui_tab_example_1', aria-expanded='true') 商家管理
+                    li
+                      a.waves-attach.waves-effect(data-toggle='tab', href='#ui_tab_example_2', aria-expanded='false') 订单管理
+                    //- li
+                    //-   a.waves-attach.waves-effect(data-toggle='tab', href='#ui_tab_example_3', aria-expanded='false') Third Tab
+                  .tab-nav-indicator(style='left: 0px; right: 412px;')
+                .card-inner
+                  .tab-content
+                    #ui_tab_example_1.tab-pane.fade.active.in
+                      .col-md-8.col-md-offset-1
+                        section.content-inner.margin-top-no
+                          .card
+                            .card-main
+                              .card-inner
+                                p
+                                  | 商家名即登录的用户名
+                        //- pre #{traders[0]}
+                        table.table
+                          thead
+                            tr
+                              th #
+                              th 商家名
+                              th 状态
+                              th 上架/下架
+                              th 电话
+                              th 重设密码
+                              th 删除
+                          tbody
+                            each item, index in traders
+                              tr
+                                td #{index + 1}
+                                td #{item.name}
+                                th 
+                                  if item.online
+                                    | 上架中
+                                  else
+                                    | 已下架
+                                th.toggleOnline(style='font-size: 25px', data-id='#{item._id}', data-online='#{item.online}')
+                                  if item.online
+                                    span.icon airline_seat_individual_suite
+                                  else
+                                    span.icon accessibility
+                                td #{item.phone}
+                                td
+                                  .input-group
+                                    input.form-control
+                                    span.input-group-addon.resetPassword(data-id='#{item._id}')
+                                      button.btn.btn-flat.waves-attach
+                                        span.icon settings_backup_restore
+                                td 
+                                  button.btn.btn-flat.waves-attach.delete(data-id='#{item._id}')
+                                    span.icon delete
+                      .col-md-3
+                        form#form
+                          .card
+                            .card-main
+                              .card-inner
+                                .form-group.form-group-label
+                                  label.floating-label(for='') 商家名
+                                  input.form-control#name(type='text')
+                                .form-group.form-group-label
+                                  label.floating-label(for='') 电话
+                                  input.form-control#phone(type='text')
+                                .form-group.form-group-label
+                                  label.floating-label(for='') 密码
+                                  input.form-control#password(type='text')
+                                  
+                                button.btn.btn-flat.waves-attach(type='submit') 添加
+                    #ui_tab_example_2.tab-pane.fade
+                      .col-md-8.col-md-offset-2
+                        table.table
+                          thead
+                            th #
+                            th 商户
+                            th 用户
+                            th 评论
+                            th 时间
+                          tbody
+                            each item in orders
+                              tr
+                                td
+                                td= item.trader.name
+                                td= item.user.nickname
+                                td #{item.assess.text || "无"}
+                                td= item.meta.createdAt
+                    //- #ui_tab_example_3.tab-pane.fade
+                    //-   p
+                    //-     | Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.
+
     script(src='//cdn.bootcss.com/jquery/3.1.1/jquery.min.js')
     script(src='//og2h60o77.bkt.clouddn.com/base.js')
     script(src='//og2h60o77.bkt.clouddn.com/project.js')
@@ -97,11 +159,53 @@ html
       })
 
       $('.delete').on('click', function(e) {
+        var r = confirm("确定删除？")
+        if (r) {
+          var _id = $(this).data('id')
+          
+          $.ajax({
+            url: '/superAdminDelete?_id=' + _id
+            })
+            .then(function(res) {
+              window.location.reload()
+            })
+        }
+      })
+      
+      $(".toggleOnline").on('click', function(e) {
         var _id = $(this).data('id')
+        var online = $(this).data('online')
+        var data = {
+          _id: _id,
+          online: !online
+        }
         $.ajax({
-          url: '/superAdminDelete?_id=' + _id
+          url: '/superAdminTo',
+          type: 'PUT',
+          data: data
         })
         .then(function(res) {
+          window.location.reload()
+        })
+
+      })
+      
+      $('.resetPassword').on('click', function(e) {
+        var _id = $(this).data('id')
+        var password = $(this).prevAll('input')
+
+        var data = {
+          _id: _id,
+          password: password.val()
+        }
+        console.log(data)
+        $.ajax({
+          url: '/superAdmin',
+          type: 'PUT',
+          data: data
+        })
+        .then(function(res) {
+          window.alert('设置完成')
           window.location.reload()
         })
       })

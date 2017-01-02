@@ -6,11 +6,11 @@
       span.icon restaurant_menu
     router-link.menu-item.shoppingCart(to='/order' v-bind:data-badge='orderLength')
       span.icon.shoppingCart shopping_cart
-    router-link.menu-item(to='/account')
-      span.icon account_box
     .menu-item(data-backdrop='static', data-toggle='modal', href='#ul2')
       span.icon room_service
-
+    router-link.menu-item(to='/account')
+      span.icon account_box
+  .snackbar
   #ul2.modal.modal-va-middle.fade(aria-hidden='true', role='dialog', tabindex='-1')
     .modal-dialog.modal-xs
       .modal-content

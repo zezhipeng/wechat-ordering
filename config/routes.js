@@ -33,6 +33,9 @@ const fail = {
 module.exports = function (app) {
   // const pauth = passport.authenticate.bind(passport);
   app.get('/superAdmin', superAdmin.index)
+  app.put('/superAdmin', superAdmin.update)
+  app.put('/superAdminTo', superAdmin.updateTo)
+
   app.get('/superAdminDelete', superAdmin.delete)
 
   // 微信接口
@@ -64,6 +67,8 @@ module.exports = function (app) {
   app.get('/logout', users.logout);
   app.get('/user/init', users.init);
   app.get('/myOrder', users.myOrder)
+  app.put('/toggleLike', users.toggleLike)
+
 
   if (process.env.NODE_ENV === 'test') {
     app.get('/index/:trader/:table', (req, res, next) => {

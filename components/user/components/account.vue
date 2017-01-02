@@ -24,12 +24,12 @@
               span.collapsed-hide(style='width: 100%')
                 span.icon card_membership
                 span(style='margin-left: 10px') {{item.trader.name}}
-                span(style='float: right; margin-right: 20px; color: #666', v-bind:class='{"waiting": item.status === "等待"}') {{item.status}}
+                span(style='float: right; margin-right: 20px; color: #f50057', v-bind:class='{"waiting": item.status === "等待"}') {{item.status}}
 
               span.collapsed-show(style='width: 100%')
                 span.icon card_membership
                 span(style='margin-left: 10px') {{item.trader.name}}
-                span(style='float: right; margin-right: 20px; color: #666', v-bind:class='{"waiting": item.status === "等待"}') {{item.status}}
+                span(style='float: right; margin-right: 20px; color: #f50057', v-bind:class='{"waiting": item.status === "等待"}') {{item.status}}
 
               br
               span(style='color: #999') {{fdate(item.meta.createdAt)}}
@@ -48,8 +48,8 @@
                     td 总费用:
                     td(style='color: #FF6600; font-size: 20px') ¥ {{item.totalFee}}
             .collapsible-action
-              a.btn.btn-brand.waves-attach.waves-light.waves-effect(data-backdrop='static', data-toggle='modal', href='#ul', @click='changeItem(item)') 评价
-              button.btn.btn-brand-accent.waves-attach.waves-light.waves-effect(@click='pay(item)') 确认付款
+              a.btn.btn-brand.waves-attach.waves-light.waves-effect(data-backdrop='static', data-toggle='modal', href='#ul', @click='changeItem(item)', v-if='!item.assess.text', style='margin-right: 20px') 评价
+              button.btn.btn-brand-accent.waves-attach.waves-light.waves-effect(@click='pay(item)', v-if='item.status !== "完成"') 确认付款
       #ui_tab_example_2.tab-pane.fade
         .coupon-item(v-for='item in coupon') {{item.minus}} 元
           br
@@ -124,7 +124,7 @@ export default {
         key: 'assess',
         value: this.assess
       }
-
+      var vm = this
       $.ajax({
         type: 'PUT',
         url: `/api/updateOrder`,
@@ -132,7 +132,9 @@ export default {
         dataType: 'json'
       })
       .then(res => {
-        console.log(res)
+        $.get('/myOrder').then(res => {
+          vm.$store.commit('myOrder', res)
+        })
         // commit(model, res)
       })
     },
@@ -237,7 +239,10 @@ export default {
     box-shadow: 1px 1px 2px #ddd;
   }
   .waiting {
-    color: #f9a825;
+    color: #f9a825 !important;
+  }
+  .done {
+    color: #f50057;
   }
   .card-inner {
     margin: 10px;
@@ -264,7 +269,7 @@ export default {
   padding-bottom: 10px;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-end;
   // button {
   //   float: right
   // }

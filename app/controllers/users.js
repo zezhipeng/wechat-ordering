@@ -44,6 +44,12 @@ exports.file = async(function* (req, res) {
    var trader = req.params.trader
    var table = req.params.table
 
+   var trader = yield Trader.findById(trader).exec()
+
+   if (!trader.online) {
+      return res.send(404)
+   }
+
    user = yield User.findById(user._id).exec()
 
    let exitTrader = user.traders.indexOf(trader)
@@ -156,6 +162,27 @@ exports.show = function (req, res) {
     user: user
   });
 };
+
+exports.toggleLike = async(function* (req, res) {
+  const dish = req.body.dish
+  const user = req.body.user
+  const trader = req.session.trader
+  console.log(req.body)
+  var _dish = yield Dish.findById(dish).exec()
+
+  if (req.body.operator === 'add') {
+    _dish.like.push(user)
+  } else {
+    _dish.like = _.remove(_dish.like, user)
+  }
+  yield _dish.save()
+
+  let dishes = yield Dish.find({trader: trader, online: true}).exec()
+
+
+  res.json(dishes)
+
+})
 
 exports.signin = function () {};
 

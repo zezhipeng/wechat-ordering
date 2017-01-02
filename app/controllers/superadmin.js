@@ -4,13 +4,39 @@ const mongoose = require('mongoose')
 const Dish = mongoose.model('Dish')
 const Trader = mongoose.model('Trader')
 const Order = mongoose.model('Order')
+const sha1 = require('sha1')
 
 
 exports.index = async(function* (req, res) {
   var traders = yield Trader.find({}).exec()
+  var orders = yield Order.find().populate('trader user').exec()
 
   res.render('superAdmin/index', {
-    traders: traders
+    traders: traders,
+    orders: orders
+  })
+})
+
+exports.update = async(function* (req, res) {
+  var _id = req.body._id
+  var password = sha1(req.body.password)
+  console.log(req.body)
+  var trader = yield Trader.findOneAndUpdate({_id: _id, password: password}).exec()
+
+  res.json({
+    success: 1
+  })
+})
+
+exports.updateTo = async(function* (req, res) {
+  var _id = req.body._id
+  var online = req.body.online
+
+  yield Trader.findOneAndUpdate({_id, _id}, {online, online}).exec()
+
+
+  res.json({
+    success: 1
   })
 })
 

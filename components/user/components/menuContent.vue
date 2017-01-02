@@ -19,6 +19,8 @@ div
       transition-group.menu-list(tag='ul', name='list')
         li.menu-item.active(v-for='item, $index in value', :key='item._id')
           .img
+            span.like.icon(v-if='iLike(item)', @click='toggleLike(item._id)') favorite
+            span.like.icon(v-if='!iLike(item)', @click='toggleLike(item._id)') favorite_border
             img.img-responsive(:src='"//og2h60o77.bkt.clouddn.com/" + item.src + "?imageMogr2/thumbnail/330x220"')
           .footer
             .line
@@ -50,6 +52,16 @@ export default {
     },
     classes() {
       return this.$store.getters.classes
+    },
+    user() {
+      return this.$store.getters.user
+    },
+    list() {
+      return this.$store.getters.list
+
+    },
+    like() {
+      return this.$store.getters.like
     }
   },
   mounted () {},
@@ -72,6 +84,46 @@ export default {
     thumb (data) {
       // data.item.favorite = true
       // data.item.thumb++
+    },
+    iLike(item) {
+      console.log(this.user)
+      console.log(this.user._id)
+      return item.like.length
+        ? _.filter(item.like, _id => _id === this.user._id).length
+        : null
+    },
+    toggleLike (dish) {
+      var dish = _.find(this.list, {_id: dish})
+
+      if (dish && _.filter(dish.like, _id => _id === this.user._id).length) {
+
+        $.ajax({
+          type: 'put',
+          url: '/toggleLike',
+          data: {
+            dish: dish,
+            operator: 'remove',
+            user: this.user._id
+          }
+        }).then(res => {
+          console.log(res)
+          this.$store.commit('list', res)
+        })
+      } else {
+        $.ajax({
+          type: 'put',
+          url: '/toggleLike',
+          data: {
+            dish: dish,
+            operator: 'add',
+            user: this.user._id
+          }
+        }).then(res => {
+          console.log(res)
+
+          this.$store.commit('list', res)
+        })
+      }
     },
     add (data, e) {
       let item = data.item
@@ -160,7 +212,21 @@ export default {
     margin-bottom: 20px;
     box-shadow: 0 1px 2px rgba(0,0,0,0.07);
     background: #fff;
+
+    .img {
+      position: relative;
+    }
+    .like {
+      position: absolute;
+      top: 5px;
+      right: 1px;
+      color: #fff;
+      z-index: 9;
+      font-size: 30px;
+    }
     img {
+      position: relative;
+      z-index: 7;
       filter: brightness(90%);
     }
 
@@ -193,6 +259,7 @@ export default {
         justify-content: space-between;
         align-items: center;
         margin-top: 10px;
+        padding-right: 5px;
 
         .name {
           font-size: 20px;
