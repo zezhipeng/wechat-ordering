@@ -19,6 +19,8 @@ import '../assets/js/snackbar'
 import '../assets/js/tab'
 import '../assets/js/tile'
 
+var localStorage = window.localStorage
+
 Vue.use(VueRouter)
 // Vue.use(Vue2Dragula, {
 //   logging: {

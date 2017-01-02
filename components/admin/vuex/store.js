@@ -8,6 +8,13 @@ import Cookies from 'js-cookie'
 // import * as getters from './getters'
 // import count from './modules/count'
 
+let trader = Cookies.getJSON('trader')
+// user = JSON.parse(user)
+if (trader) {
+  trader = trader.split('j:')[1]
+}
+// trader = JSON.parse(trader)
+
 Vue.use(Vuex)
 
 const socket = io()
@@ -23,7 +30,7 @@ const store = new Vuex.Store({
     print: {
     },
     auth: {
-      authorized: false
+      authorized: trader || false
     }
   },
   getters: {
@@ -331,4 +338,7 @@ function init() {
   })
 }
 
+if (trader) {
+  init()
+}
 module.exports = store

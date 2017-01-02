@@ -47,7 +47,7 @@ exports.update = async(function* (req, res) {
     }
     else if (key === 'online'){
       update.online = !update.online
-      
+
       yield update.save()
 
       var dishes = yield Dish.find({trader: req.session.trader._id}).exec()
@@ -136,7 +136,7 @@ exports.login = async(function* (req, res) {
     let trader = yield Trader.findOne(body).exec()
 
     req.session.trader = trader
-    res.cookie('trader', trader)
+    res.cookie('trader', trader._id)
 
     if (!trader) {
       return res.json({

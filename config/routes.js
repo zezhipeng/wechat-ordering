@@ -33,8 +33,10 @@ const fail = {
 module.exports = function (app) {
   // const pauth = passport.authenticate.bind(passport);
   app.get('/superAdmin', superAdmin.index)
+  app.get('/superAdminLogin', superAdmin.superAdminLogin)
   app.put('/superAdmin', superAdmin.update)
   app.put('/superAdminTo', superAdmin.updateTo)
+  app.post('/superAdminSignIn', superAdmin.superAdminSignIn)
 
   app.get('/superAdminDelete', superAdmin.delete)
 
