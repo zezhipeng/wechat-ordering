@@ -71,7 +71,7 @@ exports.updateOrder = async(function* (req, res) {
   let body = req.body
   let key = body.key
   let value = body.value
-  let trader = req.session.trader._id
+  let trader = req.session.trader
   let _id = body._id
 
   try {

@@ -68,7 +68,7 @@ export default {
       $('#qr').empty()
 
       _.forEach(this.tables, table => {
-        var qrcode = qr(`http://${window.location.host}/index/${this.trader._id}/${table._id}`, {
+        var qrcode = qr(`http://${window.location.host}/index?trader=${this.trader._id}&table=${table._id}`, {
             width: 128,
             height: 128
         })
@@ -88,7 +88,7 @@ export default {
     createQrCode (item) {
       $('#qr').empty()
 
-      var qrcode = qr(`http://${window.location.host}/index/${this.trader._id}/${item._id}`, {
+      var qrcode = qr(`http://${window.location.host}/index?trader=${this.trader._id}&table=${item._id}`, {
           width: 128,
           height: 128
       })

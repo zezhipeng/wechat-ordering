@@ -77,10 +77,10 @@ module.exports = function (app) {
 
 
   if (process.env.NODE_ENV === 'test') {
-    app.get('/index/:trader/:table', (req, res, next) => {
+    app.get('/index', (req, res, next) => {
       if (!req.session.user || !req.session.user._id) {
-        req.session.trader = req.params.trader
-        req.session.table = req.params.table
+        req.session.trader = req.query.trader
+        req.session.table = req.query.table
         let port = process.env.PORT
         let url = client.getAuthorizeURL(`${req.protocol}://${req.hostname}/wx/user`, 'STATE', 'snsapi_userinfo')
         res.redirect(url)
@@ -90,7 +90,7 @@ module.exports = function (app) {
       }
     }, users.index)
   } else {
-    app.get('/index/:trader/:table', users.indexDev)
+    app.get('/index', users.indexDev)
   }
 
   // app.get('/api/model/:model', users.init)
