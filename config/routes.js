@@ -32,6 +32,10 @@ const fail = {
 
 module.exports = function (app) {
   // const pauth = passport.authenticate.bind(passport);
+  app.get('/', function(req, res) {
+    res.render('index.jade')
+  })
+
   app.get('/superAdmin', superAdmin.index)
   app.get('/superAdminLogin', superAdmin.superAdminLogin)
   app.put('/superAdmin', superAdmin.update)
