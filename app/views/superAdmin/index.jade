@@ -120,12 +120,13 @@ html
                             th 时间
                           tbody
                             each item in orders
-                              tr
-                                td
-                                td= item.trader.name
-                                td= item.user.nickname
-                                td #{item.assess.text || "无"}
-                                td= item.meta.createdAt
+                              if item.trader
+                                tr
+                                  td
+                                  td= item.trader.name
+                                  td= item.user.nickname
+                                  td #{item.assess.text || "无"}
+                                  td= item.meta.createdAt
                     //- #ui_tab_example_3.tab-pane.fade
                     //-   p
                     //-     | Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.
