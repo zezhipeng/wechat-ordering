@@ -51,3 +51,16 @@ sudo service mongod start
 ### ssh 公钥路径
 
 - ~/.ssh/id_rsa.pub
+
+
+
+###
+db.createUser(
+ {
+   user: "canting",
+   pwd: "123123",
+   roles: [
+      { role: "readWrite", db: "canting" }
+   ]
+ }
+)
