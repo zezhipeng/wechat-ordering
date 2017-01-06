@@ -52,8 +52,8 @@ exports.file = async(function* (req, res) {
 
    user = yield User.findById(user._id).exec()
 
-   let exitTrader = user.traders.indexOf(trader)
-
+   let exitTrader = _.find(user.traders, trader)
+   console.log('exitTrader', exitTrader)
    if (exitTrader === -1) {
      user.traders.push(trader)
 
