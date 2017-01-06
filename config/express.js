@@ -68,6 +68,7 @@ module.exports = function (app) {
 
   // Static files middleware
   app.use(express.static(config.root + '/public'));
+  app.use('/MP_verify_VDLFB3pRjsknjBYk.txt', express.static('../libs/MP_verify_VDLFB3pRjsknjBYk.txt'))
 
   // Use winston on production
   let log = 'dev';
@@ -129,7 +130,6 @@ module.exports = function (app) {
 
   // should be declared after session and flash
   app.use(helpers(pkg.name));
-
   // if (env !== 'test') {
   //   // app.use(csrf());
   //
