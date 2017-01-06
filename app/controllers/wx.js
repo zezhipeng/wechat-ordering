@@ -15,7 +15,7 @@ var initConfig = {
   partnerKey: "Ruarua2016",
   appId: "wx3c3c10b371693534",
   mchId: "1416397002",
-  notifyUrl: "http://jimdream.com/n/",
+  notifyUrl: "http://jimdream.com/",
   pfx: fs.readFileSync(path.join(__dirname, '../../libs/apiclient_cert.p12'))
 }
 
@@ -63,6 +63,7 @@ exports.pay = async(function* (req, res) {
   }
   console.log(_order)
   payment.getBrandWCPayRequestParams(_order, function(err, payargs){
+    if (err) console.log(err)
     console.log(payargs)
     return res.json(payargs)
   })
