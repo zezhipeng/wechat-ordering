@@ -17,6 +17,7 @@ const client = require('./index').client
 const sha1 = require('sha1')
 const superAdmin = require('../app/controllers/superadmin');
 const path = require('path')
+const fs = require('fs')
 /**
  * Route middlewares
  */
