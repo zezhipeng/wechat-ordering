@@ -57,7 +57,7 @@ exports.pay = async(function* (req, res) {
     attach: `总计 ${order.dishes.length} 件`,
     out_trade_no: order.trader.name + (+new Date),
     total_fee: order.totalFee,
-    spbill_create_ip: req.ip.splice(0, 6),
+    spbill_create_ip: req.ip.split('::ffff:')[0],
     openid: order.user.openid,
     trade_type: 'JSAPI'
   }
