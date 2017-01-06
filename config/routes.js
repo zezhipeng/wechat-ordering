@@ -37,9 +37,9 @@ module.exports = function (app) {
   app.get('/', function(req, res) {
     res.render('index.jade')
   })
-  app.get('/MP_verify_VDLFB3pRjsknjBYk.txt', function(req, res) {
-    res.sendFile(path.join(__dirname, '../libs/MP_verify_VDLFB3pRjsknjBYk.txt'))
-  })
+  // app.get('/MP_verify_VDLFB3pRjsknjBYk.txt', function(req, res) {
+  //   res.sendFile(path.join(__dirname, '../libs/MP_verify_VDLFB3pRjsknjBYk.txt'))
+  // })
 
   app.get('/superAdmin', superAdmin.index)
   app.get('/superAdminLogin', superAdmin.superAdminLogin)
@@ -54,6 +54,7 @@ module.exports = function (app) {
   app.post('/wx/hear', wx.hear)
   app.get('/wx/user', wx.user)
   app.get('/wx/signature', wx.signature)
+  app.get('/wx/pay', wx.pay)
 
   // app.all('*', )
   // 用户接口

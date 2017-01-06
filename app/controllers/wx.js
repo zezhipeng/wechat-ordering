@@ -6,6 +6,20 @@ const client = require('../../config').client
 const APIService = require('../../config/wx/service');
 const sha1 = require('sha1')
 const Promise = require('bluebird')
+const path = require('path')
+const Order = mongoose.model('Order')
+const fs = require('fs')
+
+var Payment = require('wechat-pay').Payment;
+var initConfig = {
+  partnerKey: "Ruarua2016",
+  appId: "wx3c3c10b371693534",
+  mchId: "1416397002",
+  notifyUrl: "http://jimdream.com/n/",
+  pfx: fs.readFileSync(path.join(__dirname, '../../libs/apiclient_cert.p12'))
+}
+
+var payment = new Payment(initConfig)
 
 function getUserByCode(code) {
   return new Promise((resolve, reject) => {
@@ -31,6 +45,25 @@ exports.hear = async(function* (req, res) {
     console.log(echostr)
     res.send(echostr + '')
   }
+})
+
+exports.pay = async(function* (req, res) {
+  var _id = req.query.orderId
+  var order = yield Order.findById(_id).populate('user trader').exec()
+
+  var _order = {
+    body: `总费用 ${order.totalFee} 元`,
+    attach: `总计 ${order.dishes.length} 件`,
+    out_trade_no: order.trader.name + (+new Date),
+    total_fee: order.totalFee,
+    spbill_create_ip: req.ip,
+    openid: order.user.openid,
+    trade_type: 'JSAPI'
+  };
+
+  payment.getBrandWCPayRequestParams(_order, function(err, payargs){
+    res.json(payargs)
+  })
 })
 
 exports.user = async(function* (req, res) {
