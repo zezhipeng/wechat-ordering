@@ -60,7 +60,7 @@ module.exports = function (app) {
 
   var middleware = require('wechat-pay').middleware;
   var initConfig = {
-    partnerKey: "Ruarua2016",
+    partnerKey: "547140",
     appId: "wx3c3c10b371693534",
     mchId: "1416397002",
     notifyUrl: "http://jimdream.com/wx/n",
