@@ -9,7 +9,7 @@ const client = new OAuth('wx3c3c10b371693534', 'e2bfdf4d83ff7a199cfea0bb052963e4
 module.exports = {
   client: client,
   port: 80,
-  db: 'mongodb://zezhipeng:123123@localhost'
+  db: 'mongodb://zezhipeng:123123@localhost/test'
 };
 
 
