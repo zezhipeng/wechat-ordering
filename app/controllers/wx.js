@@ -50,6 +50,7 @@ exports.hear = async(function* (req, res) {
 exports.pay = async(function* (req, res) {
   var _id = req.query.orderId
   var order = yield Order.findById(_id).populate('user trader').exec()
+  console.log(order)
 
   var _order = {
     body: `总费用 ${order.totalFee} 元`,
@@ -59,10 +60,11 @@ exports.pay = async(function* (req, res) {
     spbill_create_ip: req.ip,
     openid: order.user.openid,
     trade_type: 'JSAPI'
-  };
-
+  }
+  console.log(_order)
   payment.getBrandWCPayRequestParams(_order, function(err, payargs){
-    res.json(payargs)
+    console.log(payargs)
+    return res.json(payargs)
   })
 })
 
