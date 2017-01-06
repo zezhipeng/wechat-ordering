@@ -16,10 +16,12 @@ console.log(
 var spinner = ora('building for production...')
 spinner.start()
 
-var assetsPath = path.join(config.build.assetsRoot, config.build.assetsSubDirectory)
+var assetsPath = path.join(__dirname, '../public/dist')
+
+
 rm('-rf', assetsPath)
 mkdir('-p', assetsPath)
-cp('-R', 'public/*', assetsPath)
+// cp('-R', 'public/*', assetsPath)
 
 webpack(webpackConfig, function (err, stats) {
   spinner.stop()

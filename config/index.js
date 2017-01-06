@@ -33,7 +33,7 @@ const defaults = {
     assetsPublicPath: 'public',
     assetsRoot: path.join(__dirname, '../'),
     productionSourceMap: true,
-    assetsSubDirectory: 'public/dist',
+    assetsSubDirectory: 'public/dist/',
     productionGzip: false,
     productionGzipExtensions: ['js', 'css']
   },
@@ -41,7 +41,7 @@ const defaults = {
     env: require('./dev.env'),
     assetsPublicPath: 'public',
     cssSourceMap: false,
-    assetsSubDirectory: 'public/dist'
+    assetsSubDirectory: 'public/'
   }
 };
 
