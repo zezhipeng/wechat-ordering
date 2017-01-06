@@ -8,8 +8,13 @@ Vue.use(Vuex)
 
 let user = Cookies.getJSON('user')
 // user = JSON.parse(user)
-user = user.split('j:')[1]
-user = JSON.parse(user)
+if (user) {
+  user = user.split('j:')[1]
+  user = JSON.parse(user)
+
+} else {
+  user = []
+}
 
 const socket = io()
 const plugin = createWebSocketPlugin(socket)
@@ -255,7 +260,7 @@ function init() {
     store.state.list = res.dishes
     store.state.trader = res.trader
     store.state.myOrder = res.myOrder
-
+    store.state.user = res.user
   })
 }
 
