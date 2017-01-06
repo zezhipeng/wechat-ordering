@@ -141,12 +141,10 @@ export default {
     fdate(date) {
       return moment(date).format('YYYY年MM月DD日 hh:mm')
     },
-    async pay(item) {
+    pay(item) {
+      async function onBridgeReady(){
+        var data = await $.get(`/wx/pay?orderId=${item._id}`)
 
-      var data = await $.get(`/wx/pay?orderId=${item._id}`)
-
-
-      function onBridgeReady(){
          WeixinJSBridge.invoke(
              'getBrandWCPayRequest', data,
              function(res){
