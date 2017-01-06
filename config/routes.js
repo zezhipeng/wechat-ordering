@@ -3,6 +3,7 @@
 /*
  * Module dependencies.
  */
+const express = require('express');
 
 const wx = require('../app/controllers/wx');
 const orderings = require('../app/controllers/orderings');
@@ -15,6 +16,7 @@ const auth = require('./middlewares/authorization');
 const client = require('./index').client
 const sha1 = require('sha1')
 const superAdmin = require('../app/controllers/superadmin');
+const path = require('path')
 /**
  * Route middlewares
  */
@@ -34,6 +36,9 @@ module.exports = function (app) {
   // const pauth = passport.authenticate.bind(passport);
   app.get('/', function(req, res) {
     res.render('index.jade')
+  })
+  app.get('/MP_verify_VDLFB3pRjsknjBYk.txt', function(req, res) {
+    res.sendFile(path.join(__dirname, '../libs/MP_verify_VDLFB3pRjsknjBYk.txt'))
   })
 
   app.get('/superAdmin', superAdmin.index)

@@ -32,6 +32,7 @@ const env = process.env.NODE_ENV || 'development';
  */
 
 module.exports = function (app) {
+  app.use('/MP_verify_VDLFB3pRjsknjBYk.txt', express.static('../libs/MP_verify_VDLFB3pRjsknjBYk.txt'))
 
   // Compression middleware (should be placed before express.static)
   app.use(compression({
@@ -68,7 +69,6 @@ module.exports = function (app) {
 
   // Static files middleware
   app.use(express.static(config.root + '/public'));
-  app.use('/MP_verify_VDLFB3pRjsknjBYk.txt', express.static('../libs/MP_verify_VDLFB3pRjsknjBYk.txt'))
 
   // Use winston on production
   let log = 'dev';

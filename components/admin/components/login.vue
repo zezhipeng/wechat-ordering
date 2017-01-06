@@ -23,12 +23,12 @@
                     .col-md-10.col-md-push-1
                       label.floating-label(for='ui_login_password') 密码
                       input#ui_login_password.form-control(type='password', v-model='trader.password')
-                .form-group
-                  .row
-                    .col-md-10.col-md-push-1
-                      a.btn.btn-block.btn-brand.waves-attach.waves-light.waves-effect(@click='login') 登录
-                      br
-                      router-link(to='/signUp') 注册
+                //- .form-group
+                //-   .row
+                //-     .col-md-10.col-md-push-1
+                //-       a.btn.btn-block.btn-brand.waves-attach.waves-light.waves-effect(@click='login') 登录
+                //-       br
+                //-       router-link(to='/signUp') 注册
                 .form-group
                   .row
                     .col-md-10.col-md-push-1
