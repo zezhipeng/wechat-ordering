@@ -4,10 +4,23 @@
  * Expose
  */
 const OAuth = require('wechat-oauth')
-const client = new OAuth('wx33d67a99c493f926', 'fa0b9766fa75c7f7726f7382fb360b76')
+const client = new OAuth('wx3c3c10b371693534', 'e2bfdf4d83ff7a199cfea0bb052963e4')
 
 module.exports = {
   client: client,
   port: 80,
-  db: 'mongodb://canting@123123:localhost/jimu'
+  db: 'mongodb://zezhi:123123@localhost/jimu'
 };
+
+
+// db.createUser({user: "zezhipeng", pwd: "123123", roles: [ { role: "userAdminAnyDatabase", db: "admin" }]})
+//
+// db.createUser(
+//  {
+//    user: "zezhi",
+//    pwd: "123123",
+//    roles: [
+//       { role: "readWrite", db: "canting" }
+//    ]
+//  }
+// )
