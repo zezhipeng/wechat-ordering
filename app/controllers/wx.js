@@ -52,13 +52,13 @@ exports.pay = async(function* (req, res) {
   var order = yield Order.findById(_id).populate('user trader').exec()
   console.log(order)
   var ip = req.ip.split('')
-
+  console.log('ip', ip)
   var _order = {
     body: `总费用 ${order.totalFee} 元`,
     attach: `总计 ${order.dishes.length} 件`,
     out_trade_no: order.trader.name + (+new Date),
     total_fee: order.totalFee,
-    spbill_create_ip: ip.splice(0, 6),
+    spbill_create_ip: ip.splice(0, 6).toString(),
     openid: order.user.openid,
     trade_type: 'JSAPI'
   }
