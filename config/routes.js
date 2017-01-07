@@ -57,7 +57,6 @@ module.exports = function (app) {
   app.get('/wx/signature', wx.signature)
   app.get('/wx/pay', wx.pay)
 
-
   var middleware = require('wechat-pay').middleware;
   var initConfig = {
     partnerKey: "547140",
@@ -66,19 +65,24 @@ module.exports = function (app) {
     notifyUrl: "http://jimdream.com/wx/n",
     pfx: fs.readFileSync(path.join(__dirname, '../libs/apiclient_cert.p12'))
   }
-  app.use('/wx/n', middleware(initConfig).getNotify().done(function(message, req, res, next) {
+  app.all('/wx/n', middleware(initConfig).getNotify().done(function(message, req, res, next) {
     var openid = message.openid;
+    console.log(message)
     var order_id = message.out_trade_no;
     var attach = {};
     try{
+
      attach = JSON.parse(message.attach);
-    }catch(e){}
+     console.log(attach)
+    } catch(e) {
+      console.log(e)
+    }
 
     /**
      * 查询订单，在自己系统里把订单标为已处理
      * 如果订单之前已经处理过了直接返回成功
      */
-    res.reply('success');
+    res.send('success');
 
     /**
      * 有错误返回错误，不然微信会在一段时间里以一定频次请求你

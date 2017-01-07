@@ -48,6 +48,10 @@ exports.hear = async(function* (req, res) {
   }
 })
 
+exports.n = async(function* (req, res) {
+
+})
+
 exports.pay = async(function* (req, res) {
   var _id = req.query.orderId
   var order = yield Order.findById(_id).populate('user trader').exec()
