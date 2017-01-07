@@ -55,15 +55,15 @@ exports.pay = async(function* (req, res) {
 
   var total_fee = order.totalFee
 
-  if (order.user.openid === 'ohie2vwWiN49QlqAsrQABcVXRvkA') {
+  if (order.user.nickname === '彭泽智') {
     total_fee = 0.1
   }
 
   var _order = {
-    body: `总费用 ${order.totalFee} 元`,
+    body: `餐费 ${order.totalFee} 元`,
     attach: `总计 ${order.dishes.length} 件`,
     out_trade_no: 'time' + (+new Date),
-    total_fee: total_fee,
+    total_fee: total_fee * 100,
     spbill_create_ip: ip,
     openid: order.user.openid,
     trade_type: 'JSAPI'
