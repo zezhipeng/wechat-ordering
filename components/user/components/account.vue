@@ -1,5 +1,6 @@
 <template lang="jade">
 .account-main
+  pre {{pre}}
   .account-head
     .user
       .name {{user.nickname}}
@@ -80,6 +81,7 @@ require('moment/locale/zh-cn')
 export default {
   data () {
     return {
+      pre: '',
       stars: 5,
       assess: {
         text: '',

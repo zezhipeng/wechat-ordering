@@ -105,7 +105,7 @@ exports.user = async(function* (req, res) {
       console.log('exitUser', exitUser)
       if (exitUser) {
         req.session.user = exitUser
-        res.redirect(`/index/${req.session.trader}/${req.session.table}`)
+        res.redirect(`/index?trader=${req.session.trader}&table=${req.session.table}`)
       } else {
         var user = new User(cb)
 
@@ -114,7 +114,7 @@ exports.user = async(function* (req, res) {
           user = yield user.save()
           console.log('saveUser', user)
           req.session.user = user
-          res.redirect(`/index/${req.session.trader}/${req.session.table}`)
+          res.redirect(`/index?trader=${req.session.trader}&table=${req.session.table}`)
         } catch (e) {
           console.log(e)
         }
