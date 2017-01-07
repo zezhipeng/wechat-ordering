@@ -17,6 +17,8 @@
               span.name {{item.user.nickname}}
             .tile-inner
               span.time 历时 {{moment.preciseDiff(item.meta.createdAt, Date.now())}}
+              span(style='margin-left: 20px') 状态:{{item.status}}
+
             //- .tile-action.tile-action-show
             //-   ul.nav.nav-list.margin-no.pull-right
             //-     li

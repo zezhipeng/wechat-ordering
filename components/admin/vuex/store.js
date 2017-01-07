@@ -38,7 +38,7 @@ const store = new Vuex.Store({
     service: state => state.service,
     tables: state => state.trader.tables,
     classes: state => state.trader.classes,
-    orderings: state => state.orderings.filter(v => v.status === '等待'),
+    orderings: state => state.orderings.filter(v => v.status === '等待' || v.status === '已付款'),
     done: state => state.orderings.filter(v => v.status === '完成'),
     coupon: state => state.coupon,
     users: state => state.users,
