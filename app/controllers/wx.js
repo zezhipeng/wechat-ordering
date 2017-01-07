@@ -62,7 +62,7 @@ exports.pay = async(function* (req, res) {
   var _order = {
     body: `总费用 ${order.totalFee} 元`,
     attach: `总计 ${order.dishes.length} 件`,
-    out_trade_no: order.trader.name + (+new Date),
+    out_trade_no: 'time' + (+new Date),
     total_fee: total_fee,
     spbill_create_ip: ip,
     openid: order.user.openid,
