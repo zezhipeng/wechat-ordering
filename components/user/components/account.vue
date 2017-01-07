@@ -1,7 +1,7 @@
 <template lang="jade">
 .account-main
-  pre {{pre}}
   .account-head
+    pre {{pre}}
     .user
       .name {{user.nickname}}
         .city {{user.city}}
@@ -169,6 +169,7 @@ export default {
          WeixinJSBridge.invoke(
              'getBrandWCPayRequest', data,
              function(res){
+                 vm.pre = res
                  if(res.err_msg == "get_brand_wcpay_request：ok" ) {
                    let req = {
                      model: 'orderings',
