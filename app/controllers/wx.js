@@ -9,13 +9,14 @@ const Promise = require('bluebird')
 const path = require('path')
 const Order = mongoose.model('Order')
 const fs = require('fs')
+const config = require('../../config')
 
 var Payment = require('wechat-pay').Payment;
 var initConfig = {
-  partnerKey: "547140",
-  appId: "wx3c3c10b371693534",
-  mchId: "1416397002",
-  notifyUrl: "http://jimdream.com/wx/n",
+  partnerKey: config.partnerKey || "youcanyouupnocannobb1000NIAN1HUI",
+  appId: config.appId || "wx3c3c10b371693534",
+  mchId: config.mchId || "1416397002",
+  notifyUrl: config.notifyUrl || "http://jimdream.com/wx/n",
   pfx: fs.readFileSync(path.join(__dirname, '../../libs/apiclient_cert.p12'))
 }
 

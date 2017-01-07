@@ -32,6 +32,11 @@ const env = process.env.NODE_ENV || 'development';
  */
 
 module.exports = function (app) {
+
+  app.all('*', function(req, res, next) {
+    console.log(req.url)
+    next()
+  })
   app.use('/MP_verify_VDLFB3pRjsknjBYk.txt', express.static('../libs/MP_verify_VDLFB3pRjsknjBYk.txt'))
 
   // Compression middleware (should be placed before express.static)
