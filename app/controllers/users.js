@@ -44,15 +44,15 @@ exports.file = async(function* (req, res) {
    var trader = req.query.trader
    var table = req.query.table
 
-   var trader = yield Trader.findById(trader).exec()
+   var _trader = yield Trader.findById(trader).exec()
 
-   if (!trader.online) {
+   if (!_trader.online) {
       return res.send(404)
    }
 
    user = yield User.findById(user._id).exec()
-
-   let exitTrader = _.find(user.traders, trader)
+   console.log('trader', trader)
+   let exitTrader = user.traders.indexOf(trader)
    console.log('exitTrader', exitTrader)
    if (exitTrader === -1) {
      user.traders.push(trader)

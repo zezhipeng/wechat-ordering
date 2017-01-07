@@ -106,7 +106,7 @@ export default {
     })
     var sign = $.get(`/wx/signature?url=${window.location.href}`, res => {
       wx.config({
-          debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+          debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
           appId: 'wx3c3c10b371693534', // 必填，公众号的唯一标识
           timestamp: 12345, // 必填，生成签名的时间戳
           nonceStr: 'WECHAT_API_SERVICE', // 必填，生成签名的随机串
@@ -153,20 +153,40 @@ export default {
         $.get('/myOrder').then(res => {
           vm.$store.commit('myOrder', res)
         })
-        // commit(model, res)
       })
     },
     fdate(date) {
       return moment(date).format('YYYY年MM月DD日 hh:mm')
     },
     pay(item) {
+      var vm = this
+
       async function onBridgeReady(){
         var data = await $.get(`/wx/pay?orderId=${item._id}`)
 
          WeixinJSBridge.invoke(
              'getBrandWCPayRequest', data,
              function(res){
-                 if(res.err_msg == "get_brand_wcpay_request：ok" ) {}     // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
+                 if(res.err_msg == "get_brand_wcpay_request：ok" ) {
+                   let req = {
+                     model: 'orderings',
+                     _id: item._id,
+                     key: 'status',
+                     value: '已付款'
+                   }
+
+                   $.ajax({
+                     type: 'PUT',
+                     url: `/api/updateOrder`,
+                     data: req,
+                     dataType: 'json'
+                   })
+                   .then(res => {
+                     $.get('/myOrder').then(res => {
+                       vm.$store.commit('myOrder', res)
+                     })
+                   })
+                 }     // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
              }
          );
       }
