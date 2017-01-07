@@ -19,6 +19,13 @@ const superAdmin = require('../app/controllers/superadmin');
 const path = require('path')
 const fs = require('fs')
 const config = require('./index')
+const mongoose = require('mongoose');
+
+const { wrap: async } = require('co');
+
+
+const Order = mongoose.model('Order')
+
 /**
  * Route middlewares
  */
@@ -46,10 +53,16 @@ module.exports = function (app) {
     pfx: fs.readFileSync(path.join(__dirname, '../libs/apiclient_cert.p12'))
   }
 
-  app.use('/wx/n', middleware(initConfig).getNotify().done(function(message, req, res, next) {
+  app.use('/wx/n', middleware(initConfig).getNotify().done(async(function* (message, req, res, next) {
     var openid = message.openid;
     console.log(message)
-    var order_id = message.out_trade_no;
+    var orderId = message.out_trade_no;
+
+    var order = yield Order.findById(orderId).exec()
+
+    order.wechatPay = true
+    order.save()
+    
     var attach = {};
     try{
 
@@ -69,7 +82,7 @@ module.exports = function (app) {
      * 有错误返回错误，不然微信会在一段时间里以一定频次请求你
      * res.reply(new Error('...'))
      */
-  }))
+  })))
 
   app.get('/', function(req, res) {
     res.render('index.jade')

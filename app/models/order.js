@@ -31,6 +31,10 @@ const OrderSchema = new Schema ({
       default: 0
     }
   },
+  wechatPay: {
+    type: Boolean,
+    default: false
+  },
   dishes: [
     {
       price: Number,
