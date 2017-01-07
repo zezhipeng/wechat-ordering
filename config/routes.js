@@ -18,6 +18,7 @@ const sha1 = require('sha1')
 const superAdmin = require('../app/controllers/superadmin');
 const path = require('path')
 const fs = require('fs')
+const config = require('./index')
 /**
  * Route middlewares
  */
@@ -35,6 +36,41 @@ const fail = {
 
 module.exports = function (app) {
   // const pauth = passport.authenticate.bind(passport);
+
+  var middleware = require('wechat-pay').middleware;
+  var initConfig = {
+    partnerKey: config.partnerKey || "youcanyouupnocannobb1000NIAN1HUI",
+    appId: config.appId || "wx3c3c10b371693534",
+    mchId: config.mchId || "1416397002",
+    notifyUrl: config.notifyUrl || "http://jimdream.com/wx/n",
+    pfx: fs.readFileSync(path.join(__dirname, '../libs/apiclient_cert.p12'))
+  }
+
+  app.use('/wx/n', middleware(initConfig).getNotify().done(function(message, req, res, next) {
+    var openid = message.openid;
+    console.log(message)
+    var order_id = message.out_trade_no;
+    var attach = {};
+    try{
+
+     attach = JSON.parse(message.attach);
+     console.log(attach)
+    } catch(e) {
+      console.log(e)
+    }
+
+    /**
+     * 查询订单，在自己系统里把订单标为已处理
+     * 如果订单之前已经处理过了直接返回成功
+     */
+    res.reply('success');
+
+    /**
+     * 有错误返回错误，不然微信会在一段时间里以一定频次请求你
+     * res.reply(new Error('...'))
+     */
+  }))
+
   app.get('/', function(req, res) {
     res.render('index.jade')
   })
@@ -57,38 +93,6 @@ module.exports = function (app) {
   app.get('/wx/signature', wx.signature)
   app.get('/wx/pay', wx.pay)
 
-  var middleware = require('wechat-pay').middleware;
-  var initConfig = {
-    partnerKey: "547140",
-    appId: "wx3c3c10b371693534",
-    mchId: "1416397002",
-    notifyUrl: "http://jimdream.com/wx/n",
-    pfx: fs.readFileSync(path.join(__dirname, '../libs/apiclient_cert.p12'))
-  }
-  app.all('/wx/n', middleware(initConfig).getNotify().done(function(message, req, res, next) {
-    var openid = message.openid;
-    console.log(message)
-    var order_id = message.out_trade_no;
-    var attach = {};
-    try{
-
-     attach = JSON.parse(message.attach);
-     console.log(attach)
-    } catch(e) {
-      console.log(e)
-    }
-
-    /**
-     * 查询订单，在自己系统里把订单标为已处理
-     * 如果订单之前已经处理过了直接返回成功
-     */
-    res.send('success');
-
-    /**
-     * 有错误返回错误，不然微信会在一段时间里以一定频次请求你
-     * res.reply(new Error('...'))
-     */
-  }))
   // app.all('*', )
   // 用户接口
   // app.get('/', (req, res, next) => {
