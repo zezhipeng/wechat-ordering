@@ -1,7 +1,6 @@
 <template lang="jade">
 .account-main
   .account-head
-    pre {{pre}}
     .user
       .name {{user.nickname}}
         .city {{user.city}}
@@ -170,7 +169,7 @@ export default {
              'getBrandWCPayRequest', data,
              function(res){
                  vm.pre = res
-                 if(res.err_msg == "get_brand_wcpay_request：ok" ) {
+                 if(res.err_msg == "get_brand_wcpay_request：ok" || /ok/.test(res.err_msg)) {
                    let req = {
                      model: 'orderings',
                      _id: item._id,
