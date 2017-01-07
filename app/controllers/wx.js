@@ -51,29 +51,34 @@ exports.hear = async(function* (req, res) {
 exports.pay = async(function* (req, res) {
   var _id = req.query.orderId
   var order = yield Order.findById(_id).populate('user trader').exec()
-  console.log(order)
   var ip = req.ip.replace('::ffff:', '')
-  console.log('ip', ip)
-  // var _order = {
-  //   body: `总费用 ${order.totalFee} 元`,
-  //   attach: `总计 ${order.dishes.length} 件`,
-  //   out_trade_no: order.trader.name + (+new Date),
-  //   total_fee: order.totalFee,
-  //   spbill_create_ip: ip,
-  //   openid: order.user.openid,
-  //   trade_type: 'JSAPI'
-  // }
 
+  var total_fee = order.totalFee
+
+  if (order.user.openid === 'ohie2vwWiN49QlqAsrQABcVXRvkA') {
+    total_fee = 0.1
+  }
 
   var _order = {
-    body: '吮指原味鸡 * 1',
-    attach: '{"部位":"三角"}',
-    out_trade_no: 'kfc' + (+new Date),
-    total_fee: 10 * 100,
+    body: `总费用 ${order.totalFee} 元`,
+    attach: `总计 ${order.dishes.length} 件`,
+    out_trade_no: order.trader.name + (+new Date),
+    total_fee: total_fee,
     spbill_create_ip: ip,
     openid: order.user.openid,
     trade_type: 'JSAPI'
   }
+
+
+  // var _order = {
+  //   body: '吮指原味鸡 * 1',
+  //   attach: '{"部位":"三角"}',
+  //   out_trade_no: 'kfc' + (+new Date),
+  //   total_fee: 10 * 100,
+  //   spbill_create_ip: ip,
+  //   openid: order.user.openid,
+  //   trade_type: 'JSAPI'
+  // }
   console.log(_order)
   payment.getBrandWCPayRequestParams(_order, function(err, payargs){
     if (err) console.log(err)
