@@ -14,7 +14,7 @@ if (trader) {
   trader = trader.split('j:')[1]
 }
 // trader = JSON.parse(trader)
-
+console.log('trader', trader)
 Vue.use(Vuex)
 
 const socket = io()
@@ -27,6 +27,11 @@ const store = new Vuex.Store({
     coupon: [],
     service: '',
     users: [],
+    chartFilter: [
+      {label: '今日', value: 'today'},
+      {label: '本月', value: 'thisMonth'},
+      {label: '今年', value: 'thisYear'}
+    ],
     print: {
     },
     auth: {
@@ -38,46 +43,124 @@ const store = new Vuex.Store({
     service: state => state.service,
     tables: state => state.trader.tables,
     classes: state => state.trader.classes,
+    allOrdering: state => state.orderings,
     orderings: state => state.orderings.filter(v => v.status === '等待' || v.status === '已付款'),
     done: state => state.orderings.filter(v => v.status === '完成'),
     coupon: state => state.coupon,
+    chartFilter: state => state.chartFilter,
     users: state => state.users,
     print: state => state.print,
-    today: state => {
-      var today = new Date().getDate()
-      var data = _.filter(state.orderings, order => {
-        var _month = new Date(order.meta.createdAt).getDate()
-        return month === _month
-      })
-      var r
-
-      r = _.reduce(data, (sum, item) => {
-        item.dishes.forEach(dish => {
-          sum = sum + dish.price * dish.number
-        })
-
-        return sum
-      }, 0)
-
-      return r
-    },
+    // today: state => {
+    //   var today = new Date().getDate()
+    //   var data = _.filter(state.orderings, order => {
+    //     var _month = new Date(order.meta.createdAt).getDate()
+    //     return month === _month
+    //   })
+    //   var r
+    //
+    //   r = _.reduce(data, (sum, item) => {
+    //     item.dishes.forEach(dish => {
+    //       sum = sum + dish.price * dish.number
+    //     })
+    //
+    //     return sum
+    //   }, 0)
+    //
+    //   return r
+    // },
     thisMonth: state => {
       var month = new Date().getMonth()
       var data = _.filter(state.orderings, order => {
         var _month = new Date(order.meta.createdAt).getMonth()
         return month === _month
       })
-      var r
+      var r = []
 
-      r = _.reduce(data, (sum, item) => {
-        item.dishes.forEach(dish => {
-          sum = sum + dish.price * dish.number
-        })
+      for (var i = 0; i < state.dishes.length; ++i) {
+        var count = _.reduce(data, (c, item) => {
+          let a = _.filter(item.dishes, dish => {
 
-        return sum
-      }, 0)
+            return dish.name === state.dishes[i].name
+          })
+          var _a = {
+            number: 0
+          }
+          a = a.length
+            ? a[0]
+            : _a
+
+          c = c + a.number
+
+          return c
+        }, 0)
+
+        r.push(count)
+      }
 
       return r
+      // var month = new Date().getMonth()
+      // var data = _.filter(state.orderings, order => {
+      //   var _month = new Date(order.meta.createdAt).getMonth()
+      //   return month === _month
+      // })
+      // var r
+      //
+      // r = _.reduce(data, (sum, item) => {
+      //   item.dishes.forEach(dish => {
+      //     sum = sum + dish.price * dish.number
+      //   })
+      //
+      //   return sum
+      // }, 0)
+      //
+      // return r
+    },
+    thisYear: state => {
+      var month = new Date().getYear()
+      var data = _.filter(state.orderings, order => {
+        var _month = new Date(order.meta.createdAt).getYear()
+        return month === _month
+      })
+      var r = []
+
+      for (var i = 0; i < state.dishes.length; ++i) {
+        var count = _.reduce(data, (c, item) => {
+          let a = _.filter(item.dishes, dish => {
+
+            return dish.name === state.dishes[i].name
+          })
+          var _a = {
+            number: 0
+          }
+          a = a.length
+            ? a[0]
+            : _a
+
+          c = c + a.number
+
+          return c
+        }, 0)
+
+        r.push(count)
+      }
+
+      return r
+      // var month = new Date().getYear()
+      // var data = _.filter(state.orderings, order => {
+      //   var _month = new Date(order.meta.createdAt).getYear()
+      //   return month === _month
+      // })
+      // var r
+      //
+      // r = _.reduce(data, (sum, item) => {
+      //   item.dishes.forEach(dish => {
+      //     sum = sum + dish.price * dish.number
+      //   })
+      //
+      //   return sum
+      // }, 0)
+      //
+      // return r
     },
     lastMonth: state => {
       var month = new Date().getMonth() - 1
@@ -125,18 +208,49 @@ const store = new Vuex.Store({
         var _month = new Date(order.meta.createdAt).getDate()
         return month === _month
       })
-      var r
+      var r = []
 
-      r = _.reduce(data, (sum, item) => {
-        item.dishes.forEach(dish => {
-          sum = sum + dish.price * dish.number
-        })
+      for (var i = 0; i < state.dishes.length; ++i) {
+        var count = _.reduce(data, (c, item) => {
+          let a = _.filter(item.dishes, dish => {
 
-        return sum
-      }, 0)
+            return dish.name === state.dishes[i].name
+          })
+          var _a = {
+            number: 0
+          }
+          a = a.length
+            ? a[0]
+            : _a
+
+          c = c + a.number
+
+          return c
+        }, 0)
+
+        r.push(count)
+      }
 
       return r
     },
+    // today: state => {
+    //   var month = new Date().getDate()
+    //   var data = _.filter(state.orderings, order => {
+    //     var _month = new Date(order.meta.createdAt).getDate()
+    //     return month === _month
+    //   })
+    //   var r
+    //
+    //   r = _.reduce(data, (sum, item) => {
+    //     item.dishes.forEach(dish => {
+    //       sum = sum + dish.price * dish.number
+    //     })
+    //
+    //     return sum
+    //   }, 0)
+    //
+    //   return r
+    // },
     dishesLabels: state => {
       var r = []
 
@@ -180,6 +294,9 @@ const store = new Vuex.Store({
     dishes: state => state.dishes
   },
   mutations: {
+    toggleCheck(state, data) {
+      state.coupon[data].checked = !state.coupon[data].checked
+    },
     service (state, data) {
       var table
 
@@ -244,6 +361,15 @@ const store = new Vuex.Store({
           console.log(res.data)
           commit(req.model, res.data)
         }
+      })
+    },
+    editDish({commit}, req) {
+      $.ajax({
+        type: 'put',
+        url: '/api/model/dishes',
+        data: req
+      }).then(res => {
+        store.dispatch('reflash', req)
       })
     },
     update ({commit}, req) {
@@ -327,8 +453,9 @@ const store = new Vuex.Store({
   plugins: [plugin]
 })
 
-function init() {
-  $.get('/api/init')
+function init(trader) {
+  trader = trader || ''
+  $.get(`/api/init?trader=${trader}`)
   .then(res => {
     Object.keys(res).forEach(key => {
       store.state[key] = res[key]

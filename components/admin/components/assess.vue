@@ -8,29 +8,15 @@
       thead
         tr
           th #
-          th 类别
-          th 删除
+          th 用户
+          th 内容
+          th 星星数
       tbody
-        tr(v-for='item, $index in classes')
+        tr(v-for='item, $index in allOrdering')
           td {{$index + 1}}
-          td {{item.name}}
-          td
-            a.del-btn(@click='del(item)')
-              span.icon.waves-attach.waves-effect delete
-  .col-md-5
-    .card
-      .card-main
-        .card-inner
-          .form-group.form-group-label
-            label.floating-label 名称
-            input.form-control(type='text', v-model='data.name')
-          .card-action-btn.pull-left
-            span.icon add
-            a.btn.btn-flat.waves-attach.waves-effect(@click='add(data)') 添加
-        .fbtn-container
-  //- .floatBtn
-  //-   a.fbtn.fbtn-brand-accent.fbtn-lg.waves-attach.waves-circle.waves-light.waves-effect(style='padding-top: 18px;', @click='updateTrader')
-  //-     span.icon save
+          td {{item.user.nickname}}
+          td {{item.assess.text}}
+          td {{item.assess.stars}}
 </template>
 
 <script>
@@ -41,8 +27,8 @@ export default {
     }
   },
   computed: {
-    classes() {
-      return this.$store.getters.trader.classes
+    allOrdering() {
+      return this.$store.getters.allOrdering
     }
   },
   mounted () {},

@@ -21,8 +21,8 @@ div
           span.icon expand_more
         ul(style='display: none')
           li(v-for='item in coupon',  :key='item._id', @click='useCoupon(item)', v-bind:class='{"checked": couponNow === item}') ¥{{item.minus}}
-            span 实付金额满{{item.limit}}
-              span 有效期至{{item.due}}
+            //- span 实付金额满{{item.limit}}
+            span 有效期至{{item.due}}
       transition-group(name='fadeIn')
         li(v-for='(item, $index) in order', :key='item._id')
           .img

@@ -168,6 +168,9 @@ body, html {
     }
   }
 }
+.del-btn {
+  cursor: pointer;
+}
 
 @page {
   size: 40mm 210mm;

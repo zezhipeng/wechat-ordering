@@ -28,6 +28,8 @@
                       .dish(v-for='dish, index in dishes', v-if='dish.class == dishClass.name', v-bind:class="{'active': dish == editedDish}")
                         .dish-content(v-bind:class='{"sleep": !dish.online}')
                           .tool
+                            a.delete(@click='edit(dish)')
+                              span.icon edit
                             a.delete(v-if='!dish.online', @click='toggleOnline(dish)')
                               span.icon accessibility
                             a.delete(v-if='dish.online', @click='toggleOnline(dish)')
@@ -44,7 +46,7 @@
                 .stepper
                   .stepper-step
         transition(name='fade')
-          .dishForm(v-if='dishForm')
+          .dishForm(v-show='dishForm')
             .row
               .col-md-1
                 span.icon(style='color: #666; font-size: 80px; margin-top: 10px', v-if='dishForm', @click='dishForm = !dishForm') chevron_left
@@ -93,21 +95,21 @@
                         a.btn.btn-flat.waves-attach.saveBtn(@click='createDish')
                           span.icon save
                           span 保存
-              .col-md-4
-                .row
-                  .col-md-12
-                    .card
-                      .card-main
-                        .card-header
-                          .col-md-12
-                            p 添加分类选项
-                        .card-inner
-                          .form-group.form-group-label
-                            label.floating-label 类名
-                            input.form-control(type='text', v-model='newClass.name')
-                          .card-action-btn.pull-left
-                            span.icon add
-                            a.btn.btn-flat.waves-attach.waves-effect(@click='addClass') 添加
+              //- .col-md-4
+              //-   .row
+              //-     .col-md-12
+              //-       .card
+              //-         .card-main
+              //-           .card-header
+              //-             .col-md-12
+              //-               p 添加分类选项
+              //-           .card-inner
+              //-             .form-group.form-group-label
+              //-               label.floating-label 类名
+              //-               input.form-control(type='text', v-model='newClass.name')
+              //-             .card-action-btn.pull-left
+              //-               span.icon add
+              //-               a.btn.btn-flat.waves-attach.waves-effect(@click='addClass') 添加
       .floatBtn(v-if='!dishForm')
         a.fbtn.fbtn-brand-accent.fbtn-lg.waves-attach.waves-circle.waves-light.waves-effect(style='padding-top: 18px;', @click='dishForm = !dishForm')
           span.icon add
@@ -204,10 +206,17 @@ export default {
 
       let req = {
         model: 'dishes',
+        key: 'dishes',
         body: this.data
       }
 
-      this.$store.dispatch('create', req)
+      if (this.data._id) {
+        this.$store.dispatch('editDish', req)
+
+      } else {
+
+        this.$store.dispatch('create', req)
+      }
       this.data = {}
     },
     toggleOnline(item) {
@@ -219,6 +228,15 @@ export default {
       }
 
       this.$store.dispatch('update', req)
+    },
+    edit(dish) {
+      this.dishForm = !this.dishForm
+
+      $('.form-group-label').each((i, d) => {
+        $(d).addClass('control-highlight')
+      })
+      this.data = dish
+
     },
     deleteDish() {
       // console.log(item)

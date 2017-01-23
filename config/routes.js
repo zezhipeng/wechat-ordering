@@ -62,7 +62,7 @@ module.exports = function (app) {
 
     order.wechatPay = true
     order.save()
-    
+
     var attach = {};
     try{
 
@@ -164,6 +164,7 @@ module.exports = function (app) {
 
   app.post('/admin/login', admin.login)
   app.post('/admin/signUp', admin.signUp)
+  app.get('/admin/signout', admin.signout)
   app.put('/api/update', admin.update)
   app.get('/admin', admin.index)
 

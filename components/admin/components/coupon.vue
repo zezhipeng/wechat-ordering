@@ -6,16 +6,16 @@
         tr
           th #
           th 金额
-          th 优惠券张数
-          th 使用金额下限
+          //- th 优惠券张数
+          //- th 使用金额下限
           th 截止日期
           th 删除
       tbody
         tr(v-for='item, $index in coupon')
           td(style='color: #ff6600') {{$index + 1}}
           td {{item.minus}} 元
-          td {{item.counter}} 张
-          td {{item.limit}} 元
+          //- td {{item.counter}} 张
+          //- td {{item.limit}} 元
           td {{item.due}}
           td
             span.icon delete
@@ -26,12 +26,12 @@
           .form-group.form-group-label
             label.floating-label 金额
             input.form-control(type='text', v-model.number='data.minus')
-          .form-group.form-group-label
-            label.floating-label 优惠券张数
-            input.form-control(type='text', v-model.number='data.counter')
-          .form-group.form-group-label
-            label.floating-label 使用金额下限
-            input.form-control(type='text', v-model.number='data.limit')
+          //- .form-group.form-group-label
+          //-   label.floating-label 优惠券张数
+          //-   input.form-control(type='text', v-model.number='data.counter')
+          //- .form-group.form-group-label
+          //-   label.floating-label 使用金额下限
+          //-   input.form-control(type='text', v-model.number='data.limit')
           .form-group.form-group-label
             label.floating-label 截止日期
             input.form-control#selector(type='text', v-model='data.due')
@@ -72,7 +72,7 @@ export default {
     add() {
       let body = this.data
 
-      if (!this.data || !this.data.minus || !this.data.counter || !this.data.limit || !this.data.due) {
+      if (!this.data || !this.data.minus || !this.data.due) {
         $('.snackbar').snackbar({
           alive: 4000,
           content: `<div>请填写完整表单</div>`

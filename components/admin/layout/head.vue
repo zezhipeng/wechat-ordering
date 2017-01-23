@@ -14,7 +14,11 @@ div
           span.access-hide John Smith
           span.avatar.avatar-sm
             img(alt='alt text for John Smith avatar', src='http://og2h60o77.bkt.clouddn.com/avatar-001.jpg')
-        //- ul.dropdown-menu.dropdown-menu-right
+        ul.dropdown-menu.dropdown-menu-right
+          li
+            a.padding-right-lg.waves-attach(href='/admin/signout', @click='clearCookie')
+              span.icon.icon-lg.margin-right exit_to_app
+              | 登出
         //-   li
         //-     a.padding-right-lg.waves-attach(href='javascript:void(0)')
         //-       span.icon.icon-lg.margin-right account_box
@@ -23,10 +27,10 @@ div
         //-     a.padding-right-lg.waves-attach(href='javascript:void(0)')
         //-       span.icon.icon-lg.margin-right add_to_photos
         //-       | Upload Photo
-        //-   li
-        //-     a.padding-right-lg.waves-attach(href='')
-        //-       span.icon.icon-lg.margin-right exit_to_app
-        //-       | Logout
+          //- li
+          //-   a.padding-right-lg.waves-attach(href='')
+          //-     span.icon.icon-lg.margin-right exit_to_app
+          //-     | Logout
   nav#ui_menu.menu(aria-hidden='true', tabindex='-1')
     .menu-scroll
       .menu-content
@@ -40,6 +44,8 @@ div
 </template>
 
 <script>
+import Cookies from 'js-cookie'
+
 export default {
   data () {
     return {}
@@ -48,6 +54,9 @@ export default {
   },
   mounted () {},
   methods: {
+    clearCookie() {
+      Cookies.remove('trader')
+    },
     page(url) {
       this.$store.commit('page', url)
     },

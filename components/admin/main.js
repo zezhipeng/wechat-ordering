@@ -60,6 +60,13 @@ const routes = [
         component: require('./components/orderings.vue')
       },
       {
+        path: 'assess',
+        meta: {
+          auth: true
+        },
+        component: require('./components/assess.vue')
+      },
+      {
         path: 'done',
         meta: {
           auth: true

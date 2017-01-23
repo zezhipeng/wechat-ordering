@@ -88,18 +88,19 @@ const store = new Vuex.Store({
       return _.find(state.dishes, state.user._id)
     },
     coupon: state => {
-      return state.user.coupon.filter(i => {
-        let date = i.due.match(/\d+/g)
-        let due = new Date()
-        due.setYear(date[0])
-        due.setMonth(date[1])
-        due.setDate(date[2])
-        due = due.getTime()
-        let now = Date.now()
-        console.log(due)
-        console.log(now)
-        return !i.used && (now < due + 1000 * 60 * 60 * 24)
-      })
+      return state.user.coupon
+      // return state.user.coupon.filter(i => {
+      //   let date = i.due.match(/\d+/g)
+      //   let due = new Date()
+      //   due.setYear(date[0])
+      //   due.setMonth(date[1])
+      //   due.setDate(date[2])
+      //   due = due.getTime()
+      //   let now = Date.now()
+      //   console.log(due)
+      //   console.log(now)
+      //   return !i.used && (now < due + 1000 * 60 * 60 * 24)
+      // })
     }
   },
   mutations: {

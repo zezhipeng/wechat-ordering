@@ -8,6 +8,10 @@ ul.aside
     li.waves-attach.waves-effect
       span.icon playlist_add_check
       a 已处理
+  router-link(to='/assess')
+    li.waves-attach.waves-effect
+      span.icon note
+      a 评价
   hr(style='width: 100%;')
   router-link(to='/tables')
     li.waves-attach.waves-effect

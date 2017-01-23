@@ -2,36 +2,40 @@
 .col-md-12
   .row
     .col-md-6
+      .card(v-for='user in users')
+        .card-main
+          .card-inner
+            p {{user.nickname}}
+              span(style='float: right; font-size: 20px; cursor: pointer;', @click='pushCoupon(user)')
+                span.icon edit
+                span 修改
+            table.table(v-for='item, index in user.coupon', style='box-shadow: none; margin-bottom: 0; margin-top: 0')
+              tbody
+                tr
+                  td {{item.minus}} 元
+                  td {{item.due}}
+    .col-md-6
       table.table
         thead
           tr
-            th 昵称
-            th 头像
-            th 性别
-            th 城市
-            th 优惠券
+            th #
+            th 金额
+            th 有效日期
+            th 选择
         tbody
-          tr(v-for='item, $index in users')
-            td {{item.nickname}}
+          tr(v-for='item, index in coupon')
+            td {{index + 1}}
+            td {{item.minus}} 元
+            td {{item.due}} {{item.checked}}
             td
-              img.img-responsive(:src='item.headimgurl', style='width: 30px')
-            td {{item.sex == '1' ? '男' : '女'}}
-            td {{item.city}}
-            td(v-on:dragover='dragover' v-on:drop='drop(item)')
-              ul.nav.nav-list.margin-no
-                li.dropdown.open
-                  a.dropdown-toggle.text-black.waves-attach.waves-effect(data-toggle='dropdown', aria-expanded='true')
-                    span.icon(style='margin-left: 10px; color: #ff6600; font-size: 20px') view_list
-                  ul.dropdown-menu.dropdown-menu-right
-                    li(v-for='i, index in item.coupon')
-                      a 减:{{i.minus}}元 上限金额:{{i.limit}}元 截止日期{{i.due}}
-                        span.icon(style='margin-left: 10px; color: #ff6600; font-size: 20px', @click='deleteCoupon({item: item, index: index})') delete
-    .col-md-6
-      .tile-wrap
-        .tile(v-for='item in coupon', draggable="true", v-on:dragstart='dragstart(item)')
-          .tile-side.pull-left 减 {{item.minus}} 元
-          .tile-side.pull-left 上限金额 {{item.limit}} 元
-          .tile-inner  截止日期 {{item.due}}
+              .checkbox.checkbox-adv
+                label(:for='item._id')
+                  input.access-hide(type='checkbox', :id='item._id', :name='item._id', v-model='item.checked')
+                  span.checkbox-circle
+                  span.checkbox-circle-check
+                  span.checkbox-circle-icon.icon done
+
+
 
 
 </template>
@@ -59,6 +63,7 @@ export default {
   mounted () {
   },
   methods: {
+
     drop(item) {
       let exit = _.find(item.coupon, this.dropping)
       if (!exit) {
@@ -78,27 +83,35 @@ export default {
       this.spliceCoupon(item, index)
     },
     checkCoupon(data) {
-      let item = data.item
-      let i = data.i
-      let $index = data.$index
-
-      let exit = item.coupon.indexOf(i._id)
-
-      if (exit > -1) {
-        this.spliceCoupon(item, i, $index)
-      } else {
-        this.pushCoupon(item, i)
-      }
+      console.log(data)
+      data.checked = !data.checked
+      // let item = data.item
+      // let i = data.i
+      // let $index = data.$index
+      //
+      // let exit = item.coupon.indexOf(i._id)
+      //
+      // if (exit > -1) {
+      //   this.spliceCoupon(item, i, $index)
+      // } else {
+      //   this.pushCoupon(item, i)
+      // }
     },
-    pushCoupon(item, i) {
+    toggleCheck(index) {
+      this.$store.commit('toggleCheck', index)
+    },
+    pushCoupon(item) {
+      var _coupon = this.coupon.filter(i => i.checked)
+      _coupon = _coupon.map(i => i._id)
+
       let req = {
         model: 'user',
-        operator: 'push',
+        // operator: 'push',
         key: 'coupon',
-        value: i._id,
+        value: _coupon,
         _id: item._id
       }
-
+      console.log(_coupon)
       this.$store.dispatch('update', req)
     },
     spliceCoupon(item, $index) {

@@ -19,7 +19,7 @@
             a.btn.btn-flat.btn-brand-accent.waves-attach.waves-effect(data-toggle='modal', data-backdrop='static', href='#modal', @click='createQrCode(item)')
               span.icon crop_free
           td
-            a(@click='del($index)')
+            a.del-btn(@click='del($index)')
               span.icon.waves-attach.waves-effect delete
   .col-md-5
     .card
@@ -116,14 +116,17 @@ export default {
       this.data = {}
     },
     del($index) {
-      let req = {
-        model: 'trader',
-        operator: 'splice',
-        key: 'tables',
-        value: $index
+      var r = window.confirm('确认删除?')
+      if (r) {
+        let req = {
+          model: 'trader',
+          operator: 'splice',
+          key: 'tables',
+          value: $index
+        }
+        
+        this.$store.dispatch('update', req)
       }
-
-      this.$store.dispatch('update', req)
     }
   },
   components: {}

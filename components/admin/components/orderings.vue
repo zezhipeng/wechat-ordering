@@ -16,6 +16,7 @@
             .tile-side.pull-left
               span.name {{item.user.nickname}}
             .tile-inner
+              span(style='margin-right: 20px') 时间 {{moment(item.meta.createdAt).format('YYYY MM/DD hh:mm')}}
               span.time 历时 {{moment.preciseDiff(item.meta.createdAt, Date.now())}}
               span(style='margin-left: 20px') 状态:{{item.status}}
 
@@ -215,7 +216,7 @@ export default {
 
       $('.snackbar').snackbar({
         alive: 4000,
-        content: `<div>已移动到"已完成"中 <a class="backToOrder" data-dismiss='snackbar'>撤销</a></div>`
+        content: `<div>已移动到"已处理"中 <a class="backToOrder" data-dismiss='snackbar'>撤销</a></div>`
       })
 
       this.tileCollapse = null

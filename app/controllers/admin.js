@@ -29,18 +29,28 @@ exports.index = async(function* (req, res) {
   })
 })
 
+exports.signout = async(function* (req, res) {
+  req.session.destroy()
+
+  res.redirect('/admin')
+})
+
+
 exports.update = async(function* (req, res) {
   let body = req.body
   let operator = body.operator
   let key = body.key
   let value = body.value
   let model = req.params.model
-  let _id = body._id
-  console.log(body)
+  let _id = body._id || body.body._id
+
   try {
     let update = yield api[model].findById(_id).exec()
     if (operator === 'push') {
       update[key][operator](value)
+    }
+    else if (key === 'coupon') {
+      update.coupon = value
     }
     else if (operator === 'splice') {
       update[key][operator](value, 1)
@@ -54,15 +64,30 @@ exports.update = async(function* (req, res) {
 
       return res.json(dishes)
     }
+    else if (key === 'dishes') {
+      console.log(body.body)
+      console.log(update)
+      update.name = body.body.name
+      update.class = body.body.class
+      update.price = body.body.price
+      update.online = body.body.online
+      update.stars = body.body.stars
+      update.vt = body.body.vt
+      update.unit = body.body.unit
+      update.recommend = body.body.recommend
+      update.recommendVt = body.body.recommendVt
+    }
     else {
       update[key] = value
     }
+    console.log(update)
     yield update.save()
 
 
     res.json(update)
 
   } catch(e) {
+    console.log(e)
     res.send(e)
   }
 })
@@ -197,13 +222,16 @@ exports.signUp = async(function* (req, res) {
 })
 
 exports.init = async(function* (req, res) {
-  if (!req.session.trader) {
-    res.json({
-      success: 0,
-      msg: '不存在 session'
-    })
-  }
-  let _id = req.session.trader._id
+
+  // if (!req.session.trader) {
+  //   res.json({
+  //     success: 0,
+  //     msg: '不存在 session'
+  //   })
+  // }
+  let _id = req.session.trader && req.session.trader._id
+    ? req.session.trader._id
+    : req.query.trader
 
   try {
     let trader = yield Trader.findById(_id).exec()
