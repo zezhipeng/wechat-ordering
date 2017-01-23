@@ -240,9 +240,12 @@ export default {
       this.$store.dispatch('updateOrder', req)
     },
     totalFee(dishes) {
-      return _.reduce(dishes, (total, item) => {
+      var total = _.reduce(dishes, (total, item) => {
         return total += item.price * item.number
       }, 0)
+
+      total = total.toFixed(2)
+      return total
     },
     showTile($index) {
       if (this.tileCollapse === $index) {
