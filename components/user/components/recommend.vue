@@ -24,7 +24,7 @@
       swiper-slide(v-for='item, $index in list', v-if='item.recommend')
         .recommend-content
           .img
-            img.img-responsive(:src='"//og2h60o77.bkt.clouddn.com/" + item.src + "?imageMogr2/thumbnail/330x220"')
+            img.img-responsive(:src='"//og2h60o77.bkt.clouddn.com/" + item.src + "?imageMogr2/thumbnail/330x220"', style='width: 330px;height: 220px')
           .footer
             br
             .line1

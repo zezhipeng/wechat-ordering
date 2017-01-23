@@ -36,7 +36,7 @@
                               span.icon airline_seat_individual_suite
                             a.delete(@click='deleteMid(dish)', data-backdrop='static', data-toggle='modal', href='#dialog')
                               span.icon delete
-                          img(:src='"http://og2h60o77.bkt.clouddn.com/" + dish.src')
+                          img(:src='"http://og2h60o77.bkt.clouddn.com/" + dish.src', style='width: 234px; height: 150px')
                           p {{dish.name}}
                             span(style='float: right') ¥{{dish.price}} /{{dish.unit}}
                           p 推荐指数
