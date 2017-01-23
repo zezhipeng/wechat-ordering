@@ -20,7 +20,7 @@ const TraderSchema = new Schema({
    online: {
      type: Boolean,
      default: true
-   }, 
+   },
    phone: String,
    role: {
      type: Number,
@@ -30,7 +30,6 @@ const TraderSchema = new Schema({
      {
        name: {
          type: String,
-         unique: true
        },
        status: {
          type: String,
