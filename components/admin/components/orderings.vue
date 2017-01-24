@@ -110,6 +110,9 @@ export default {
     }
   },
   computed: {
+    theFilter() {
+      return this.$store.getters.theFilter
+    },
     orderings() {
       return this.$store.getters.orderings
     },

@@ -171,7 +171,7 @@ exports.login = async(function* (req, res) {
     }
     const _id = trader._id
     let dishes = yield Dish.find({trader: _id}).exec()
-    let orderings = yield Order.find({trader: _id}).populate('user').limit(50).exec()
+    let orderings = yield Order.find({trader: _id}).populate('user').exec()
     let coupon = yield Coupon.find({trader: _id}).exec()
     let users = yield User.find({traders: {$in: [_id]}}).populate('coupon').exec()
 
@@ -236,7 +236,7 @@ exports.init = async(function* (req, res) {
   try {
     let trader = yield Trader.findById(_id).exec()
     let dishes = yield Dish.find({trader: _id}).exec()
-    let orderings = yield Order.find({trader: _id}).populate('user').limit(50).exec()
+    let orderings = yield Order.find({trader: _id}).populate('user').exec()
     let coupon = yield Coupon.find({trader: _id}).exec()
     let users = yield User.find({traders: {$in: [_id]}}).populate('coupon').exec()
 
@@ -257,7 +257,7 @@ exports.reflash = async(function* (req, res) {
 
   try {
     if (model === 'order') {
-      var data = yield api[model].find({trader: req.session.trader._id}).populate('user').limit(50).exec()
+      var data = yield api[model].find({trader: req.session.trader._id}).populate('user').exec()
 
     } else {
       var data = yield api[model].find({trader: req.session.trader._id}).exec()

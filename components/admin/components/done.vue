@@ -92,13 +92,12 @@ require('moment/locale/zh-cn')
 export default {
   data () {
     return {
-      theFilter: {
-        start: '',
-        end: ''
-      },
     }
   },
   computed: {
+    theFilter() {
+      return this.$store.getters.theFilter
+    },
     done() {
       return this.$store.getters.done
     },

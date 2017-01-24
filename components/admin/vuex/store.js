@@ -43,6 +43,7 @@ const store = new Vuex.Store({
     }
   },
   getters: {
+    theFilter: state => state.theFilter,
     trader: state => state.trader,
     service: state => state.service,
     tables: state => state.trader.tables,
