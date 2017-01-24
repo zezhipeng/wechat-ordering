@@ -2,9 +2,18 @@
 .col-md-8
   .row
     .tile-wrap
+      .col-md-4
+        .input-group
+          span.input-group-addon 起始日期
+          input.form-control(placeholder='起始日期', type='date', style='width: 200px; float: left', v-model='theFilter.start')
+      .col-md-4
+        .input-group
+          span.input-group-addon 结束日期
+          input.form-control(placeholder='结束日期', type='date', style='width: 200px; float: left', v-model='theFilter.end')
+      br
       h2(v-if='!done.length') 暂无数据
       transition-group(name='fadeLeft')
-        .tile(v-for='item, $index in done', :key='item._id')
+        .tile.col-md-12(v-for='item, $index in done', :key='item._id')
           .card-main
             .card-inner(style='margin: 0 20px')
               p
@@ -22,7 +31,7 @@
                 .tile-action
                   ul.nav.nav-list.margin-no.pull-right
                     li
-                      a.text-black-sec.waves-attach.waves-effect(@click='backToOrder(item)')
+                      a.text-black-sec.waves-attach.waves-effect.del-btn(@click='backToOrder(item)')
                         span 撤销
                         span.icon sync
               .collapsible-region.collapse(aria-expanded='false', style='height: 0px;', :id='item._id')
@@ -82,7 +91,12 @@ require('moment/locale/zh-cn')
 
 export default {
   data () {
-    return {}
+    return {
+      theFilter: {
+        start: '',
+        end: ''
+      },
+    }
   },
   computed: {
     done() {
@@ -92,17 +106,30 @@ export default {
       return moment
     }
   },
+  watch: {
+    'theFilter.start': function(newVal, oldVal) {
+      this.$store.commit('theFilterStart', newVal)
+    },
+    'theFilter.end': function(newVal, oldVal) {
+      this.$store.commit('theFilterEnd', newVal)
+    }
+  },
   mounted () {},
   methods: {
     backToOrder(item) {
-      let req = {
-        model: 'orderings',
-        _id: item._id,
-        key: 'status',
-        value: '等待'
-      }
+      var r = window.confirm('确认撤回？')
 
-      this.$store.dispatch('updateOrder', req)
+      if (r) {
+        let req = {
+          model: 'orderings',
+          _id: item._id,
+          key: 'status',
+          value: '等待'
+        }
+
+        this.$store.dispatch('updateOrder', req)
+
+      }
     }
   },
   components: {}

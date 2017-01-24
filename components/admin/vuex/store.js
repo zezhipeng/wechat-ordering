@@ -27,6 +27,10 @@ const store = new Vuex.Store({
     coupon: [],
     service: '',
     users: [],
+    theFilter: {
+      start: '',
+      end: ''
+    },
     chartFilter: [
       {label: '今日', value: 'today'},
       {label: '本月', value: 'thisMonth'},
@@ -44,8 +48,47 @@ const store = new Vuex.Store({
     tables: state => state.trader.tables,
     classes: state => state.trader.classes,
     allOrdering: state => state.orderings,
-    orderings: state => state.orderings.filter(v => v.status === '等待' || v.status === '已付款'),
-    done: state => state.orderings.filter(v => v.status === '完成'),
+    orderings: state => {
+      var orderings = state.orderings.filter(v => v.status === '等待' || v.status === '已付款')
+
+      if (state.theFilter.start) {
+        orderings = orderings.filter(order => {
+          var time = new Date(state.theFilter.start).getTime()
+
+          return new Date(order.meta.createdAt).getTime() > time
+        })
+      }
+
+      if (state.theFilter.end) {
+        orderings = orderings.filter(order => {
+          var time = new Date(state.theFilter.end).getTime()
+          return new Date(order.meta.createdAt).getTime() < time
+        })
+      }
+
+      return orderings
+    },
+    done: state => {
+      var orderings = state.orderings.filter(v => v.status === '完成')
+
+      if (state.theFilter.start) {
+        orderings = orderings.filter(order => {
+          var time = new Date(state.theFilter.start).getTime()
+
+          return new Date(order.meta.createdAt).getTime() > time
+        })
+      }
+
+      if (state.theFilter.end) {
+        orderings = orderings.filter(order => {
+          var time = new Date(state.theFilter.end).getTime()
+          return new Date(order.meta.createdAt).getTime() < time
+        })
+      }
+
+      return orderings
+
+    },
     coupon: state => state.coupon,
     chartFilter: state => state.chartFilter,
     users: state => state.users,
@@ -294,6 +337,12 @@ const store = new Vuex.Store({
     dishes: state => state.dishes
   },
   mutations: {
+    theFilterStart(state, data) {
+      state.theFilter.start = data
+    },
+    theFilterEnd(state, data) {
+      state.theFilter.end = data
+    },
     toggleCheck(state, data) {
       state.coupon[data].checked = !state.coupon[data].checked
     },
@@ -304,7 +353,7 @@ const store = new Vuex.Store({
         if (_table._id === data.table) table = _table
       })
 
-      state.service = `${table.name}号桌${data.user.nickname}需要服务`
+      state.service = `${table.name}号桌${data.user.nickname}需要服务.   ${new Date().getHours()}:${new Date().getMinutes()}`
     },
     trader (state, data) {
       state.auth.authorized = true

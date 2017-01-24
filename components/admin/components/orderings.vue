@@ -2,9 +2,28 @@
 .col-md-8
   .row
     .tile-wrap
+      //- .dropdown-wrap
+        //- .dropdown.dropdown-inline
+        //-   a.btn.dropdown-toggle-btn.waves-attach.waves-effect(data-toggle='dropdown', aria-expanded='false')
+        //-     | 时间范围
+        //-     span.icon.margin-left-sm keyboard_arrow_down
+          //- ul.dropdown-menu.nav
+          //-   li(v-for='item in filterList', @click='filter(item)')
+          //-     a.waves-attach.waves-effect {{item.label}}
+      .col-md-4
+        .input-group
+          span.input-group-addon 起始日期
+          input.form-control(placeholder='起始日期', type='date', style='width: 200px; float: left', v-model='theFilter.start')
+      .col-md-4
+        .input-group
+          span.input-group-addon 结束日期
+          input.form-control(placeholder='结束日期', type='date', style='width: 200px; float: left', v-model='theFilter.end')
+      br
       h2(v-if='!orderings.length') 暂无数据
+
       transition-group(name='fadeLeft')
-        .tile.tile-column(v-for='item, $index in orderings', :key='item._id')
+
+        .tile.tile-column.col-md-12(v-for='item, $index in orderings', :key='item._id')
           .tile-content(@click='showTile($index)')
             .tile-side.pull-left
               span.tableNumber {{$index + 1}}
@@ -17,9 +36,14 @@
               span.name {{item.user.nickname}}
             .tile-inner
               span(style='margin-right: 20px') 时间 {{moment(item.meta.createdAt).format('YYYY MM/DD hh:mm')}}
-              span.time 历时 {{moment.preciseDiff(item.meta.createdAt, Date.now())}}
+              //- span.time 历时 {{moment.preciseDiff(item.meta.createdAt, Date.now())}}
               span(style='margin-left: 20px') 状态:{{item.status}}
-
+            .tile-action
+              ul.nav.nav-list.margin-no.pull-right
+                li
+                  a.text-black-sec.waves-attach.waves-effect.del-btn(@click='del(item)')
+                    span 删除
+                    span.icon delete
             //- .tile-action.tile-action-show
             //-   ul.nav.nav-list.margin-no.pull-right
             //-     li
@@ -45,7 +69,7 @@
                       td
                       td
                       td 总费用:
-                      td(style='color: #FF6600; font-size: 20px') ¥ {{item.totalFee}}
+                      td(style='color: #FF6600; font-size: 20px') ¥ {{item.totalFee.toFixed(2)}}
 
               .tile-action
                 a.btn.btn-flat.waves-attach.waves-effect(data-toggle='tile', href='#ui_tile_example_2', @click='print(item)')
@@ -65,15 +89,30 @@ require('moment/locale/zh-cn')
 export default {
   data () {
     return {
+      filterList: [
+        {label: '今日订单', value: 'today'},
+        {label: '全部订单', value: 'all'}
+      ],
+      theFilter: {
+        start: '',
+        end: ''
+      },
       tileCollapse: null,
       orderCache: {}
+    }
+  },
+  watch: {
+    'theFilter.start': function(newVal, oldVal) {
+      this.$store.commit('theFilterStart', newVal)
+    },
+    'theFilter.end': function(newVal, oldVal) {
+      this.$store.commit('theFilterEnd', newVal)
     }
   },
   computed: {
     orderings() {
       return this.$store.getters.orderings
     },
-
     moment() {
       var STRINGS = {
           nodiff: '',
@@ -193,9 +232,32 @@ export default {
     }
   },
   mounted () {
-
+    var vm = this
+    $('.selector').pickdate(
+      {
+        format: 'yyyy/mm/dd', // escape any formatting characters with an exclamation mark
+        formatSubmit: 'yyyy/mm/dd'
+      }
+    )
   },
   methods: {
+    filter(item) {
+      console.log(item)
+    },
+    del(item) {
+      var r = window.confirm('确认删除？')
+      if (r) {
+
+        $.ajax({
+          type: 'delete',
+          url: `/orderings/${item._id}`
+        })
+        .done(res => {
+          console.log(res)
+          this.$store.commit('orderings', res.data)
+        })
+      }
+    },
     print(item) {
       this.$store.commit('print', item)
       setTimeout(function() {

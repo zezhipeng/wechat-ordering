@@ -46,7 +46,7 @@
                     td
                     td
                     td 总费用:
-                    td(style='color: #FF6600; font-size: 20px') ¥ {{item.totalFee}}
+                    td(style='color: #FF6600; font-size: 20px') ¥ {{item.totalFee.toFixed(2)}}
             .collapsible-action
               a.btn.btn-brand.waves-attach.waves-light.waves-effect(data-backdrop='static', data-toggle='modal', href='#ul', @click='changeItem(item)', v-if='!item.assess.text', style='margin-right: 20px') 评价
               button.btn.btn-brand-accent.waves-attach.waves-light.waves-effect(@click='pay(item)', v-if='item.status === "等待"') 确认付款

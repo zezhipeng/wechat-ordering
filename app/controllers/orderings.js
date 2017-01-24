@@ -58,8 +58,8 @@ exports.create = async(function* (req, res) {
   var ordering = {
     table: _table.name,
     user: user._id,
-    fee: fee,
-    totalFee: totalFee,
+    fee: fee.toFixed(2),
+    totalFee: totalFee.toFixed(2),
     dishes: dishes,
     trader: trader
   }
@@ -107,9 +107,10 @@ exports.del = async(function* (req, res) {
 
   try {
     let ordering = yield Order.findByIdAndRemove(_id).exec()
-
+    var orders = yield Order.find({trader: req.session.trader._id}).populate('user').limit(50).exec()
     res.json({
-      success: 1
+      success: 1,
+      data: orders
     })
   } catch (e) {
     res.json({

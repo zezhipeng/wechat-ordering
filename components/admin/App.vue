@@ -56,6 +56,10 @@ export default {
   },
   mounted () {
     // this.$store.dispatch('init')
+    $('.serverAlert').on('click', '.close', function(e) {
+      console.log(e)
+      $(this).remove()
+    })
   },
   watch: {
     'snackbar': function (newVal, oldVal) {
@@ -63,10 +67,14 @@ export default {
       console.log(oldVal)
     },
     'service': function (newVal, oldVal) {
-      $('.snackbar').snackbar({
-        alive: 10000,
-        content: `<div>${newVal}</div>`
-      })
+      var d = document.createElement('div')
+      var span = document.createElement('span')
+      span.className = 'close del-btn'
+      $(d).text(newVal)
+      $(span).text('X')
+      $(d).append(span)
+
+      $('.serverAlert').append(d)
     }
   },
   methods: {
@@ -134,6 +142,27 @@ body, html {
 
 .print {
   display: none;
+}
+
+.serverAlert {
+  width: 100%;
+  margin-top: -24px;
+
+  div {
+    width: 100%;
+    height: 60px;
+    line-height: 60px;
+    padding-left: 40px;
+    font-size: 20px;
+    color: #fff;
+    background: #C12127;
+
+    span {
+      color: #fff;
+      float: right;
+      margin-right: 20px;
+    }
+  }
 }
 
 @media print {

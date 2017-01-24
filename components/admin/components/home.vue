@@ -1,6 +1,8 @@
 <template lang="jade">
 div
   v-head
+  .serverAlert.noPrint
+
   v-aside
   .main
     transition(name="fade-right" mode="out-in")
@@ -15,7 +17,12 @@ export default {
     return {}
   },
   computed: {},
-  mounted () {},
+  mounted () {
+    $('.serverAlert').on('click', '.close', function(e) {
+
+      $(this).parent().remove()
+    })
+  },
   methods: {},
   components: {
     VHead,

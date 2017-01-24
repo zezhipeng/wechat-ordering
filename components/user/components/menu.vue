@@ -108,10 +108,13 @@ export default {
         margin-bottom: 5px;
 
         .img {
-          width: 100px;
+          width: 120px !important;
+          height: 90px !important;
           overflow: hidden;
           img {
-            max-width: 120px
+            max-width: 120px;
+            width: 120px !important;
+            height: 90px !important;
           }
         }
         .footer {

@@ -37,12 +37,14 @@
                             a.delete(@click='deleteMid(dish)', data-backdrop='static', data-toggle='modal', href='#dialog')
                               span.icon delete
                           img(:src='"http://og2h60o77.bkt.clouddn.com/" + dish.src', style='width: 234px; height: 150px')
-                          p {{dish.name}}
+                          p 菜名: {{dish.name}}
                             span(style='float: right') ¥{{dish.price}} /{{dish.unit}}
-                          p 推荐指数
+                          p
+                            span 点赞数: {{dish.like.length}}
+                          p 推荐指数:
                             span(style='margin-left: 5px')
                             span.icon(v-for='i in dish.stars') star_border
-                          p {{dish.vt}}
+                          p 描述: {{dish.vt}}
                 .stepper
                   .stepper-step
         transition(name='fade')
@@ -293,7 +295,7 @@ export default {
     .dish-content {
       cursor: pointer;
       background: #fff;
-      height: 270px;
+      height: 300px;
       width: 250px;
       transition: all 375ms cubic-bezier(0.4, 0, 0.2, 1);
       padding: 8px;
