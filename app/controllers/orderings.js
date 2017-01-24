@@ -107,7 +107,7 @@ exports.del = async(function* (req, res) {
 
   try {
     let ordering = yield Order.findByIdAndRemove(_id).exec()
-    var orders = yield Order.find({trader: req.session.trader._id}).populate('user').limit(50).exec()
+    var orders = yield Order.find({trader: req.session.trader._id}).populate('user').exec()
     res.json({
       success: 1,
       data: orders
