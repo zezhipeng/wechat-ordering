@@ -41,9 +41,9 @@ div
     .footer-bar(v-if='order.length')
       .coupon
         span.text 减
-        span.number ¥{{couponShow.toFixed(2)}}
+        span.number ¥{{couponShow}}
       .total 合计：
-        span ¥{{tweeningValue.toFixed(2)}}
+        span ¥{{tweeningValue}}
       .pay-btn(@click='submitOrder', v-bind:disabled='ordering') 立即下单({{order.length}})
 </template>
 
