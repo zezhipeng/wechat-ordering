@@ -107,7 +107,7 @@ export default {
       new TWEEN.Tween({ tweeningValue: startValue })
         .to({ tweeningValue: endValue }, 500)
         .onUpdate(function () {
-          vm[tweeningValue] = this.tweeningValue.toFixed(0)
+          vm[tweeningValue] = this.tweeningValue.toFixed(1)
         })
         .start()
       animate()
