@@ -1,19 +1,25 @@
 <template lang="jade">
 .col-md-12
   .col-md-10
-    .dropdown-wrap
-      .dropdown.dropdown-inline
-        a.btn.dropdown-toggle-btn.waves-attach.waves-effect(data-toggle='dropdown', aria-expanded='false')
-          | {{select.label}}
-          span.icon.margin-left-sm keyboard_arrow_down
-        ul.dropdown-menu.nav
-          li(v-for='item in chartFilter', @click='filter(item)')
-            a.waves-attach.waves-effect {{item.label}}
-    .card
-      .card-main
-        .card-inner
-          canvas#myChart2(width='1062', height='530')
-    canvas#myChart(width='1062', height='530')
+    br
+    .col-md-2
+
+      .dropdown-wrap
+        .dropdown.dropdown-inline
+          a.btn.dropdown-toggle-btn.waves-attach.waves-effect(data-toggle='dropdown', aria-expanded='false')
+            | {{select.label}}
+            span.icon.margin-left-sm keyboard_arrow_down
+          ul.dropdown-menu.nav
+            li(v-for='item in chartFilter', @click='filter(item)')
+              a.waves-attach.waves-effect {{item.label}}
+    .col-md-3
+      a.btn.dropdown-toggle-btn.waves-attach.waves-effect.export 导出报表
+    .col-md-12
+      .card
+        .card-main
+          .card-inner
+            canvas#myChart2(width='1062', height='530')
+      canvas#myChart(width='1062', height='530')
 
 </template>
 
@@ -59,6 +65,9 @@ export default {
     dishesLabels() {
       return this.$store.getters.dishesLabels
     },
+    dishPercent() {
+      return this.$store.getters[this.select.value + 'Percent']
+    },
     dishesData() {
       return this.$store.getters[this.select.value]
     }
@@ -70,10 +79,45 @@ export default {
       this.ctx2.update()
     },
     'dishesData': function(newVal, val) {
+      this.ctx2.update()
+
       console.log(newVal)
     }
   },
   mounted () {
+    var vm = this
+    $('.export').click(function(e) {
+      var name = vm.dishesLabels
+      // console.log()
+      // name.unshift('菜品')
+      var number = vm.dishesData
+      // number.unshift('销售份数')
+      console.log(vm.dishPercent)
+      var percent = vm.dishPercent.map(item => item + '%')
+      // percent.unshift('销售额比例')
+
+      var q = {
+        fileName: `${vm.select.label}销售报表`,
+        data: [
+          name,
+          number,
+          percent
+        ]
+      }
+
+      $.ajax({
+        type: 'POST',
+        url: '/excelExport',
+        data: q,
+        dataType: 'json'
+      })
+      .then(res => {
+        console.log('res', res)
+        window.location.href = '/excelExport'
+      })
+    })
+
+
     var labels = this.maxDay()
     var label = this.getMonth()
 

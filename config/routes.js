@@ -162,6 +162,8 @@ module.exports = function (app) {
   app.delete('/api/model/:model', admin.delete)
   app.put('/api/updateOrder', admin.updateOrder)
 
+  app.get('/excelExport', admin.excelExport)
+  app.post('/excelExport', admin.excelExport)
   app.post('/admin/login', admin.login)
   app.post('/admin/signUp', admin.signUp)
   app.get('/admin/signout', admin.signout)

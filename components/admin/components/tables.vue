@@ -87,8 +87,8 @@ export default {
     },
     createQrCode (item) {
       $('#qr').empty()
-
-      var qrcode = qr(`http://jimdream.com/index?trader=${this.trader._id}&table=${item._id}`, {
+      var location = window.location.origin
+      var qrcode = qr(`${location}/index?trader=${this.trader._id}&table=${item._id}`, {
           width: 128,
           height: 128
       })

@@ -94,24 +94,133 @@ const store = new Vuex.Store({
     chartFilter: state => state.chartFilter,
     users: state => state.users,
     print: state => state.print,
-    // today: state => {
-    //   var today = new Date().getDate()
-    //   var data = _.filter(state.orderings, order => {
-    //     var _month = new Date(order.meta.createdAt).getDate()
-    //     return month === _month
-    //   })
-    //   var r
-    //
-    //   r = _.reduce(data, (sum, item) => {
-    //     item.dishes.forEach(dish => {
-    //       sum = sum + dish.price * dish.number
-    //     })
-    //
-    //     return sum
-    //   }, 0)
-    //
-    //   return r
-    // },
+    todayPercent: state => {
+      var month = new Date().getDate()
+      var data = _.filter(state.orderings, order => {
+        var _month = new Date(order.meta.createdAt).getDate()
+        return month === _month
+      })
+
+      var total = _.reduce(data, (c, item) => {
+        var t = item.dishes.map(dish => dish.price * dish.number)
+        t = _.sum(t)
+        c = c + t
+        console.log(c)
+        return c
+      }, 0)
+
+      var r = []
+
+      for (var i = 0; i < state.dishes.length; ++i) {
+        var count = _.reduce(data, (c, item) => {
+          let a = _.filter(item.dishes, dish => {
+
+            return dish.name === state.dishes[i].name
+          })
+          var _a = {
+            number: 0
+          }
+          a = a.length
+            ? a[0]
+            : _a
+
+          c = c + a.number
+
+          return c
+        }, 0)
+
+        var m = state.dishes[i].price * count
+
+        r.push(Math.floor(m / total * 100))
+      }
+
+      return r
+    },
+    thisMonthPercent: state => {
+      var month = new Date().getMonth()
+      var data = _.filter(state.orderings, order => {
+        var _month = new Date(order.meta.createdAt).getMonth()
+        return month === _month
+      })
+
+      var total = _.reduce(data, (c, item) => {
+        var t = item.dishes.map(dish => dish.price * dish.number)
+        t = _.sum(t)
+        c = c + t
+        console.log(c)
+        return c
+      }, 0)
+
+      var r = []
+
+      for (var i = 0; i < state.dishes.length; ++i) {
+        var count = _.reduce(data, (c, item) => {
+          let a = _.filter(item.dishes, dish => {
+
+            return dish.name === state.dishes[i].name
+          })
+          var _a = {
+            number: 0
+          }
+          a = a.length
+            ? a[0]
+            : _a
+
+          c = c + a.number
+
+          return c
+        }, 0)
+
+        var m = state.dishes[i].price * count
+
+        r.push(Math.floor(m / total * 100))
+      }
+
+      return r
+    },
+    thisYearPercent: state => {
+      var month = new Date().getYear()
+      var data = _.filter(state.orderings, order => {
+        var _month = new Date(order.meta.createdAt).getYear()
+        return month === _month
+      })
+
+      var total = _.reduce(data, (c, item) => {
+        var t = item.dishes.map(dish => dish.price * dish.number)
+        console.log('t', t)
+        t = _.sum(t)
+        c = c + t
+
+        return c
+      }, 0)
+
+      var r = []
+
+      for (var i = 0; i < state.dishes.length; ++i) {
+        var count = _.reduce(data, (c, item) => {
+          let a = _.filter(item.dishes, dish => {
+
+            return dish.name === state.dishes[i].name
+          })
+          var _a = {
+            number: 0
+          }
+          a = a.length
+            ? a[0]
+            : _a
+
+          c = c + a.number
+
+          return c
+        }, 0)
+
+        var m = state.dishes[i].price * count
+
+        r.push(Math.floor(m / total * 100))
+      }
+
+      return r
+    },
     thisMonth: state => {
       var month = new Date().getMonth()
       var data = _.filter(state.orderings, order => {
@@ -142,22 +251,6 @@ const store = new Vuex.Store({
       }
 
       return r
-      // var month = new Date().getMonth()
-      // var data = _.filter(state.orderings, order => {
-      //   var _month = new Date(order.meta.createdAt).getMonth()
-      //   return month === _month
-      // })
-      // var r
-      //
-      // r = _.reduce(data, (sum, item) => {
-      //   item.dishes.forEach(dish => {
-      //     sum = sum + dish.price * dish.number
-      //   })
-      //
-      //   return sum
-      // }, 0)
-      //
-      // return r
     },
     thisYear: state => {
       var month = new Date().getYear()

@@ -11,6 +11,10 @@ const Dish = mongoose.model('Dish')
 const sha1 = require('sha1')
 const qiniu = require('qiniu')
 const Coupon = mongoose.model('Coupon')
+// Require library
+var xl = require('excel4node');
+
+// Create a new instance of a Workbook class
 
 qiniu.conf.ACCESS_KEY = 'cw7SuaudV3y-NbqWLoyeMash8bo0SsZMVKj4O6l1'
 qiniu.conf.SECRET_KEY = 'oryX3EukelCKUOBD-9vYKX7cKzhOTGFh_VVB8gmE'
@@ -321,6 +325,42 @@ exports.user = async(function* (req, res) {
     console.log('users', users)
     res.json(users)
   }
+})
+
+exports.excelExport = async(function* (req, res) {
+  if (req.body.fileName) req.session.fileName = req.body.fileName
+  if (req.body.data) req.session.data = req.body.data
+
+  var fileName = 'Sales_Report'
+  var data = req.session.data || []
+
+  var wb = new xl.Workbook()
+  var ws = wb.addWorksheet('Sheet 1')
+  var style = wb.createStyle({
+      font: {
+          color: '#000000',
+          size: 14
+      }
+  })
+
+  if (req.body.fileName) {
+    data[0].unshift('菜品')
+    data[1].unshift('销售份数')
+    data[2].unshift('销售额比例')
+  }
+
+  for (var i = 1; i <= data.length; ++i) {
+    data[i - 1].forEach(function(value, index) {
+      ws.cell(i, index + 1).string(value).style(style)
+    })
+  }
+
+  if (req.body.fileName) {
+    return res.json({
+      msg: 'success'
+    })
+  }
+  wb.write(fileName + '.xlsx', res)
 })
 
 exports.qiniu = async(function* (req, res) {

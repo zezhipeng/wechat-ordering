@@ -49,7 +49,7 @@
                     td(style='color: #FF6600; font-size: 20px') ¥ {{item.totalFee.toFixed(2)}}
             .collapsible-action
               a.btn.btn-brand.waves-attach.waves-light.waves-effect(data-backdrop='static', data-toggle='modal', href='#ul', @click='changeItem(item)', v-if='!item.assess.text', style='margin-right: 20px') 评价
-              button.btn.btn-brand-accent.waves-attach.waves-light.waves-effect(@click='pay(item)', v-if='item.status === "等待"') 确认付款
+              //- button.btn.btn-brand-accent.waves-attach.waves-light.waves-effect(@click='pay(item)', v-if='item.status === "等待"') 确认付款
       #ui_tab_example_2.tab-pane.fade
         .coupon-item(v-for='item in coupon') {{item.minus}} 元
           br
